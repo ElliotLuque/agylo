@@ -33,7 +33,9 @@ export const boardRouter = router({
                 }
             },
             board: {
-                connect: await board
+                connect: {
+                  id: (await board).id
+                }
             },
             user: {
                 connect: { id: userId }
