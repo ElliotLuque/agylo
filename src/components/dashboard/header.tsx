@@ -5,7 +5,7 @@ const Header: React.FC = () => {
   return (
     <header className="flex flex-row flex-wrap items-center justify-between shadow-md py-2 px-2">
       <div className="flex flex-row items-center gap-4">
-        <Link href="/dashboard" className="text-2xl font-bold">Logo header</Link>
+        <Link href="/dashboard" className="text-2xl text-indigo-500 font-bold">Logo</Link>
         <h1 className="text-lg">Projects</h1>
         <h1 className="text-lg">My tasks</h1>
       </div>
@@ -17,7 +17,7 @@ const Header: React.FC = () => {
           onClick={() => signOut()}
           className="rounded-md bg-red-500 py-2 px-4 text-xl font-bold text-white hover:bg-red-700"
         >
-          User WIP - Sign out 
+          User avatar - Sign out 
         </button>
       </div>
     </header>
