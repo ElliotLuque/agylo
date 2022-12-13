@@ -9,40 +9,62 @@ export const boardRouter = router({
         description: z.string().optional(),
       })
     )
-    .mutation( async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
-      const { id: userId } = ctx.session.user
+      const { id: userId } = ctx.session.user;
 
-      const board = prisma.board.create({
+      return await prisma.boardParticipants.create({
         data: {
-          name: input.name,
-          description: input.description,
-          icon: {
+          board: {
             create: {
-              url: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+              name: input.name,
+              description: input.description,
+              icon: {
+                connect: {
+                  id: 1,
+                },
+              },
+            },
+          },
+          user: {
+            connect: { id: userId },
+          },
+          role: {
+            connect: { id: 1 },
+          },
+        },
+      });
+    }),
+  listBoards: protectedProcedure.query(async ({ ctx }) => {
+    const { prisma } = ctx;
+    const { id: userId } = ctx.session.user;
+
+    return await prisma.boardParticipants.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        board: true,
+      },
+    });
+  }),
+  getBoard: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+
+      return await prisma.board.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          columns: {
+            include: {
+              tasks: true,
             },
           },
         },
       });
-
-      const boardParticipant = prisma.boardParticipants.create({
-        data: {
-            role: {
-                create: {
-                    name: "admin"
-                }
-            },
-            board: {
-                connect: {
-                  id: (await board).id
-                }
-            },
-            user: {
-                connect: { id: userId }
-            }
-        }
-      })
-
-      return await prisma.$transaction([board, boardParticipant]); 
     }),
+    
 });
