@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import BoardCreateDialog from "../components/dashboard/createDialog";
 
 import Header from "../components/dashboard/header";
 import LoadingSpinner from "../components/misc/loadingSpinner";
 import { protectedPage } from "../server/common/protected-page";
 import { trpc } from "../utils/trpc";
+import type { NextPageWithLayout } from "./_app";
 
 const BoardItem: React.FC<{
   id: number;
@@ -16,7 +17,7 @@ const BoardItem: React.FC<{
 }> = ({ id, name, description }) => {
   return (
     <Link
-      href={`/boards/${id}`}
+      href={`/board/${id}`}
       className="flex h-48 w-80 flex-col flex-nowrap gap-1 rounded-xl bg-white p-4 drop-shadow-lg"
     >
       <h1 className="text-xl font-bold">{name}</h1>
@@ -25,14 +26,13 @@ const BoardItem: React.FC<{
   );
 };
 
-const Dashboard: NextPage = () => {
+const Dashboard: NextPageWithLayout = () => {
   const { data: boards, isLoading } = trpc.board.listBoards.useQuery();
 
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Header />
       <main className="mx-12 flex flex-col flex-nowrap p-6">
         <div className="flex flex-row flex-wrap justify-between">
           <h1 className="pb-1 text-3xl font-bold">My work</h1>
@@ -45,7 +45,7 @@ const Dashboard: NextPage = () => {
             boards?.map((board) => (
               <motion.div
                 key={board.boardId}
-                initial={{ x: 5 , opacity: 0 }}
+                initial={{ x: 5, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
@@ -71,6 +71,15 @@ const Dashboard: NextPage = () => {
           </h1>
         </div>
       </main>
+    </>
+  );
+};
+
+Dashboard.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <>
+      <Header />
+      {page}
     </>
   );
 };
