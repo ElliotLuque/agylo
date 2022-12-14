@@ -58,6 +58,9 @@ export const boardRouter = router({
           id: input.id,
         },
         include: {
+          labels: true,
+          participants: true,
+          icon: true,
           columns: {
             include: {
               tasks: true,
