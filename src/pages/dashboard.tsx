@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { ReactElement, useState } from "react";
+import { type ReactElement, useState } from "react";
 import BoardCreateDialog from "../components/dashboard/createDialog";
 
 import Header from "../components/dashboard/header";
@@ -38,7 +38,7 @@ const Dashboard: NextPageWithLayout = () => {
           <h1 className="pb-1 text-3xl font-bold">My work</h1>
         </div>
         <BoardCreateDialog open={open} setOpen={setOpen} />
-        <div className="flex flex-row items-center gap-7 py-6">
+        <div className="flex flex-row flex-wrap items-center gap-7 py-6">
           {isLoading ? (
             <LoadingSpinner height={48} width={16} />
           ) : (
