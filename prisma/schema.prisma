@@ -63,9 +63,13 @@ model Label {
   color           LabelColor @relation(fields: [colorId], references: [id])
   colorId         Int
 
+  board           Board     @relation(fields: [boardId], references: [id])
+  boardId         Int
+
   tasksLabels     TaskLabels[]
 
   @@index([colorId])
+  @@index([boardId])
 }
 
 model TaskLabels {
@@ -159,6 +163,7 @@ model Board {
 
   participants  BoardParticipants[]
   columns       Column[]
+  labels        Label[]
 
   @@index([iconId])
 }
