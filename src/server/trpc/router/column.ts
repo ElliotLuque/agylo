@@ -45,21 +45,51 @@ export const columnRouter = router({
   reorderColumn: protectedProcedure
     .input(
       z.object({
-        columnId: z.number(),
-        index: z.number(),
+        sourceColumnId: z.number(),
+        sourceIndex: z.number(),
+        destinationIndex: z.number(),
+        boardId: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.column.update({
-        where: {
-          id: input.columnId,
-        },
-        data: {
-          index: input.index,
-        },
-      });
+      return await prisma.$transaction(async (tx) => {
+         const sourceColumn = await tx.column.findUnique({
+            where: {
+                id: input.sourceColumnId,
+            }
+         })
+
+         const destinationColumn = await tx.column.findFirst({
+            where: {
+                boardId: input.boardId,
+                index: input.destinationIndex
+            }
+         })
+
+         if (sourceColumn && destinationColumn) {
+            await tx.column.update({
+                where: {
+                    id: sourceColumn.id
+                },
+                data: {
+                    index: destinationColumn.index
+                }
+            })
+
+            await tx.column.update({
+                where: {
+                    id: destinationColumn.id
+                },
+                data: {
+                    index: sourceColumn.index
+                }
+            })
+         }
+      })
+
+      
     }),
   deleteColumn: protectedProcedure
     .input(

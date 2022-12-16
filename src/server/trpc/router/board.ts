@@ -63,8 +63,11 @@ export const boardRouter = router({
           icon: true,
           columns: {
             include: {
-              tasks: true,
+              tasks: true
             },
+            orderBy: {
+              index: "asc",
+            }
           },
         },
       });
