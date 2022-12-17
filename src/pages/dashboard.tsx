@@ -4,11 +4,12 @@ import Link from "next/link";
 import { type ReactElement, useState } from "react";
 import BoardCreateDialog from "../components/dashboard/createDialog";
 
-import Header from "../components/dashboard/header";
+import Header from "../components/common/header";
 import LoadingSpinner from "../components/misc/loadingSpinner";
 import { protectedPage } from "../server/common/protected-page";
 import { trpc } from "../utils/trpc";
 import type { NextPageWithLayout } from "./_app";
+import Head from "next/head";
 
 const BoardItem: React.FC<{
   id: number;
@@ -33,6 +34,9 @@ const Dashboard: NextPageWithLayout = () => {
 
   return (
     <>
+      <Head>
+        <title>Agylo - Dashboard</title>
+      </Head>
       <main className="mx-12 flex flex-col flex-nowrap p-6">
         <div className="flex flex-row flex-wrap justify-between">
           <h1 className="pb-1 text-3xl font-bold">My work</h1>
