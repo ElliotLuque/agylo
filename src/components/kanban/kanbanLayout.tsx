@@ -1,5 +1,5 @@
-import Header from "./header";
-import Sidebar from "../kanban/sidebar";
+import Header from "../common/header";
+import Sidebar from "./sidebar";
 import type { ReactElement } from "react";
 
 const KanbanLayout: React.FC<{children: ReactElement, name: string, description: string}> = ({ children, name, description }) => {

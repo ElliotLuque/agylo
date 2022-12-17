@@ -23,7 +23,7 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import Head from "next/head";
-import KanbanLayout from "../../../components/common/kanbanLayout";
+import KanbanLayout from "../../../components/kanban/kanbanLayout";
 
 type Column = {
   id: number;
