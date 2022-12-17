@@ -2,7 +2,7 @@ import Header from "./header";
 import Sidebar from "../kanban/sidebar";
 import type { ReactElement } from "react";
 
-const DashboardLayout: React.FC<{children: ReactElement, name: string, description: string}> = ({ children, name, description }) => {
+const KanbanLayout: React.FC<{children: ReactElement, name: string, description: string}> = ({ children, name, description }) => {
     return <div className="flex h-screen flex-col">
       <Header />
       <main className="flex h-full flex-row">
@@ -15,4 +15,4 @@ const DashboardLayout: React.FC<{children: ReactElement, name: string, descripti
     </div>
 }
 
-export default DashboardLayout;
+export default KanbanLayout;
