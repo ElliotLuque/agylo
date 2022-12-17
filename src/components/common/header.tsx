@@ -8,7 +8,7 @@ const UserAvatar: React.FC = () => {
   return (
     <Image
       onClick={() => signOut()}
-      className="p-1 cursor-pointer rounded-full"
+      className="cursor-pointer rounded-full p-1"
       width={42}
       height={42}
       src={
@@ -22,7 +22,7 @@ const UserAvatar: React.FC = () => {
 
 const Header: React.FC = () => {
   return (
-    <header className="flex flex-row flex-wrap items-center justify-between py-2 px-2 shadow-md">
+    <header className="z-10 flex flex-row flex-wrap items-center justify-between py-2 px-2 shadow-md">
       <div className="flex flex-row items-center gap-4">
         <Link href="/dashboard" className="text-2xl font-bold text-indigo-500">
           Logo
