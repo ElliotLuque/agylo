@@ -63,14 +63,27 @@ export const boardRouter = router({
           icon: true,
           columns: {
             include: {
-              tasks: true
+              tasks: true,
             },
             orderBy: {
               index: "asc",
-            }
+            },
           },
         },
       });
     }),
-    
+  getBasicBoard: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+
+      return await prisma.board.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          icon: true,
+        },
+      });
+    }),
 });
