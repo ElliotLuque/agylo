@@ -72,7 +72,7 @@ export const boardRouter = router({
         },
       });
     }),
-  getBasicBoard: protectedProcedure
+  getBoardInfo: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
