@@ -1,5 +1,4 @@
 import { useState, type ReactElement } from "react";
-import Header from "../../../components/common/header";
 import { trpc } from "../../../utils/trpc";
 import type { NextPageWithLayout } from "../../_app";
 import {
@@ -23,11 +22,8 @@ import {
   horizontalListSortingStrategy,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import ColumnDraggable from "../../../components/kanban/column";
-import Sidebar from "../../../components/kanban/sidebar";
 import Head from "next/head";
-import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
-import DashboardLayout from "../../../components/common/dashboardLayout";
+import KanbanLayout from "../../../components/common/kanbanLayout";
 
 type Column = {
   id: number;
@@ -35,7 +31,7 @@ type Column = {
   index: number;
 };
 
-const KanbanLayout: NextPageWithLayout = ({
+const KanbanPage: NextPageWithLayout = ({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const trpcUtils = trpc.useContext();
@@ -133,22 +129,21 @@ const KanbanLayout: NextPageWithLayout = ({
 export const getServerSideProps: GetServerSideProps = async (context) =>
   protectedRouterPage(context);
 
-KanbanLayout.getLayout = function getLayout(page: ReactElement) {
+KanbanPage.getLayout = function getLayout(page: ReactElement) {
   const boardInfo = trpc.board.getBoardInfo.useQuery({
     id: parseInt(page.props.id as string),
   });
 
-  const { data: boardData } = boardInfo;
-  const { description, name } = boardData || {};
+  const { description, name } = boardInfo?.data ?? {};
 
   return (
-    <DashboardLayout
+    <KanbanLayout
       name={name ?? "Board"}
-      description={description ?? "description"}
+      description={description ?? ""}
     >
       {page}
-    </DashboardLayout>
+    </KanbanLayout>
   );
 };
 
-export default KanbanLayout;
+export default KanbanPage;
