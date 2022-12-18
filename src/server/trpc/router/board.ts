@@ -35,6 +35,38 @@ export const boardRouter = router({
         },
       });
     }),
+  updateBoard: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        description: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+
+      return await prisma.board.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+        },
+      });
+    }),
+  deleteBoard: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+
+      return await prisma.board.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
   listBoards: protectedProcedure.query(async ({ ctx }) => {
     const { prisma } = ctx;
     const { id: userId } = ctx.session.user;
