@@ -19,6 +19,7 @@ const config = {
       "t3.ftcdn.net",
       "avatars.githubusercontent.com",
       "lh3.googleusercontent.com",
+      "cdn-icons-png.flaticon.com"
     ],
   },
 };
