@@ -14,10 +14,10 @@ model Comment {
   updatedAt     DateTime @updatedAt
   body          String   @db.Text
 
-  author        User     @relation(fields: [authorId], references: [id])
+  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId      String
 
-  task          Task     @relation(fields: [taskId], references: [id])
+  task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
 
   attachments   Attachment[]
@@ -31,10 +31,10 @@ model Attachment {
   url           String   @db.Text
   filename      String
 
-  comment       Comment?  @relation(fields: [commentId], references: [id])
+  comment       Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId     Int
 
-  task          Task     @relation(fields: [taskId], references: [id])
+  task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
 
   @@index([commentId])
@@ -63,7 +63,7 @@ model Label {
   color           LabelColor @relation(fields: [colorId], references: [id])
   colorId         Int
 
-  board           Board     @relation(fields: [boardId], references: [id])
+  board           Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId         Int
 
   tasksLabels     TaskLabels[]
@@ -73,10 +73,10 @@ model Label {
 }
 
 model TaskLabels {
-  task     Task   @relation(fields: [taskId], references: [id])
+  task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId   Int
 
-  label    Label    @relation(fields: [labelId], references: [id])
+  label    Label    @relation(fields: [labelId], references: [id], onDelete: Cascade)
   labelId  Int
 
   @@id([taskId, labelId])
@@ -121,7 +121,7 @@ model Column {
   name      String
   index     Int
 
-  board     Board    @relation(fields: [boardId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
   
   tasks     Task[]
@@ -136,10 +136,10 @@ model Role {
 }
 
 model BoardParticipants {
-  board     Board    @relation(fields: [boardId], references: [id])
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
 
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
   role      Role     @relation(fields: [roleId], references: [id])
