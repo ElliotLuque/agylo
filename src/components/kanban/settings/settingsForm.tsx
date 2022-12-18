@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { trpc } from "../../../utils/trpc";
+import { useEffect } from "react";
 
 interface ISettingsBoardInputs {
   name: string;
@@ -29,6 +30,7 @@ const SettingsForm: React.FC<{
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ISettingsBoardInputs>({
     resolver: zodResolver(boardSettingsSchema),
@@ -42,18 +44,24 @@ const SettingsForm: React.FC<{
     });
   };
 
+  useEffect(() => {
+    reset({
+      name,
+      description,
+    })
+  }, [name, description, reset])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-6">
+      <div className="my-6">
         <label
           htmlFor="name"
-          className="text-md mb-2 block font-medium text-gray-800 dark:text-white"
+          className="text-md mb-2 block  text-gray-800 dark:text-white"
         >
           Name
         </label>
         <input
           {...register("name")}
-          defaultValue={name}
           type="text"
           id="name"
           className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm font-medium text-gray-900 ${
@@ -71,13 +79,12 @@ const SettingsForm: React.FC<{
       <div className="mb-6">
         <label
           htmlFor="description"
-          className="text-md mb-2 block font-medium text-gray-800 dark:text-white"
+          className="text-md mb-2 block text-gray-800 dark:text-white"
         >
           Description
         </label>
         <textarea
           {...register("description")}
-          defaultValue={description}
           id="description"
           rows={5}
           className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
