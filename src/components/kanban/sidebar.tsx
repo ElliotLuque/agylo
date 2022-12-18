@@ -10,7 +10,7 @@ const Sidebar: React.FC<{ name: string; description: string }> = ({
   const { id } = useRouter().query;
 
   return (
-    <aside className="h-full w-80 bg-gray-50">
+    <aside className="h-full w-72 bg-gray-50 border border-gray-200 border-r-1">
       <div className="flex h-full flex-col justify-between gap-2 py-4 px-7">
         <div>
           <div className="flex mb-2 flex-col items-start justify-center">

@@ -101,7 +101,7 @@ const KanbanPage: NextPageWithLayout = ({
       <Head>
         <title>Agylo board - {boardData?.name}</title>
       </Head>
-      <div className="w-full">
+      <div className="w-full shadow-md">
         <h1 onClick={handleCreateColumn}>Board {boardData?.name}</h1>
         <DndContext
           collisionDetection={closestCenter}
