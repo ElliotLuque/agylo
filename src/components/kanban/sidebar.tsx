@@ -6,14 +6,13 @@ const Sidebar: React.FC<{ name: string; description: string }> = ({
   name,
   description,
 }) => {
-
   const { id } = useRouter().query;
 
   return (
-    <aside className="h-full w-72 bg-gray-50 border border-gray-200 border-r-1">
+    <aside className="border-r-1 h-full w-72 border border-gray-200 bg-gray-50">
       <div className="flex h-full flex-col justify-between gap-2 py-4 px-7">
         <div>
-          <div className="flex mt-5 gap-6 flex-row items-center">
+          <div className="mt-5 flex flex-row items-center gap-6">
             <Image
               width={45}
               height={45}
@@ -22,16 +21,23 @@ const Sidebar: React.FC<{ name: string; description: string }> = ({
               }
               alt="default icon"
             />
-            <div><h1 className="text-lg text-gray-800 font-medium">{name}</h1>
-            <p className="text-sm text-gray-600">{description}</p></div>
+            <div>
+              <h1 className="text-lg font-medium text-gray-800">{name}</h1>
+              <p className="text-sm text-gray-600">{description}</p>
+            </div>
           </div>
-          <div className="mt-10 text-xl flex flex-col justify-center font-bold gap-4">
-            <Link href={{pathname: '/board/[id]', query: {id}}}>Home</Link>
-            <Link href={{pathname: '/board/[id]/team', query: {id}}}>Team</Link>
+          <div className="mt-10 flex flex-col justify-center gap-4 text-xl font-bold">
+            <Link href={{ pathname: "/board/[id]", query: { id } }}>Home</Link>
+            <Link href={{ pathname: "/board/[id]/team", query: { id } }}>
+              Team
+            </Link>
           </div>
         </div>
         <div className="mb-4">
-          <Link className="text-2xl font-bold" href={{pathname: '/board/[id]/settings', query: {id}}}>
+          <Link
+            className="text-2xl font-bold"
+            href={{ pathname: "/board/[id]/settings", query: { id } }}
+          >
             Settings
           </Link>
         </div>
