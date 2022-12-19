@@ -12,6 +12,7 @@ import {
 import Head from "next/head";
 import SettingsForm from "../../../components/kanban/settings/settingsForm";
 import DeleteBoardDialog from "../../../components/kanban/settings/deleteBoardDialog";
+import Toast from "../../../components/common/toast";
 
 const SettingsPage: NextPageWithLayout = ({
   id,
@@ -21,12 +22,17 @@ const SettingsPage: NextPageWithLayout = ({
   });
 
   const [open, setOpen] = useState(false);
+  
+  const [toast, setToast] = useState(false);
 
   return (
     <>
       <Head>
         <title>{boardInfo?.name} - Settings - Agylo</title>
       </Head>
+      <div className="absolute right-28 top-32">
+      {toast && <Toast message="Board updated successfully!" />}
+      </div>
       <div className="w-full">
         <div className="flex flex-col items-center justify-center">
           <div className="mx-4 flex w-[32rem] flex-col gap-7 divide-y p-5">
@@ -51,10 +57,12 @@ const SettingsPage: NextPageWithLayout = ({
             </div>
             <div className="mb-5 pt-5">
               <h1 className="text-lg font-medium text-gray-800">Details</h1>
+              
               <SettingsForm
                 id={parseInt(id as string)}
                 name={boardInfo?.name ?? ""}
                 description={boardInfo?.description ?? ""}
+                setToast={setToast}
               />
             </div>
             <div className="mb-5 pt-5">

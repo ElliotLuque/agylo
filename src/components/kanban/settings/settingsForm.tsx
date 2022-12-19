@@ -18,11 +18,13 @@ const SettingsForm: React.FC<{
   id: number;
   name: string;
   description: string;
-}> = ({ id, name, description }) => {
+  setToast: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ id, name, description, setToast }) => {
   const trpcUtils = trpc.useContext();
 
   const { mutateAsync: updateBoard } = trpc.board.updateBoard.useMutation({
     onSuccess: () => {
+      setToast(true);
       trpcUtils.board.invalidate();
     },
   });
