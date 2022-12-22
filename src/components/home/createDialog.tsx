@@ -26,6 +26,7 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<IBoardInputs>({
     resolver: zodResolver(boardSchema),
@@ -35,7 +36,8 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     onSuccess: () => {
       setOpen(false);
       utils.board.listBoards.invalidate();
-    }
+      reset();
+    },
   });
 
   const onSubmit = async (data: IBoardInputs) => {
@@ -98,7 +100,11 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                             : "focus:border-indigo-400 focus:ring-indigo-200"
                         } focus:outline-none focus:ring-1`}
                       />
-                      {errors.name && <p className="text-red-400 text-sm mt-2 font-medium">Board name must have at least 5 characters </p>}
+                      {errors.name && (
+                        <p className="mt-2 text-sm font-medium text-red-400">
+                          Board name must have at least 5 characters{" "}
+                        </p>
+                      )}
                     </div>
                     <div className="mb-6">
                       <label
@@ -117,7 +123,10 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                     </div>
                     <div className="flex flex-row items-center justify-between">
                       <button
-                        onClick={() => setOpen(false)}
+                        onClick={() => {
+                          setOpen(false);
+                          reset();
+                        }}
                         type="button"
                         className="w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-gray-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
                       >
