@@ -38,9 +38,9 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
         <div className="mt-8">
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between group">
             <h1 className="text-lg font-medium text-stone-500">Boards</h1>
-            <div onClick={() => setOpenCreateDialog(true)}>
+            <div className="invisible group-hover:visible" onClick={() => setOpenCreateDialog(true)}>
               <AddIcon />
             </div>
           </div>
