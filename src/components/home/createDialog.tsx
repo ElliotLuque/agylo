@@ -35,7 +35,7 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
   const { mutateAsync } = trpc.board.createBoard.useMutation({
     onSuccess: () => {
       setOpen(false);
-      utils.board.listBoards.invalidate();
+      utils.board.listUserBoards.invalidate();
       reset();
     },
   });

@@ -28,7 +28,7 @@ const BoardItem: React.FC<{
 };
 
 const Dashboard: NextPageWithLayout = () => {
-  const { data: boards, isLoading } = trpc.board.listBoards.useQuery();
+  const { data: boards, isLoading } = trpc.board.listUserBoards.useQuery();
 
   const [open, setOpen] = useState(false);
 

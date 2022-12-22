@@ -8,7 +8,7 @@ import { useState } from "react";
 import BoardCreateDialog from "../home/createDialog";
 
 const Sidebar: React.FC = () => {
-  const { data: userBoards } = trpc.board.listBoards.useQuery();
+  const { data: userBoards } = trpc.board.listUserBoards.useQuery();
 
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
 

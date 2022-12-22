@@ -67,7 +67,7 @@ export const boardRouter = router({
         },
       });
     }),
-  listBoards: protectedProcedure.query(async ({ ctx }) => {
+  listUserBoards: protectedProcedure.query(async ({ ctx }) => {
     const { prisma } = ctx;
     const { id: userId } = ctx.session.user;
 
