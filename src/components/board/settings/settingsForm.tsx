@@ -26,6 +26,9 @@ const SettingsForm: React.FC<{
     onSuccess: () => {
       setToast(true);
       trpcUtils.board.invalidate();
+      setTimeout(() => {
+        setToast(false)
+      }, 3500);
     },
   });
 

@@ -2,14 +2,14 @@ import { motion } from "framer-motion";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { type ReactElement, useState } from "react";
-import BoardCreateDialog from "../components/dashboard/createDialog";
+import BoardCreateDialog from "../components/home/createDialog";
 
-import Header from "../components/common/header";
 import LoadingSpinner from "../components/misc/loadingSpinner";
 import { protectedPage } from "../server/common/protected-page";
 import { trpc } from "../utils/trpc";
 import type { NextPageWithLayout } from "./_app";
 import Head from "next/head";
+import Layout from "../components/common/layout";
 
 const BoardItem: React.FC<{
   id: number;
@@ -81,10 +81,9 @@ const Dashboard: NextPageWithLayout = () => {
 
 Dashboard.getLayout = function getLayout(page: ReactElement) {
   return (
-    <>
-      <Header />
+    <Layout>
       {page}
-    </>
+    </Layout>
   );
 };
 

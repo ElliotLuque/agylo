@@ -16,14 +16,10 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  horizontalListSortingStrategy,
-  sortableKeyboardCoordinates,
-} from "@dnd-kit/sortable";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Head from "next/head";
-import KanbanLayout from "../../../components/kanban/kanbanLayout";
+import Header from "../../../components/common/header";
+import Layout from "../../../components/common/layout";
 
 type Column = {
   id: number;
@@ -99,16 +95,21 @@ const KanbanPage: NextPageWithLayout = ({
   return (
     <>
       <Head>
-        <title>Agylo board - {boardData?.name}</title>
+        <title>{boardData?.name} - Agylo</title>
       </Head>
-      <div className="w-full shadow-md">
-        <h1 onClick={handleCreateColumn}>Board {boardData?.name}</h1>
-        <DndContext
-          collisionDetection={closestCenter}
-          sensors={sensors}
-          onDragEnd={handleDragEnd}
-        >
-          {/* <SortableContext
+      <div className="flex w-full flex-col">
+        <Header
+          name={boardData?.name ?? "Board"}
+          description={boardData?.description ?? ""}
+          id={parseInt(id as string)}
+        />
+        <div>
+          <DndContext
+            collisionDetection={closestCenter}
+            sensors={sensors}
+            onDragEnd={handleDragEnd}
+          >
+            {/* <SortableContext
           items={columns}
           strategy={horizontalListSortingStrategy}
         >
@@ -120,7 +121,8 @@ const KanbanPage: NextPageWithLayout = ({
             />
           ))}
         </SortableContext> */}
-        </DndContext>
+          </DndContext>
+        </div>
       </div>
     </>
   );
@@ -130,20 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (context) =>
   protectedRouterPage(context);
 
 KanbanPage.getLayout = function getLayout(page: ReactElement) {
-  const boardInfo = trpc.board.getBoardInfo.useQuery({
-    id: parseInt(page.props.id as string),
-  });
-
-  const { description, name } = boardInfo?.data ?? {};
-
-  return (
-    <KanbanLayout
-      name={name ?? "Board"}
-      description={description ?? ""}
-    >
-      {page}
-    </KanbanLayout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export default KanbanPage;

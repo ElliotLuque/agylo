@@ -1,7 +1,6 @@
 import { type ReactElement, useState } from "react";
 import { trpc } from "../../../utils/trpc";
 import Image from "next/image";
-import KanbanLayout from "../../../components/kanban/kanbanLayout";
 import type { NextPageWithLayout } from "../../_app";
 import { protectedRouterPage } from "../../../server/common/protected-router-page";
 import {
@@ -10,9 +9,10 @@ import {
 } from "next";
 
 import Head from "next/head";
-import SettingsForm from "../../../components/kanban/settings/settingsForm";
-import DeleteBoardDialog from "../../../components/kanban/settings/deleteBoardDialog";
 import Toast from "../../../components/common/toast";
+import SettingsForm from "../../../components/board/settings/settingsForm";
+import DeleteBoardDialog from "../../../components/board/settings/deleteBoardDialog";
+import Layout from "../../../components/common/layout";
 
 const SettingsPage: NextPageWithLayout = ({
   id,
@@ -31,7 +31,7 @@ const SettingsPage: NextPageWithLayout = ({
         <title>{boardInfo?.name} - Settings - Agylo</title>
       </Head>
       <div className="absolute right-28 top-32">
-      {toast && <Toast message="Board updated successfully!" />}
+      <Toast message="Board updated successfully!" isOpen={toast} />
       </div>
       <div className="w-full">
         <div className="flex flex-col items-center justify-center">
@@ -57,7 +57,6 @@ const SettingsPage: NextPageWithLayout = ({
             </div>
             <div className="mb-5 pt-5">
               <h1 className="text-lg font-medium text-gray-800">Details</h1>
-              
               <SettingsForm
                 id={parseInt(id as string)}
                 name={boardInfo?.name ?? ""}
@@ -95,16 +94,10 @@ export const getServerSideProps: GetServerSideProps = async (context) =>
   protectedRouterPage(context);
 
 SettingsPage.getLayout = function getLayout(page: ReactElement) {
-  const boardInfo = trpc.board.getBoardInfo.useQuery({
-    id: parseInt(page.props.id as string),
-  });
-
-  const { description, name } = boardInfo?.data ?? {};
-
   return (
-    <KanbanLayout name={name ?? "Board"} description={description ?? ""}>
+    <Layout>
       {page}
-    </KanbanLayout>
+    </Layout>
   );
 };
 
