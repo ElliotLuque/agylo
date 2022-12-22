@@ -32,11 +32,11 @@ const Sidebar: React.FC = () => {
           </h1>
         </div>
         <div className="mt-8">
-          <h1 className="font-medium text-stone-500">Boards</h1>
-          <div className="ml-1.5 mt-5 mb-4 flex h-76 flex-col gap-2.5 overflow-auto">
+          <h1 className="font-medium text-md text-stone-500">Boards</h1>
+          <div className="ml-1.5 mt-5 mb-4 flex h-76 flex-col gap-3.5 overflow-auto">
             {userBoards?.map((board) => (
               <Link
-                className="font-semibold text-gray-800"
+                className="font-bold text-sm text-gray-800"
                 href={`/board/${board.boardId}`}
                 key={board.boardId}
               >
