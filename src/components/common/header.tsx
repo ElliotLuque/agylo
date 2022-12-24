@@ -13,7 +13,7 @@ const Header: React.FC<{ name: string; description: string, id: number }> = ({
       </div>
       <div className="flex flex-row items-center gap-4">
         <h1 className="text-lg">Search</h1>
-        <Link href={{pathname: "/board/[id]/settings", query: {id}}}>
+        <Link href={{pathname: "/[id]/settings", query: {id}}}>
         <h1 className="text-lg">Configuration</h1></Link>
         <UserAvatar width={42} height={42} />
       </div>

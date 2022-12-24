@@ -1,12 +1,12 @@
 import { useState, type ReactElement } from "react";
-import { trpc } from "../../../utils/trpc";
-import type { NextPageWithLayout } from "../../_app";
+import { trpc } from "../../utils/trpc";
+import type { NextPageWithLayout } from "../_app";
 import {
   type InferGetServerSidePropsType,
   type GetServerSideProps,
 } from "next";
-import { protectedRouterPage } from "../../../server/common/protected-router-page";
-import LoadingSpinner from "../../../components/misc/loadingSpinner";
+import { protectedRouterPage } from "../../server/common/protected-router-page";
+import LoadingSpinner from "../../components/misc/loadingSpinner";
 
 import {
   DndContext,
@@ -18,8 +18,8 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Head from "next/head";
-import Header from "../../../components/common/header";
-import Layout from "../../../components/common/layout";
+import Header from "../../components/common/header";
+import Layout from "../../components/common/layout";
 
 type Column = {
   id: number;
@@ -40,26 +40,26 @@ const KanbanPage: NextPageWithLayout = ({
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const { data: boardData, isLoading } = trpc.board.getBoard.useQuery(
+  const { data: projectData, isLoading } = trpc.project.getProject.useQuery(
     {
       id: parseInt(id as string),
     },
     {
       onSuccess: () => {
-        setColumns(boardData?.columns || []);
+        setColumns(projectData?.columns || []);
       },
     }
   );
 
   const { mutateAsync: createColumn } = trpc.column.createColumn.useMutation({
     onSuccess: () => {
-      trpcUtils.board.invalidate();
+      trpcUtils.project.invalidate();
     },
   });
 
   const handleCreateColumn = async () => {
     await createColumn({
-      boardId: parseInt(id as string),
+      projectId: parseInt(id as string),
       name: "New Column",
       index: 0,
     });
@@ -82,9 +82,6 @@ const KanbanPage: NextPageWithLayout = ({
   if (isLoading) {
     return (
       <>
-        <Head>
-          <title>Agylo board</title>
-        </Head>
         <div className="grid w-full place-items-center">
           <LoadingSpinner height={48} width={48} />
         </div>
@@ -95,12 +92,12 @@ const KanbanPage: NextPageWithLayout = ({
   return (
     <>
       <Head>
-        <title>{boardData?.name} - Agylo</title>
+        <title>{projectData?.name} - Agylo</title>
       </Head>
       <div className="flex w-full flex-col">
         <Header
-          name={boardData?.name ?? "Board"}
-          description={boardData?.description ?? ""}
+          name={projectData?.name ?? "Project"}
+          description={projectData?.description ?? ""}
           id={parseInt(id as string)}
         />
         <div>

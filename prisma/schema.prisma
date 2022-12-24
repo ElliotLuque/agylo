@@ -63,13 +63,13 @@ model Label {
   color           LabelColor @relation(fields: [colorId], references: [id])
   colorId         Int
 
-  board           Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  boardId         Int
+  project         Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId       Int
 
   tasksLabels     TaskLabels[]
 
   @@index([colorId])
-  @@index([boardId])
+  @@index([projectId])
 }
 
 model TaskLabels {
@@ -121,23 +121,23 @@ model Column {
   name      String
   index     Int
 
-  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  boardId   Int
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   Int
   
   tasks     Task[]
 
-  @@index([boardId])
+  @@index([projectId])
 }
 
 model Role {
   id         Int      @id @default(autoincrement())
   name       String
-  users      BoardParticipants[]
+  users      ProjectParticipants[]
 }
 
-model BoardParticipants {
-  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  boardId   Int
+model ProjectParticipants {
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   Int
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
@@ -145,23 +145,24 @@ model BoardParticipants {
   role      Role     @relation(fields: [roleId], references: [id])
   roleId    Int
 
-  @@id([boardId, userId])
+  @@id([projectId, userId])
 
   @@index([roleId])
   @@index([userId])
-  @@index([boardId])
+  @@index([projectId])
 }
 
-model Board {
+model Project {
   id            Int         @id @default(autoincrement())
   name          String
+  url           String      @unique
   description   String?      
   createdAt     DateTime    @default(now())
 
   iconId        Int
   icon          Icon        @relation(fields: [iconId], references: [id])
 
-  participants  BoardParticipants[]
+  participants  ProjectParticipants[]
   columns       Column[]
   labels        Label[]
 
@@ -169,9 +170,9 @@ model Board {
 }
 
 model Icon {
-  id        Int      @id @default(autoincrement())
-  url       String   @db.Text
-  boards    Board[]
+  id          Int      @id @default(autoincrement())
+  color       String   @db.Text
+  projects    Project[]
 }
 
 model User {
@@ -183,7 +184,7 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
-  userBoards    BoardParticipants[]
+  userProjects  ProjectParticipants[]
   createdTasks  Task[]   @relation("author")
   asignedTasks  Task[]   @relation("asignee")
   comments      Comment[]

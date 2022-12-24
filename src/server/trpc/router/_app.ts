@@ -1,11 +1,11 @@
 import { router } from "../trpc";
 import { authRouter } from "./auth";
-import { boardRouter } from "./board";
+import { projectRouter } from "./project";
 import { columnRouter } from "./column";
 
 export const appRouter = router({
   auth: authRouter,
-  board: boardRouter,
+  project: projectRouter,
   column: columnRouter
 });
 

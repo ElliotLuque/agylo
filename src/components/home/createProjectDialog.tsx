@@ -10,17 +10,13 @@ type DialogProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-interface IBoardInputs {
+interface IProjectInputs {
   name: string;
+  url: string;
   description?: string;
 }
 
-const boardSchema = z.object({
-  name: z.string().min(5),
-  description: z.string().optional(),
-});
-
-const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
+const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
   const utils = trpc.useContext();
 
   const {
@@ -28,21 +24,22 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IBoardInputs>({
-    resolver: zodResolver(boardSchema),
-  });
+  } = useForm<IProjectInputs>({});
 
-  const { mutateAsync } = trpc.board.createBoard.useMutation({
-    onSuccess: () => {
-      setOpen(false);
-      utils.board.listUserBoards.invalidate();
-      reset();
-    },
-  });
+  const { mutateAsync: createProject } = trpc.project.createProject.useMutation(
+    {
+      onSuccess: () => {
+        setOpen(false);
+        utils.project.listUserProject.invalidate();
+        reset();
+      },
+    }
+  );
 
-  const onSubmit = async (data: IBoardInputs) => {
-    mutateAsync({
+  const onSubmit = async (data: IProjectInputs) => {
+    createProject({
       name: data.name,
+      url: data.url,
       description: data.description,
     });
   };
@@ -60,7 +57,7 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-30" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -79,8 +76,13 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                     as="h3"
                     className="pb-5 text-2xl font-medium leading-6 text-gray-800"
                   >
-                    Create board
+                    New project
                   </Dialog.Title>
+
+                  <p className="py-3">
+                    Create a project to start collaborating with people,
+                    creating tasks and managing work.
+                  </p>
 
                   <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-6">
@@ -91,7 +93,13 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                         Name
                       </label>
                       <input
-                        {...register("name")}
+                        {...register("name", {
+                          required: { value: true, message: "is required" },
+                          minLength: {
+                            value: 5,
+                            message: "must have at least 5 characters",
+                          },
+                        })}
                         type="text"
                         id="name"
                         className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm font-medium text-gray-900 ${
@@ -102,7 +110,48 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                       />
                       {errors.name && (
                         <p className="mt-2 text-sm font-medium text-red-400">
-                          Board name must have at least 5 characters{" "}
+                          Project name {String(errors.name.message)}
+                        </p>
+                      )}
+                    </div>
+                    <div className="mb-6">
+                      <label
+                        htmlFor="name"
+                        className="text-md mb-2 block font-medium text-gray-800 dark:text-white"
+                      >
+                        URL
+                      </label>
+                      <div
+                        className={`flex w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-50 text-sm font-medium text-gray-900 ${
+                          errors.url
+                            ? "border-red-400 bg-red-50 focus-within:ring-red-200"
+                            : "focus-within:border-indigo-400 focus-within:ring-indigo-200"
+                        } focus-within:outline-none focus-within:ring-1`}
+                      >
+                        <span className="border-r border-gray-300 bg-gray-100 p-2.5">
+                          agylo.app/
+                        </span>
+                        <input
+                          {...register("url", {
+                            required: { value: true, message: "is required" },
+                            pattern: {
+                              value: /^[a-zA-Z0-9-]+$/,
+                              message:
+                                "can only contain letters, numbers and dashes",
+                            },
+                          })}
+                          type="text"
+                          id="url"
+                          className={`w-full p-2.5 ${
+                            errors.url
+                              ? "border-red-400 bg-red-50 focus:ring-red-200"
+                              : "focus:border-indigo-400 focus:ring-indigo-200"
+                          } focus:outline-none focus:ring-1`}
+                        />
+                      </div>
+                      {errors.url && (
+                        <p className="mt-2 text-sm font-medium text-red-400">
+                          Project URL {String(errors.url.message)}
                         </p>
                       )}
                     </div>
@@ -114,12 +163,27 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                         Description
                       </label>
                       <textarea
-                        {...register("description")}
+                        {...register("description", {
+                          maxLength: {
+                            value: 200,
+                            message: "must have a maximum of 200 characters",
+                          },
+                        })}
                         id="description"
                         rows={5}
-                        className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                        placeholder="Write your board description..."
+                        className={`block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 ${
+                          errors.description
+                            ? "border-red-400 bg-red-50 focus:ring-red-200"
+                            : "focus:border-indigo-400 focus:ring-indigo-200"
+                        }  focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400`}
+                        placeholder="Write your project description..."
                       />
+                      {errors.description && (
+                        <p className="mt-2 text-sm font-medium text-red-400">
+                          Project description{" "}
+                          {String(errors.description.message)}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-row items-center justify-between">
                       <button
@@ -151,4 +215,4 @@ const BoardCreateDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
   );
 };
 
-export default BoardCreateDialog;
+export default CreateProjectDialog;

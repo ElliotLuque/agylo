@@ -5,7 +5,7 @@ export const protectedRouterPage: GetServerSideProps = async (context) => {
   const { req, res } = context;
   const session = await getServerAuthSession({ req, res });
 
-  const id = context.query?.id;
+  const id = context.query?.projectId;
 
   if (!session) {
     return {

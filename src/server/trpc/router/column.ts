@@ -6,7 +6,7 @@ export const columnRouter = router({
     .input(
       z.object({
         name: z.string().min(5),
-        boardId: z.number(),
+        projectId: z.number(),
         index: z.number(),
       })
     )
@@ -17,8 +17,8 @@ export const columnRouter = router({
         data: {
           name: input.name,
           index: input.index,
-          board: {
-            connect: { id: input.boardId },
+          project: {
+            connect: { id: input.projectId },
           },
         },
       });
@@ -48,7 +48,7 @@ export const columnRouter = router({
         sourceColumnId: z.number(),
         sourceIndex: z.number(),
         destinationIndex: z.number(),
-        boardId: z.number(),
+        projectId: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -63,7 +63,7 @@ export const columnRouter = router({
 
          const destinationColumn = await tx.column.findFirst({
             where: {
-                boardId: input.boardId,
+                projectId: input.projectId,
                 index: input.destinationIndex
             }
          })

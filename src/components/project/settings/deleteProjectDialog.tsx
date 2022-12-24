@@ -7,19 +7,19 @@ import { useForm } from "react-hook-form";
 type DialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  boardId: number;
-  boardName: string;
+  projectId: number;
+  projectName: string;
 };
 
 interface IFormInput {
   name: string;
 }
 
-const DeleteBoardDialog: React.FC<DialogProps> = ({
+const DeleteProjectDialog: React.FC<DialogProps> = ({
   open,
   setOpen,
-  boardId,
-  boardName,
+  projectId,
+  projectName,
 }) => {
   const trpcUtils = trpc.useContext();
 
@@ -31,16 +31,16 @@ const DeleteBoardDialog: React.FC<DialogProps> = ({
     formState: { isValid },
   } = useForm<IFormInput>({});
 
-  const { mutateAsync: deleteBoard } = trpc.board.deleteBoard.useMutation({
+  const { mutateAsync: deleteProject } = trpc.project.deleteProject.useMutation({
     onSuccess: () => {
       setOpen(false);
       router.push("/dashboard");
-      trpcUtils.board.invalidate();
+      trpcUtils.project.invalidate();
     },
   });
 
   const onSubmit = async () => {
-    await deleteBoard({ id: boardId });
+    await deleteProject({ id: projectId });
   };
 
   return (
@@ -78,11 +78,11 @@ const DeleteBoardDialog: React.FC<DialogProps> = ({
                     Are you sure?
                   </Dialog.Title>
                   <p>
-                    This board will be deleted permanently, this action{" "}
+                    This project will be deleted permanently, this action{" "}
                     <span className="font-bold">CANNOT</span> be undone.
                   </p>
                   <p className="mt-4">
-                    Please, type <span className="font-bold">{boardName}</span>{" "}
+                    Please, type <span className="font-bold">{projectName}</span>{" "}
                     to confirm.
                   </p>
                   <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +93,7 @@ const DeleteBoardDialog: React.FC<DialogProps> = ({
                       ></label>
                       <input
                         {...register("name", {
-                          validate: (value: string) => value === boardName,
+                          validate: (value: string) => value === projectName,
                         })}
                         type="text"
                         id="name"
@@ -110,7 +110,7 @@ const DeleteBoardDialog: React.FC<DialogProps> = ({
                               : "bg-red-300"
                           } px-5 py-2.5 text-center font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800`}
                         >
-                          Permanently delete this board
+                          Permanently delete this project
                         </button>
                       </div>
                     </div>
@@ -125,4 +125,4 @@ const DeleteBoardDialog: React.FC<DialogProps> = ({
   );
 };
 
-export default DeleteBoardDialog;
+export default DeleteProjectDialog;

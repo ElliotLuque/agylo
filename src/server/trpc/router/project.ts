@@ -1,23 +1,25 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
-export const boardRouter = router({
-  createBoard: protectedProcedure
+export const projectRouter = router({
+  createProject: protectedProcedure
     .input(
       z.object({
         name: z.string(),
-        description: z.string().optional(),
+        url: z.string().regex(/^[a-zA-Z0-9-]+$/),
+        description: z.string().max(200).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
       const { id: userId } = ctx.session.user;
 
-      return await prisma.boardParticipants.create({
+      return await prisma.projectParticipants.create({
         data: {
-          board: {
+          project: {
             create: {
               name: input.name,
+              url: input.url,
               description: input.description,
               icon: {
                 connect: {
@@ -35,7 +37,7 @@ export const boardRouter = router({
         },
       });
     }),
-  updateBoard: protectedProcedure
+  updateProject: protectedProcedure
     .input(
       z.object({
         id: z.number(),
@@ -46,7 +48,7 @@ export const boardRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.board.update({
+      return await prisma.project.update({
         where: {
           id: input.id,
         },
@@ -56,36 +58,36 @@ export const boardRouter = router({
         },
       });
     }),
-  deleteBoard: protectedProcedure
+  deleteProject: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.board.delete({
+      return await prisma.project.delete({
         where: {
           id: input.id,
         },
       });
     }),
-  listUserBoards: protectedProcedure.query(async ({ ctx }) => {
+  listUserProject: protectedProcedure.query(async ({ ctx }) => {
     const { prisma } = ctx;
     const { id: userId } = ctx.session.user;
 
-    return await prisma.boardParticipants.findMany({
+    return await prisma.projectParticipants.findMany({
       where: {
         userId,
       },
       include: {
-        board: true,
+        project: true,
       },
     });
   }),
-  getBoard: protectedProcedure
+  getProject: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.board.findUnique({
+      return await prisma.project.findUnique({
         where: {
           id: input.id,
         },
@@ -104,12 +106,12 @@ export const boardRouter = router({
         },
       });
     }),
-  getBoardInfo: protectedProcedure
+  getProjectBasicInfo: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.board.findUnique({
+      return await prisma.project.findUnique({
         where: {
           id: input.id,
         },

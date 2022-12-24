@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { type ReactElement, useState } from "react";
-import BoardCreateDialog from "../components/home/createDialog";
+import CreateProjectDialog from "../components/home/createProjectDialog";
 
 import LoadingSpinner from "../components/misc/loadingSpinner";
 import { protectedPage } from "../server/common/protected-page";
@@ -11,14 +11,14 @@ import type { NextPageWithLayout } from "./_app";
 import Head from "next/head";
 import Layout from "../components/common/layout";
 
-const BoardItem: React.FC<{
+const ProjectItem: React.FC<{
   id: number;
   name: string;
   description: string | null;
 }> = ({ id, name, description }) => {
   return (
     <Link
-      href={`/board/${id}`}
+      href={`/${id}`}
       className="flex h-48 w-80 flex-col flex-nowrap gap-1 rounded-xl bg-white p-4 drop-shadow-lg"
     >
       <h1 className="text-xl font-bold">{name}</h1>
@@ -28,7 +28,7 @@ const BoardItem: React.FC<{
 };
 
 const Dashboard: NextPageWithLayout = () => {
-  const { data: boards, isLoading } = trpc.board.listUserBoards.useQuery();
+  const { data: projects, isLoading } = trpc.project.listUserProject.useQuery();
 
   const [open, setOpen] = useState(false);
 
@@ -41,22 +41,22 @@ const Dashboard: NextPageWithLayout = () => {
         <div className="flex flex-row flex-wrap justify-between">
           <h1 className="pb-1 text-3xl font-bold">My work</h1>
         </div>
-        <BoardCreateDialog open={open} setOpen={setOpen} />
+        <CreateProjectDialog open={open} setOpen={setOpen} />
         <div className="flex flex-row flex-wrap items-center gap-7 py-6">
           {isLoading ? (
             <LoadingSpinner height={48} width={16} />
           ) : (
-            boards?.map((board) => (
+            projects?.map((project) => (
               <motion.div
-                key={board.boardId}
+                key={project.projectId}
                 initial={{ x: 5, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <BoardItem
-                  id={board.boardId}
-                  name={board.board.name}
-                  description={board.board.description}
+                <ProjectItem
+                  id={project.projectId}
+                  name={project.project.name}
+                  description={project.project.description}
                 />
               </motion.div>
             ))
@@ -65,7 +65,7 @@ const Dashboard: NextPageWithLayout = () => {
             className="inline-flex w-auto justify-center rounded-lg bg-indigo-500 px-6 py-4 text-white hover:bg-indigo-800"
             onClick={() => (open ? setOpen(false) : setOpen(true))}
           >
-            Add new board
+            Add new project
           </button>
         </div>
 
