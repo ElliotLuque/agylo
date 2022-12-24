@@ -39,7 +39,7 @@ const Dashboard: NextPageWithLayout = () => {
       </Head>
       <main className="mx-12 flex flex-col flex-nowrap p-6">
         <div className="flex flex-row flex-wrap justify-between">
-          <h1 className="pb-1 text-3xl font-bold">My work</h1>
+          <h1 className="pb-1 text-3xl font-bold">Dashboard</h1>
         </div>
         <CreateProjectDialog open={open} setOpen={setOpen} />
         <div className="flex flex-row flex-wrap items-center gap-7 py-6">

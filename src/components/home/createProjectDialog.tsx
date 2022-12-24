@@ -1,9 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../../utils/trpc";
 import { Fragment } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 type DialogProps = {
   open: boolean;
