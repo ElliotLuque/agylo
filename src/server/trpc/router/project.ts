@@ -136,11 +136,18 @@ export const projectRouter = router({
         },
       });
 
+      if (!projectId) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found",
+        });
+      }
+
       const participant = await prisma.projectParticipants.findUnique({
         where: {
           projectId_userId: {
             projectId: projectId?.id as number,
-            userId
+            userId,
           },
         },
       });
