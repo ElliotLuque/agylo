@@ -81,7 +81,20 @@ const KanbanPage: NextPageWithLayout = ({
           <title> Not authorized - Agylo</title>
         </Head>
         <div className="grid w-full place-items-center">
-          <h1 className="text-2xl">You are not authorized in this project</h1>
+          <h1 className="text-2xl">You don&lsquo;t have access to this project</h1>
+        </div>
+      </>
+    );
+  }
+
+  if (error?.data?.httpStatus === 404) {
+    return (
+      <>
+        <Head>
+          <title> Not found - Agylo</title>
+        </Head>
+        <div className="grid w-full place-items-center">
+          <h1 className="text-2xl">Project not found</h1>
         </div>
       </>
     );
