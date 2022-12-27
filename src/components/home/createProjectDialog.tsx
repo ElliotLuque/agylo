@@ -28,7 +28,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     {
       onSuccess: () => {
         setOpen(false);
-        utils.project.listUserProject.invalidate();
+        utils.project.listUserProjects.invalidate();
         reset();
       },
     }
@@ -97,6 +97,10 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                             value: 5,
                             message: "must have at least 5 characters",
                           },
+                          maxLength: {
+                            value: 20,
+                            message: "must have a maximum of 20 characters",
+                          },
                         })}
                         type="text"
                         id="name"
@@ -132,6 +136,10 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                         <input
                           {...register("url", {
                             required: { value: true, message: "is required" },
+                            maxLength: {
+                              value: 20,
+                              message: "must have a maximum of 20 characters",
+                            },
                             pattern: {
                               value: /^[a-zA-Z0-9-]+$/,
                               message:

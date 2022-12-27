@@ -5,7 +5,7 @@ export const protectedRouterPage: GetServerSideProps = async (context) => {
   const { req, res } = context;
   const session = await getServerAuthSession({ req, res });
 
-  const id = context.query?.projectId;
+  const url = context.query?.projectUrl;
 
   if (!session) {
     return {
@@ -17,6 +17,6 @@ export const protectedRouterPage: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { session, id },
+    props: { session, url },
   };
 };

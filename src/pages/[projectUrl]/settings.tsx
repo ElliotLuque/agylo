@@ -15,14 +15,15 @@ import SettingsForm from "../../components/project/settings/settingsForm";
 import DeleteProjectDialog from "../../components/project/settings/deleteProjectDialog";
 
 const SettingsPage: NextPageWithLayout = ({
-  id,
+  url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+
   const { data: projectInfo } = trpc.project.getProjectBasicInfo.useQuery({
-    id: parseInt(id as string),
+    url,
   });
 
-  const [open, setOpen] = useState(false);
-  
+  const [openDialog, setOpenDialog] = useState(false);
+
   const [toast, setToast] = useState(false);
 
   return (
@@ -31,7 +32,7 @@ const SettingsPage: NextPageWithLayout = ({
         <title>{projectInfo?.name} - Settings - Agylo</title>
       </Head>
       <div className="absolute right-28 top-32">
-      <Toast message="Project updated successfully!" isOpen={toast} />
+        <Toast message="Project updated successfully!" isOpen={toast} />
       </div>
       <div className="w-full">
         <div className="flex flex-col items-center justify-center">
@@ -58,27 +59,29 @@ const SettingsPage: NextPageWithLayout = ({
             <div className="mb-5 pt-5">
               <h1 className="text-lg font-medium text-gray-800">Details</h1>
               <SettingsForm
-                id={parseInt(id as string)}
+                id={projectInfo?.id as number}
                 name={projectInfo?.name ?? ""}
                 description={projectInfo?.description ?? ""}
                 setToast={setToast}
               />
             </div>
             <div className="mb-5 pt-5">
-              <h1 className="text-lg font-medium text-gray-800">Delete project</h1>
+              <h1 className="text-lg font-medium text-gray-800">
+                Delete project
+              </h1>
               <p className="mt-2 text-sm text-gray-500">
-                If you delete this project, all tasks, team members and comments will
-                be permanently deleted. Please be certain.
+                If you delete this project, all tasks, team members and comments
+                will be permanently deleted. Please be certain.
               </p>
               <DeleteProjectDialog
-                open={open}
-                setOpen={setOpen}
-                projectId={parseInt(id as string)}
-                projectName={projectInfo?.name ?? ""}
+                open={openDialog}
+                setOpen={setOpenDialog}
+                projectId={projectInfo?.id as number}
+                projectName={projectInfo?.name as string}
               />
               <button
-                onClick={() => setOpen(true)}
-                className="mt-5 w-full rounded-lg bg-red-500 px-8 py-2.5 text-center text-md font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 sm:w-auto"
+                onClick={() => setOpenDialog(true)}
+                className="text-md mt-5 w-full rounded-lg bg-red-500 px-8 py-2.5 text-center font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 sm:w-auto"
               >
                 Delete this project
               </button>
@@ -94,11 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) =>
   protectedRouterPage(context);
 
 SettingsPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export default SettingsPage;

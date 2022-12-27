@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -47,6 +48,23 @@ export const projectRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
+      const { id: userId } = ctx.session.user;
+
+      const participant = await prisma.projectParticipants.findUnique({
+        where: {
+          projectId_userId: {
+            projectId: input.id,
+            userId,
+          },
+        },
+      });
+
+      if (!participant) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have access to this project",
+        });
+      }
 
       return await prisma.project.update({
         where: {
@@ -62,6 +80,23 @@ export const projectRouter = router({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
+      const { id: userId } = ctx.session.user;
+
+      const participant = await prisma.projectParticipants.findUnique({
+        where: {
+          projectId_userId: {
+            projectId: input.id,
+            userId,
+          },
+        },
+      });
+
+      if (!participant) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have access to this project",
+        });
+      }
 
       return await prisma.project.delete({
         where: {
@@ -69,7 +104,7 @@ export const projectRouter = router({
         },
       });
     }),
-  listUserProject: protectedProcedure.query(async ({ ctx }) => {
+  listUserProjects: protectedProcedure.query(async ({ ctx }) => {
     const { prisma } = ctx;
     const { id: userId } = ctx.session.user;
 
@@ -78,18 +113,48 @@ export const projectRouter = router({
         userId,
       },
       include: {
-        project: true,
+        project: {
+          include: {
+            icon: true,
+          },
+        },
       },
     });
   }),
   getProject: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
+      const { id: userId } = ctx.session.user;
+
+      const projectId = await prisma.project.findUnique({
+        where: {
+          url: input.url,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const participant = await prisma.projectParticipants.findUnique({
+        where: {
+          projectId_userId: {
+            projectId: projectId?.id as number,
+            userId
+          },
+        },
+      });
+
+      if (!participant) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have access to this project",
+        });
+      }
 
       return await prisma.project.findUnique({
         where: {
-          id: input.id,
+          url: input.url,
         },
         include: {
           labels: true,
@@ -107,13 +172,13 @@ export const projectRouter = router({
       });
     }),
   getProjectBasicInfo: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
       return await prisma.project.findUnique({
         where: {
-          id: input.id,
+          url: input.url,
         },
         include: {
           icon: true,

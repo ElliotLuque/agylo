@@ -40,7 +40,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
   });
 
   const onSubmit = async () => {
-    await deleteProject({ id: projectId });
+    await deleteProject({ url: projectId });
   };
 
   return (

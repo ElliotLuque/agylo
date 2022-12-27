@@ -28,7 +28,7 @@ type Column = {
 };
 
 const KanbanPage: NextPageWithLayout = ({
-  id,
+  url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const trpcUtils = trpc.useContext();
   const sensors = useSensors(
@@ -40,10 +40,8 @@ const KanbanPage: NextPageWithLayout = ({
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const { data: projectData, isLoading } = trpc.project.getProject.useQuery(
-    {
-      id: parseInt(id as string),
-    },
+  const { data: projectData, isLoading, error } = trpc.project.getProject.useQuery(
+    { url },
     {
       onSuccess: () => {
         setColumns(projectData?.columns || []);
@@ -57,14 +55,6 @@ const KanbanPage: NextPageWithLayout = ({
     },
   });
 
-  const handleCreateColumn = async () => {
-    await createColumn({
-      projectId: parseInt(id as string),
-      name: "New Column",
-      index: 0,
-    });
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleDragEnd(event: any) {
     const { active, over } = event;
@@ -77,6 +67,16 @@ const KanbanPage: NextPageWithLayout = ({
         return arrayMove(items, oldIndex, newIndex);
       });
     }
+  }
+
+  if (error) {
+    return (
+      <>
+        <div className="grid w-full place-items-center">
+          <h1 className="text-2xl">You are not authorized to view this page</h1>
+        </div>
+      </>
+    );
   }
 
   if (isLoading) {
@@ -98,7 +98,7 @@ const KanbanPage: NextPageWithLayout = ({
         <Header
           name={projectData?.name ?? "Project"}
           description={projectData?.description ?? ""}
-          id={parseInt(id as string)}
+          url={projectData?.url as string}
         />
         <div>
           <DndContext

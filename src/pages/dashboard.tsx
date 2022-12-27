@@ -12,13 +12,13 @@ import Head from "next/head";
 import Layout from "../components/common/layout";
 
 const ProjectItem: React.FC<{
-  id: number;
+  url: string;
   name: string;
   description: string | null;
-}> = ({ id, name, description }) => {
+}> = ({ url, name, description }) => {
   return (
     <Link
-      href={`/${id}`}
+      href={`/${url}`}
       className="flex h-48 w-80 flex-col flex-nowrap gap-1 rounded-xl bg-white p-4 drop-shadow-lg"
     >
       <h1 className="text-xl font-bold">{name}</h1>
@@ -28,7 +28,7 @@ const ProjectItem: React.FC<{
 };
 
 const Dashboard: NextPageWithLayout = () => {
-  const { data: projects, isLoading } = trpc.project.listUserProject.useQuery();
+  const { data: projects, isLoading } = trpc.project.listUserProjects.useQuery();
 
   const [open, setOpen] = useState(false);
 
@@ -54,7 +54,7 @@ const Dashboard: NextPageWithLayout = () => {
                 transition={{ duration: 0.3 }}
               >
                 <ProjectItem
-                  id={project.projectId}
+                  url={project.project.url}
                   name={project.project.name}
                   description={project.project.description}
                 />
