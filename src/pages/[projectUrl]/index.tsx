@@ -40,7 +40,11 @@ const KanbanPage: NextPageWithLayout = ({
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const { data: projectData, isLoading, error } = trpc.project.getProject.useQuery(
+  const {
+    data: projectData,
+    isLoading,
+    error,
+  } = trpc.project.getProject.useQuery(
     { url },
     {
       onSuccess: () => {
@@ -72,6 +76,9 @@ const KanbanPage: NextPageWithLayout = ({
   if (error) {
     return (
       <>
+        <Head>
+          <title> Not authorized - Agylo</title>
+        </Head>
         <div className="grid w-full place-items-center">
           <h1 className="text-2xl">You are not authorized to view this page</h1>
         </div>
@@ -82,6 +89,9 @@ const KanbanPage: NextPageWithLayout = ({
   if (isLoading) {
     return (
       <>
+        <Head>
+          <title>Agylo</title>
+        </Head>
         <div className="grid w-full place-items-center">
           <LoadingSpinner height={48} width={48} />
         </div>

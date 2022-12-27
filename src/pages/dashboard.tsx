@@ -35,7 +35,7 @@ const Dashboard: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Agylo - Dashboard</title>
+        <title>Dashboard - Agylo</title>
       </Head>
       <main className="mx-12 flex flex-col flex-nowrap p-6">
         <div className="flex flex-row flex-wrap justify-between">
