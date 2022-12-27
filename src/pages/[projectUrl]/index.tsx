@@ -43,13 +43,14 @@ const KanbanPage: NextPageWithLayout = ({
   const {
     data: projectData,
     isLoading,
-    error,
+    error
   } = trpc.project.getProject.useQuery(
     { url },
     {
       onSuccess: () => {
         setColumns(projectData?.columns || []);
       },
+      retry: false,
     }
   );
 
@@ -73,14 +74,14 @@ const KanbanPage: NextPageWithLayout = ({
     }
   }
 
-  if (error) {
+  if (error?.data?.httpStatus === 403) {
     return (
       <>
         <Head>
           <title> Not authorized - Agylo</title>
         </Head>
         <div className="grid w-full place-items-center">
-          <h1 className="text-2xl">You are not authorized to view this page</h1>
+          <h1 className="text-2xl">You are not authorized in this project</h1>
         </div>
       </>
     );
