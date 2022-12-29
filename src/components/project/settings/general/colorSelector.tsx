@@ -6,12 +6,13 @@ import { getIconBg } from "../../../../utils/colorSetter";
 import { Float } from "@headlessui-float/react";
 
 const ColorSelector: React.FC<{
+  currentIcon: number;
   projectId: number;
   setToast: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ projectId, setToast }) => {
+}> = ({ currentIcon, projectId, setToast }) => {
   const trpcUtils = trpc.useContext();
   const { data: colors } = trpc.colors.list.useQuery();
-  const [selectedColor, setSelectedColor] = useState<number>(0);
+  const [selectedColor, setSelectedColor] = useState<number>(currentIcon);
 
   const { mutateAsync: updateIcon } =
     trpc.project.updateProjectIcon.useMutation({
