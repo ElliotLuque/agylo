@@ -14,17 +14,30 @@ import DeleteProjectDialog from "../../components/project/settings/general/delet
 import SettingsSection from "../../components/project/settings/general/sections/settingsSection";
 import DeleteSection from "../../components/project/settings/general/sections/deleteSection";
 import IconSection from "../../components/project/settings/general/sections/iconSection";
+import LoadingSpinner from "../../components/misc/loadingSpinner";
 
 const SettingsPage: NextPageWithLayout = ({
   url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: projectInfo } = trpc.project.getProjectBasicInfo.useQuery({
+  const { data: projectInfo, isLoading } = trpc.project.getProjectBasicInfo.useQuery({
     url,
   });
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const [toast, setToast] = useState(false);
+  const [errorToast, setErrorToast] = useState(false);
+
+  if (isLoading) {
+    return <>
+    <Head>
+      <title>Agylo</title>
+    </Head>
+    <div className="grid w-full place-items-center">
+      <LoadingSpinner height={48} width={48} />
+    </div>
+  </>
+  }
 
   return (
     <>
@@ -39,8 +52,9 @@ const SettingsPage: NextPageWithLayout = ({
         projectName={projectInfo?.name as string}
       />
 
-      <div className="absolute right-28 top-32">
-        <Toast message="Project updated successfully!" isOpen={toast} />
+      <div className="absolute right-28 top-36">
+        <Toast message="Project updated successfully!" isOpen={toast} error={false} />
+        <Toast message="Project URL is already in use!" isOpen={errorToast} error />
       </div>
       <div className="w-full">
         <div className="flex flex-col items-center justify-center">
@@ -52,15 +66,18 @@ const SettingsPage: NextPageWithLayout = ({
               </h2>
             </div>
             <IconSection
+            currentIcon={projectInfo?.iconId as number}
               iconId={projectInfo?.iconId as number}
               setToast={setToast}
               projectId={projectInfo?.id as number}
             />
             <SettingsSection
               id={projectInfo?.id as number}
+              url={projectInfo?.url as string}
               name={projectInfo?.name ?? ""}
               description={projectInfo?.description ?? ""}
               setToast={setToast}
+              setErrorToast={setErrorToast}
             />
             <DeleteSection setOpenDialog={setOpenDialog} />
           </div>
