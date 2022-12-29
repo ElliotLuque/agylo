@@ -85,7 +85,7 @@ export const projectRouter = router({
           if (error.code === "P2002") {
             throw new TRPCError({
               code: "CONFLICT",
-              message: "Project url already exists",
+              message: "Project url already exists!",
             });
           }
         }
