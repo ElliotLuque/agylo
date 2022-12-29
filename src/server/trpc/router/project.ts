@@ -6,6 +6,7 @@ export const projectRouter = router({
   createProject: protectedProcedure
     .input(
       z.object({
+        iconId: z.number(),
         name: z.string(),
         url: z.string().regex(/^[a-zA-Z0-9-]+$/),
         description: z.string().max(200).optional(),
@@ -24,7 +25,7 @@ export const projectRouter = router({
               description: input.description,
               icon: {
                 connect: {
-                  id: 1,
+                  id: input.iconId,
                 },
               },
             },
@@ -73,6 +74,46 @@ export const projectRouter = router({
         data: {
           name: input.name,
           description: input.description,
+        },
+      });
+    }),
+  updateProjectIcon: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        iconId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+      const { id: userId } = ctx.session.user;
+
+      const participant = await prisma.projectParticipants.findUnique({
+        where: {
+          projectId_userId: {
+            projectId: input.id,
+            userId,
+          },
+        },
+      });
+
+      if (!participant) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have access to this project",
+        });
+      }
+
+      return await prisma.project.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          icon: {
+            connect: {
+              id: input.iconId,
+            },
+          },
         },
       });
     }),
