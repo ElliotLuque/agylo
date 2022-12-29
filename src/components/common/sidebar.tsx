@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
 
 const ProjectItem: React.FC<{ name: string, url: string, iconId: number, }> = ({name, url, iconId}) => {
  return <Link
- className="flex items-center gap-2 "
+ className="flex items-center gap-2 align-middle"
  href={`/${url}`}
 
 >
