@@ -7,7 +7,7 @@ import { getIconBg } from "../../../utils/colorSetter";
 const ColorSelector: React.FC<{projectId: number}> = ({projectId}) => {
   const trpcUtils = trpc.useContext();
   const { data: colors } = trpc.colors.list.useQuery();
-  const [selectedColor, setSelectedColor] = useState<number>(2);
+  const [selectedColor, setSelectedColor] = useState<number>(0);
 
   const { mutateAsync: updateIcon } = trpc.project.updateProjectIcon.useMutation();
 
