@@ -1,6 +1,5 @@
 import { type ReactElement, useState } from "react";
 import { trpc } from "../../utils/trpc";
-import Image from "next/image";
 import type { NextPageWithLayout } from "../_app";
 import { protectedRouterPage } from "../../server/common/protected-router-page";
 import {
@@ -13,6 +12,8 @@ import Toast from "../../components/common/toast";
 import Layout from "../../components/common/layout";
 import SettingsForm from "../../components/project/settings/settingsForm";
 import DeleteProjectDialog from "../../components/project/settings/deleteProjectDialog";
+import { getIconBg } from "../../utils/colorSetter";
+import ColorSelector from "../../components/project/settings/colorSelector";
 
 const SettingsPage: NextPageWithLayout = ({
   url,
@@ -36,27 +37,18 @@ const SettingsPage: NextPageWithLayout = ({
       </div>
       <div className="w-full">
         <div className="flex flex-col items-center justify-center">
-          <div className="mx-4 flex w-[32rem] flex-col gap-7 divide-y p-5">
-            <div className="mt-5">
+          <div className="mx-4 flex w-[32rem] flex-col gap-5 divide-y p-5">
+            <div className="mt-5 mb-2">
               <h1 className="text-2xl font-bold text-gray-800">Project</h1>
               <h2 className="text-sm  font-medium text-gray-500">
                 Manage your project settings
               </h2>
+            </div>   
+            <div className="py-5 flex flex-col items-center gap-6">
+              <span className={`w-20 h-20 mt-4 rounded-2xl ${getIconBg(projectInfo?.iconId as number)}`}></span>
+              <ColorSelector projectId={projectInfo?.id as number} />
             </div>
             <div className="py-5">
-              <Image
-                width={95}
-                height={95}
-                src={
-                  "https://cdn-icons-png.flaticon.com/512/1195/1195191.png?w=1800&t=st=1671288239~exp=1671288839~hmac=eaf6e627a59608a80254c733b040b5d8ca2fb12d18c21a55264eb4f30633646d"
-                }
-                alt="default icon"
-              />
-              <button className="mt-5 w-full rounded-lg bg-indigo-500 px-2.5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto">
-                Change icon
-              </button>
-            </div>
-            <div className="mb-5 pt-5">
               <h1 className="text-lg font-medium text-gray-800">Details</h1>
               <SettingsForm
                 id={projectInfo?.id as number}
@@ -65,7 +57,7 @@ const SettingsPage: NextPageWithLayout = ({
                 setToast={setToast}
               />
             </div>
-            <div className="mb-5 pt-5">
+            <div className="py-5">
               <h1 className="text-lg font-medium text-gray-800">
                 Delete project
               </h1>

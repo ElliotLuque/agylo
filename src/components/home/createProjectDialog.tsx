@@ -1,14 +1,16 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { trpc } from "../../utils/trpc";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
+import { getIconBg } from "../../utils/colorSetter";
 
 type DialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-interface IProjectInputs {
+interface IProjectFormInputs {
   name: string;
   url: string;
   description?: string;
@@ -22,7 +24,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IProjectInputs>({});
+  } = useForm<IProjectFormInputs>({});
 
   const { mutateAsync: createProject } = trpc.project.createProject.useMutation(
     {
@@ -34,13 +36,17 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
     }
   );
 
-  const onSubmit = async (data: IProjectInputs) => {
+  const onSubmit = async (formData: IProjectFormInputs) => {
     createProject({
-      name: data.name,
-      url: data.url,
-      description: data.description,
+      iconId: selectedColor,
+      name: formData.name,
+      url: formData.url,
+      description: formData.description,
     });
   };
+
+  const { data: colors } = trpc.colors.list.useQuery();
+  const [selectedColor, setSelectedColor] = useState<number>(1);
 
   return (
     <>
@@ -82,7 +88,28 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                     creating tasks and managing work.
                   </p>
 
-                  <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+                  <form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="mb-6">
+                      <p className="text-md mb-3.5 block font-medium text-gray-800 dark:text-white">
+                        Icon
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        {colors?.map((color) => {
+                          return (
+                            <motion.span
+                              onClick={() => setSelectedColor(color.id)}
+                              key={color.id}
+                              className={`h-8 w-8 cursor-pointer rounded ${getIconBg(color.id)} ${
+                                color.id === selectedColor
+                                  ? "ring-4 ring-indigo-400"
+                                  : ""
+                              }`}
+                              whileHover={{ scale: 1.3 }}
+                            ></motion.span>
+                          );
+                        })}
+                      </div>
+                    </div>
                     <div className="mb-6">
                       <label
                         htmlFor="name"
