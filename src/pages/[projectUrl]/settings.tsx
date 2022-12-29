@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from "react";
+import React, { type ReactElement, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import type { NextPageWithLayout } from "../_app";
 import { protectedRouterPage } from "../../server/common/protected-router-page";
@@ -10,15 +10,14 @@ import {
 import Head from "next/head";
 import Toast from "../../components/common/toast";
 import Layout from "../../components/common/layout";
-import SettingsForm from "../../components/project/settings/settingsForm";
-import DeleteProjectDialog from "../../components/project/settings/deleteProjectDialog";
-import { getIconBg } from "../../utils/colorSetter";
-import ColorSelector from "../../components/project/settings/colorSelector";
+import DeleteProjectDialog from "../../components/project/settings/general/deleteProjectDialog";
+import SettingsSection from "../../components/project/settings/general/sections/settingsSection";
+import DeleteSection from "../../components/project/settings/general/sections/deleteSection";
+import IconSection from "../../components/project/settings/general/sections/iconSection";
 
 const SettingsPage: NextPageWithLayout = ({
   url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-
   const { data: projectInfo } = trpc.project.getProjectBasicInfo.useQuery({
     url,
   });
@@ -32,6 +31,14 @@ const SettingsPage: NextPageWithLayout = ({
       <Head>
         <title>{projectInfo?.name} - Settings - Agylo</title>
       </Head>
+
+      <DeleteProjectDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        projectId={projectInfo?.id as number}
+        projectName={projectInfo?.name as string}
+      />
+
       <div className="absolute right-28 top-32">
         <Toast message="Project updated successfully!" isOpen={toast} />
       </div>
@@ -43,41 +50,19 @@ const SettingsPage: NextPageWithLayout = ({
               <h2 className="text-sm  font-medium text-gray-500">
                 Manage your project settings
               </h2>
-            </div>   
-            <div className="py-5 flex flex-col items-center gap-6">
-              <span className={`w-20 h-20 mt-4 rounded-2xl ${getIconBg(projectInfo?.iconId as number)}`}></span>
-              <ColorSelector projectId={projectInfo?.id as number} />
             </div>
-            <div className="py-5">
-              <h1 className="text-lg font-medium text-gray-800">Details</h1>
-              <SettingsForm
-                id={projectInfo?.id as number}
-                name={projectInfo?.name ?? ""}
-                description={projectInfo?.description ?? ""}
-                setToast={setToast}
-              />
-            </div>
-            <div className="py-5">
-              <h1 className="text-lg font-medium text-gray-800">
-                Delete project
-              </h1>
-              <p className="mt-2 text-sm text-gray-500">
-                If you delete this project, all tasks, team members and comments
-                will be permanently deleted. Please be certain.
-              </p>
-              <DeleteProjectDialog
-                open={openDialog}
-                setOpen={setOpenDialog}
-                projectId={projectInfo?.id as number}
-                projectName={projectInfo?.name as string}
-              />
-              <button
-                onClick={() => setOpenDialog(true)}
-                className="text-md mt-5 w-full rounded-lg bg-red-500 px-8 py-2.5 text-center font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 sm:w-auto"
-              >
-                Delete this project
-              </button>
-            </div>
+            <IconSection
+              iconId={projectInfo?.iconId as number}
+              setToast={setToast}
+              projectId={projectInfo?.id as number}
+            />
+            <SettingsSection
+              id={projectInfo?.id as number}
+              name={projectInfo?.name ?? ""}
+              description={projectInfo?.description ?? ""}
+              setToast={setToast}
+            />
+            <DeleteSection setOpenDialog={setOpenDialog} />
           </div>
         </div>
       </div>
