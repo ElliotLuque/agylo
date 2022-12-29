@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         <div className="flex cursor-default items-center gap-3">
           <NotificationIcon />
           <h1 className="opacity-40 ">
-            Inbox <span className="text-sm">(Coming soon)</span>
+            Inbox <span className="text-sm">(Coming soon!)</span>
           </h1>
         </div>
       </div>
@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
       />
 
       <aside className="border-r-1 fixed top-0 h-screen w-72 border border-gray-200 bg-white">
-        <div className="flex h-full flex-col gap-2 py-4 px-7">
+        <div className="flex h-full flex-col gap-6 py-4 px-7">
           <h1 className="mt-5 text-2xl font-bold text-indigo-500"> Agylo</h1>
           <Navbar />
           <div className="mt-8">
