@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 
 export const projectRouter = router({
   createProject: protectedProcedure
@@ -44,6 +45,7 @@ export const projectRouter = router({
       z.object({
         id: z.number(),
         name: z.string(),
+        url: z.string().regex(/^[a-zA-Z0-9-]+$/),
         description: z.string().optional(),
       })
     )
@@ -67,15 +69,27 @@ export const projectRouter = router({
         });
       }
 
-      return await prisma.project.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          name: input.name,
-          description: input.description,
-        },
-      });
+      try {
+        return await prisma.project.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            name: input.name,
+            url: input.url,
+            description: input.description,
+          },
+        });
+      } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === "P2002") {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "Project url already exists",
+            });
+          }
+        }
+      }
     }),
   updateProjectIcon: protectedProcedure
     .input(
