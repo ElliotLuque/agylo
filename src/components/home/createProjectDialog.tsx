@@ -175,7 +175,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
                           })}
                           type="text"
                           id="url"
-                          className={`w-full p-2.5 ${
+                          className={`w-full p-2.5 bg-gray-50 ${
                             errors.url
                               ? "border-red-400 bg-red-50 focus:ring-red-200"
                               : "focus:border-indigo-400 focus:ring-indigo-200"
