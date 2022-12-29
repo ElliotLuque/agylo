@@ -42,7 +42,7 @@ const ProjectItem: React.FC<{ name: string, url: string, iconId: number, }> = ({
 
 >
  <span
-   className={`mr-3 h-3 w-3 rounded ${getIconBg(
+   className={`mr-3 h-3 w-3 rounded-sm ${getIconBg(
      iconId
    )}`}
  ></span>
