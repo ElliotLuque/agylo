@@ -86,7 +86,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
                     to confirm.
                   </p>
                   <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="mb-6">
+                    <div className="mb-1">
                       <label
                         htmlFor="name"
                         className="text-md mb-2 block font-medium text-gray-800 dark:text-white"
@@ -100,7 +100,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
                         className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm font-medium text-gray-900 focus:border-red-400
                       focus:outline-none focus:ring-1 focus:ring-red-200`}
                       />
-                      <div className="mt-5 flex w-full flex-row items-center justify-between">
+                      <div className="mt-3 flex w-full flex-row items-center justify-between">
                         <button
                           disabled={!isValid}
                           type="submit"
