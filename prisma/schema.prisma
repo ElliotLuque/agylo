@@ -90,6 +90,7 @@ model Task {
   id          Int      @id @default(autoincrement())
   title       String
   description String?   @db.Text
+  taskKey     String  @unique
   createdAt   DateTime @default(now())
   index       Int
 
