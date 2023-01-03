@@ -32,7 +32,7 @@ model Attachment {
   filename      String
 
   comment       Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId     Int
+  commentId     Int?
 
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
@@ -93,19 +93,22 @@ model Task {
   createdAt   DateTime @default(now())
   index       Int
 
+  commentCount Int?
+  attachmentCount Int?
+
   column      Column   @relation(fields: [columnId], references: [id])
   columnId    Int
 
   priority    Priority? @relation(fields: [priorityId], references: [id])
-  priorityId  Int
+  priorityId  Int?
 
   author      User   @relation(fields: [authorId], references: [id], name: "author")
   authorId    String
 
-  asignee     User?   @relation(fields: [asigneeId], references: [id], name: "asignee")
-  asigneeId   String
+  assignee     User?   @relation(fields: [assigneeId], references: [id], name: "assignee")
+  assigneeId   String?
 
-  label       TaskLabels[]
+  labels      TaskLabels[]
   comments    Comment[]
   attachments Attachment[]
 
@@ -113,7 +116,7 @@ model Task {
   @@index([priorityId])
 
   @@index([authorId])
-  @@index([asigneeId])
+  @@index([assigneeId])
 }
 
 model Column {
@@ -157,6 +160,7 @@ model Project {
   name          String
   url           String      @unique
   description   String?      
+  taskKey       String     
   createdAt     DateTime    @default(now())
 
   iconId        Int
@@ -186,7 +190,7 @@ model User {
   sessions      Session[]
   userProjects  ProjectParticipants[]
   createdTasks  Task[]   @relation("author")
-  asignedTasks  Task[]   @relation("asignee")
+  assignedTasks Task[]   @relation("assignee")
   comments      Comment[]
 
 }
