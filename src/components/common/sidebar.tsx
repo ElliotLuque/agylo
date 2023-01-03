@@ -64,7 +64,7 @@ const Sidebar: React.FC = () => {
         setOpen={setOpenCreateDialog}
       />
 
-      <aside className="border-r-1 fixed top-0 h-screen w-72 border border-gray-200 bg-white">
+      <aside className="border-r-1 fixed top-0 h-screen w-72 border z-10 border-gray-200 bg-white">
         <div className="flex h-full flex-col gap-6 py-4 px-7">
           <h1 className="mt-5 text-2xl font-bold text-indigo-500"> Agylo</h1>
           <Navbar />
