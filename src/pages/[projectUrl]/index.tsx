@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import { trpc } from "../../utils/trpc";
 import type { NextPageWithLayout } from "../_app";
 import {
@@ -8,47 +8,29 @@ import {
 import { protectedRouterPage } from "../../server/common/protected-router-page";
 import LoadingSpinner from "../../components/misc/loadingSpinner";
 
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Head from "next/head";
 import Header from "../../components/common/header";
 import Layout from "../../components/common/layout";
-
-type Column = {
-  id: number;
-  name: string;
-  index: number;
-};
+import type { Column} from "../../types/kanban";
+import KanbanBoard from "../../components/project/views/kanban/kanbanBoard";
 
 const KanbanPage: NextPageWithLayout = ({
   url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const trpcUtils = trpc.useContext();
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const [columns, setColumns] = useState<Column[]>([]);
 
   const {
     data: projectData,
     isLoading,
-    error
-  } = trpc.project.getProject.useQuery(
+    error,
+  } = trpc.project.getKanbanData.useQuery(
     { url },
     {
       onSuccess: () => {
-        setColumns(projectData?.columns || []);
+        // setColumns([]);
+        // projectData?.columns?.forEach((column) => {
+        //   setColumns((prev) => [...prev, column]);
+        // });
       },
       retry: false,
     }
@@ -57,22 +39,17 @@ const KanbanPage: NextPageWithLayout = ({
   const { mutateAsync: createColumn } = trpc.column.createColumn.useMutation({
     onSuccess: () => {
       trpcUtils.project.invalidate();
+      trpcUtils.column.invalidate();
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function handleDragEnd(event: any) {
-    const { active, over } = event;
-
-    if (active.id !== over.id) {
-      setColumns((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
-
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  }
+  const handleCreateColumn = async () => {
+    await createColumn({
+      projectId: projectData?.id as number,
+      name: "New column",
+      index: projectData?.columns.length as number,
+    });
+  };
 
   if (error?.data?.httpStatus === 403) {
     return (
@@ -81,7 +58,9 @@ const KanbanPage: NextPageWithLayout = ({
           <title> Not authorized - Agylo</title>
         </Head>
         <div className="grid w-full place-items-center">
-          <h1 className="text-2xl">You don&lsquo;t have access to this project</h1>
+          <h1 className="text-2xl">
+            You don&apos;t have access to this project
+          </h1>
         </div>
       </>
     );
@@ -118,31 +97,15 @@ const KanbanPage: NextPageWithLayout = ({
       <Head>
         <title>{projectData?.name} - Agylo</title>
       </Head>
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col px-7 py-3">
         <Header
           name={projectData?.name ?? "Project"}
           description={projectData?.description ?? ""}
           url={projectData?.url as string}
         />
-        <div>
-          <DndContext
-            collisionDetection={closestCenter}
-            sensors={sensors}
-            onDragEnd={handleDragEnd}
-          >
-            {/* <SortableContext
-          items={columns}
-          strategy={horizontalListSortingStrategy}
-        >
-          {columns.map((column) => (
-            <ColumnDraggable
-              key={column.id}
-              id={column.id}
-              name={column.name}
-            />
-          ))}
-        </SortableContext> */}
-          </DndContext>
+        <button onClick={handleCreateColumn}>Create column</button>
+        <div className="w-full flex gap-4 p-7">
+          <KanbanBoard columns={projectData?.columns as Column[]}/>
         </div>
       </div>
     </>

@@ -23,6 +23,7 @@ export const projectRouter = router({
             create: {
               name: input.name,
               url: input.url,
+              taskKey: input.name.substring(0, 3).toUpperCase(),
               description: input.description,
               icon: {
                 connect: {
@@ -176,7 +177,7 @@ export const projectRouter = router({
       },
     });
   }),
-  getProject: protectedProcedure
+  getKanbanData: protectedProcedure
     .input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
     .query(async ({ ctx, input }) => {
       const { prisma } = ctx;
@@ -218,16 +219,44 @@ export const projectRouter = router({
         where: {
           url: input.url,
         },
-        include: {
-          labels: true,
-          participants: true,
-          icon: true,
+        select: {
+          id: true,
+          name: true,
+          url: true,
+          taskKey: true,
+          description: true,
           columns: {
-            include: {
-              tasks: true,
-            },
-            orderBy: {
-              index: "asc",
+            select: {
+              id: true,
+              name: true,
+              index: true,
+              tasks: {
+                select: {
+                  id: true,
+                  title: true,
+                  index: true,
+                  commentCount: true,
+                  attachmentCount: true,
+                  priorityId: true,
+                  labels: {
+                    select: {
+                      label: {
+                        select: {
+                          id: true,
+                          name: true,
+                          colorId: true,
+                        },
+                      },
+                    },
+                  },
+                  assignee: {
+                    select: {
+                      id: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
             },
           },
         },
