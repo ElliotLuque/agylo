@@ -20,6 +20,14 @@ async function main() {
     data: [{ name: "Low" }, { name: "Medium" }, { name: "High" }],
   });
 
+  const roles = await prisma.role.createMany({
+    data: [
+      {name: "admin"},
+      {name: "member"},
+    ]
+  })
+
+  console.log({ roles});
   console.log({ icons});
   console.log({ priorities});
 }
