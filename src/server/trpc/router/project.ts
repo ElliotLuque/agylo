@@ -23,7 +23,7 @@ export const projectRouter = router({
             create: {
               name: input.name,
               url: input.url,
-              taskKey: input.name.substring(0, 3).toUpperCase(),
+              key: input.name.substring(0, 3).toUpperCase(),
               description: input.description,
               icon: {
                 connect: {
@@ -223,18 +223,25 @@ export const projectRouter = router({
           id: true,
           name: true,
           url: true,
-          taskKey: true,
+          key: true,
           description: true,
           columns: {
+            orderBy: {
+              index: "asc",
+            },
             select: {
               id: true,
               name: true,
               index: true,
               tasks: {
+                orderBy: {
+                  index: "asc",
+                },
                 select: {
                   id: true,
                   title: true,
                   index: true,
+                  taskKey: true,
                   commentCount: true,
                   attachmentCount: true,
                   priorityId: true,
