@@ -17,7 +17,7 @@ const AddColumn: React.FC<{
   const handleCreateColumn = async (formData: { name: string }) => {
     try {
       const newColumn = await createColumn({
-        name: formData.name,
+        name: formData.name.trim(),
         projectId,
         index: columnsLength,
       });
