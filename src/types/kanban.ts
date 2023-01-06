@@ -1,9 +1,10 @@
 export type Task = {
+  id: number;
   title: string;
   labels: Label[];
   assignee: Assignee;
-  id: number;
   index: number;
+  taskKey: string;
   commentCount: number | null;
   attachmentCount: number | null;
   priorityId: number;
@@ -18,8 +19,8 @@ export type Label = {
 };
 
 export type Assignee = {
-  image: string | null;
   id: string;
+  image: string | null;
 } | null;
 
 export type Column = {
