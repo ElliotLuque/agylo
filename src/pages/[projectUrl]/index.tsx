@@ -11,19 +11,17 @@ import LoadingSpinner from "../../components/misc/loadingSpinner";
 import Head from "next/head";
 import Header from "../../components/common/header";
 import Layout from "../../components/common/layout";
-import type { Column} from "../../types/kanban";
 import KanbanBoard from "../../components/project/views/kanban/kanbanBoard";
 
 const KanbanPage: NextPageWithLayout = ({
   url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const trpcUtils = trpc.useContext();
 
   const {
     data: projectData,
     isLoading,
     error,
-  } = trpc.project.getKanbanData.useQuery(
+  } = trpc.project.getProjectBasicInfo.useQuery(
     { url },
     {
       onSuccess: () => {
@@ -35,21 +33,6 @@ const KanbanPage: NextPageWithLayout = ({
       retry: false,
     }
   );
-
-  const { mutateAsync: createColumn } = trpc.column.createColumn.useMutation({
-    onSuccess: () => {
-      trpcUtils.project.invalidate();
-      trpcUtils.column.invalidate();
-    },
-  });
-
-  const handleCreateColumn = async () => {
-    await createColumn({
-      projectId: projectData?.id as number,
-      name: "New column",
-      index: projectData?.columns.length as number,
-    });
-  };
 
   if (error?.data?.httpStatus === 403) {
     return (
@@ -103,9 +86,8 @@ const KanbanPage: NextPageWithLayout = ({
           description={projectData?.description ?? ""}
           url={projectData?.url as string}
         />
-        <button onClick={handleCreateColumn}>Create column</button>
-        <div className="w-full flex gap-4 p-7">
-          <KanbanBoard columns={projectData?.columns as Column[]}/>
+        <div className="flex w-full gap-4 p-6">
+          <KanbanBoard projectUrl={url} />
         </div>
       </div>
     </>
