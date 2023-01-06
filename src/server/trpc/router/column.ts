@@ -5,7 +5,7 @@ export const columnRouter = router({
   createColumn: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(5),
+        name: z.string().min(1),
         projectId: z.number(),
         index: z.number(),
       })
@@ -47,47 +47,32 @@ export const columnRouter = router({
       z.object({
         sourceColumnId: z.number(),
         sourceIndex: z.number(),
-        destinationIndex: z.number(),
-        projectId: z.number(),
+        destinationColumnId: z.number(),
+        destinationIndex: z.number()
       })
     )
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx;
 
-      return await prisma.$transaction(async (tx) => {
-         const sourceColumn = await tx.column.findUnique({
-            where: {
-                id: input.sourceColumnId,
-            }
-         })
+      const sourceColumn = prisma.column.update({
+        where: {
+            id: input.sourceColumnId,
+        }, 
+        data: {
+            index: input.destinationIndex
+        }
+     })
 
-         const destinationColumn = await tx.column.findFirst({
-            where: {
-                projectId: input.projectId,
-                index: input.destinationIndex
-            }
-         })
-
-         if (sourceColumn && destinationColumn) {
-            await tx.column.update({
-                where: {
-                    id: sourceColumn.id
-                },
-                data: {
-                    index: destinationColumn.index
-                }
-            })
-
-            await tx.column.update({
-                where: {
-                    id: destinationColumn.id
-                },
-                data: {
-                    index: sourceColumn.index
-                }
-            })
-         }
+      const destinationColumn =  prisma.column.update({
+        where: {
+            id: input.destinationColumnId,
+        },
+        data: {
+            index: input.sourceIndex
+        }
       })
+
+      return await prisma.$transaction([sourceColumn, destinationColumn])
 
       
     }),
