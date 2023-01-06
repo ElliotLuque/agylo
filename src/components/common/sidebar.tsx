@@ -35,22 +35,18 @@ const Navbar: React.FC = () => {
   );
 };
 
-const ProjectItem: React.FC<{ name: string, url: string, iconId: number, }> = ({name, url, iconId}) => {
- return <Link
- className="flex items-center gap-2 align-middle"
- href={`/${url}`}
-
->
- <span
-   className={`mr-3 h-3 w-3 rounded-sm ${getIconBg(
-     iconId
-   )}`}
- ></span>
- <p className="text-md font-bold text-gray-800">
-   {name}
- </p>
-</Link>
-}
+const ProjectItem: React.FC<{ name: string; url: string; iconId: number }> = ({
+  name,
+  url,
+  iconId,
+}) => {
+  return (
+    <Link className="flex items-center gap-2 align-middle" href={`/${url}`}>
+      <span className={`mr-3 h-3 w-3 rounded-sm ${getIconBg(iconId)}`}></span>
+      <p className="text-md font-bold text-gray-800">{name}</p>
+    </Link>
+  );
+};
 
 const Sidebar: React.FC = () => {
   const { data: userProjects } = trpc.project.listUserProjects.useQuery();
@@ -64,16 +60,16 @@ const Sidebar: React.FC = () => {
         setOpen={setOpenCreateDialog}
       />
 
-      <aside className="border-r-1 fixed top-0 h-screen w-72 border z-10 border-gray-200 bg-white">
+      <aside className="border-r-1 fixed top-0 z-10 h-screen w-72 border border-gray-200 bg-white">
         <div className="flex h-full flex-col gap-6 py-4 px-7">
           <h1 className="mt-5 text-2xl font-bold text-indigo-500"> Agylo</h1>
           <Navbar />
           <div className="mt-8">
             <div className="flex w-full items-center justify-between">
               <h1 className="text-lg font-medium opacity-70">Projects</h1>
-              <div onClick={() => setOpenCreateDialog(true)}>
-                <AddIcon />
-              </div>
+              <button onClick={() => setOpenCreateDialog(true)}>
+                <AddIcon classNames="h-5 w-5" />
+              </button>
             </div>
             <div className="h-76 ml-1.5 mt-5 mb-4 flex flex-col gap-3.5 overflow-auto">
               {userProjects?.map((project) => {
