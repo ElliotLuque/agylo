@@ -161,7 +161,8 @@ model Project {
   name          String
   url           String      @unique
   description   String?      
-  taskKey       String     
+  key           String     
+  taskCount     Int         @default(0)
   createdAt     DateTime    @default(now())
 
   iconId        Int
