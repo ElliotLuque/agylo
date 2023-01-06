@@ -5,8 +5,7 @@ import {
 } from "@dnd-kit/sortable";
 import type { Column } from "../../../../types/kanban";
 import { CSS } from "@dnd-kit/utilities";
-import DotsHorizontalIcon from "../../../common/svg/dotsHorizontalIcon";
-import AddIcon from "../../../common/svg/addIcon";
+import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 interface Props {
   id: Column["id"];
@@ -46,15 +45,11 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
             <h2 className="select-none text-xl font-bold">{name}</h2>
           </div>
           <div className="flex items-center gap-2">
-            <button>
-              <AddIcon classNames="w-4 h-4 text-gray-900" />
-            </button>
-            <button>
-              <DotsHorizontalIcon classNames="w-6 h-6 text-gray-900" />
-            </button>
+            <PlusIcon className="h-4 w-4 text-gray-900 hover:cursor-pointer" />
+            <EllipsisHorizontalIcon className="h-6 w-6 text-gray-900 hover:cursor-pointer" />
           </div>
         </div>
-        <div className="flex flex-col gap-3 cursor-pointer">{children}</div>
+        <div className="flex cursor-pointer flex-col gap-3">{children}</div>
       </div>
     );
   }
@@ -76,12 +71,8 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <button>
-            <AddIcon classNames="w-4 h-4 text-gray-900" />
-          </button>
-          <button>
-            <DotsHorizontalIcon classNames="w-6 h-6 text-gray-900" />
-          </button>
+          <PlusIcon className="h-4 w-4 text-gray-900 hover:cursor-pointer " />
+          <EllipsisHorizontalIcon className="h-6 w-6 text-gray-900 hover:cursor-pointer" />
         </div>
       </div>
       <div className="flex flex-col gap-3">{children}</div>

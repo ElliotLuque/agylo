@@ -1,6 +1,8 @@
+import {
+  ExclamationCircleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
-import InfoIcon from "./svg/infoIcon";
-import ErrorIcon from "./svg/errorIcon";
 
 const Toast: React.FC<{ message: string; isOpen: boolean; error: boolean }> = ({
   message,
@@ -22,9 +24,13 @@ const Toast: React.FC<{ message: string; isOpen: boolean; error: boolean }> = ({
             role="alert"
           >
             <div className="flex items-center  gap-4 p-4">
-              {error ? <ErrorIcon /> : <InfoIcon />}
-              <p className="text-md text-gray-700 align-middle dark:text-gray-400">
-                  {message}
+              {error ? (
+                <ExclamationCircleIcon className="h-6 w-6 self-center text-red-500" />
+              ) : (
+                <InformationCircleIcon className="h-4 w-4 text-indigo-500" />
+              )}
+              <p className="text-md align-middle text-gray-700 dark:text-gray-400">
+                {message}
               </p>
             </div>
           </div>

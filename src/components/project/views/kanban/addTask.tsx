@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import type { Column, Task } from "../../../../types/kanban";
-import AddIcon from "../../../common/svg/addIcon";
 import { useOnClickOutside } from "usehooks-ts";
 import { useKeypress } from "../../../../utils/useKeypress";
 import { trpc } from "../../../../utils/trpc";
 import { useForm } from "react-hook-form";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 const AddTask: React.FC<{ createTaskCallback: (column: Column) => void, column: Column, projectId: number }> = ({ createTaskCallback, column, projectId }) => {
   const [isAdding, setIsAdding] = useState(false);
@@ -73,7 +73,7 @@ const AddTask: React.FC<{ createTaskCallback: (column: Column) => void, column: 
       className="flex min-h-[2rem] w-[17rem] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg p-4  hover:bg-gray-50"
     >
       <div className="flex w-full items-center justify-center gap-3">
-        <AddIcon classNames="w-[1.2rem] h-[1.2rem] text-gray-900 opacity-70" />
+        <PlusIcon className="w-[1.2rem] h-[1.2rem] text-gray-900 opacity-70" />
         <p className="select-none text-sm font-medium text-gray-900 opacity-70">
           Add task
         </p>

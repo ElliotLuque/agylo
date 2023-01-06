@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import type { Column } from "../../../../types/kanban";
 import { trpc } from "../../../../utils/trpc";
-import AddIcon from "../../../common/svg/addIcon";
 import { useOnClickOutside } from "usehooks-ts";
 import { useKeypress } from "../../../../utils/useKeypress";
 import { useForm } from "react-hook-form";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 const AddColumn: React.FC<{
   createColumnCallback: (column: Column) => void;
@@ -74,7 +74,7 @@ const AddColumn: React.FC<{
       className="flex min-h-[25rem] min-w-[20rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg p-4  hover:bg-gray-50"
     >
       <div className="flex items-center gap-3">
-        <AddIcon classNames="w-[1.2rem] h-[1.2rem] text-gray-900 opacity-70" />
+        <PlusIcon className="w-[1.2rem] h-[1.2rem] text-gray-900 opacity-70" />
         <p className="select-none font-medium text-gray-900 opacity-70">
           Add column
         </p>

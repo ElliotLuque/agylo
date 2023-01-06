@@ -1,31 +1,28 @@
 import Link from "next/link";
 import { trpc } from "../../utils/trpc";
-import HomeIcon from "./svg/homeIcon";
-import TasksIcon from "./svg/tasksIcon";
-import NotificationIcon from "./svg/notificationIcon";
-import AddIcon from "./svg/addIcon";
 import { useState } from "react";
 import CreateProjectDialog from "../home/createProjectDialog";
 import { getIconBg } from "../../utils/colorSetter";
+import {BellIcon, CheckCircleIcon, HomeIcon, PlusIcon} from "@heroicons/react/24/outline";
 
 const Navbar: React.FC = () => {
   return (
     <div className="mt-10 flex flex-col justify-center gap-6 text-lg font-semibold text-gray-800">
       <Link href="/dashboard">
         <div className="flex items-center gap-3">
-          <HomeIcon />
+          <HomeIcon  className="h-7 w-7" />
           <h1>Home</h1>
         </div>
       </Link>
       <Link href="/my-tasks">
         <div className="flex items-center gap-3">
-          <TasksIcon />
+          <CheckCircleIcon className="h-7 w-7" />
           <h1>My tasks</h1>
         </div>
       </Link>
       <div>
         <div className="flex cursor-default items-center gap-3">
-          <NotificationIcon />
+          <BellIcon className="h-7 w-7 opacity-40" />
           <h1 className="opacity-40 ">
             Inbox <span className="text-sm">(Coming soon!)</span>
           </h1>
@@ -67,9 +64,7 @@ const Sidebar: React.FC = () => {
           <div className="mt-8">
             <div className="flex w-full items-center justify-between">
               <h1 className="text-lg font-medium opacity-70">Projects</h1>
-              <button onClick={() => setOpenCreateDialog(true)}>
-                <AddIcon classNames="h-5 w-5" />
-              </button>
+              <PlusIcon onClick={() => setOpenCreateDialog(true)} className="h-5 w-5 hover:cursor-pointer"/>
             </div>
             <div className="h-76 ml-1.5 mt-5 mb-4 flex flex-col gap-3.5 overflow-auto">
               {userProjects?.map((project) => {
