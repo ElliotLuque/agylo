@@ -97,16 +97,16 @@ model Task {
   commentCount Int?
   attachmentCount Int?
 
-  column      Column   @relation(fields: [columnId], references: [id])
+  column      Column   @relation(fields: [columnId], references: [id], onDelete: NoAction)
   columnId    Int
 
-  priority    Priority? @relation(fields: [priorityId], references: [id])
+  priority    Priority? @relation(fields: [priorityId], references: [id], onDelete: SetNull)
   priorityId  Int?
 
-  author      User   @relation(fields: [authorId], references: [id], name: "author")
-  authorId    String
+  author      User?   @relation(fields: [authorId], references: [id], name: "author", onDelete: SetNull)
+  authorId    String?
 
-  assignee     User?   @relation(fields: [assigneeId], references: [id], name: "assignee")
+  assignee     User?   @relation(fields: [assigneeId], references: [id], name: "assignee", onDelete: SetNull)
   assigneeId   String?
 
   labels      TaskLabels[]
