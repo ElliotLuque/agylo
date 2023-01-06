@@ -1,9 +1,14 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Task } from "../../../../types/kanban";
-import { useEffect } from "react";
 
-const TaskSortable: React.FC<Task & {cursor: string}> = ({ id, title, taskKey, index, cursor }) => {
+const TaskSortable: React.FC<Task & { cursor: string }> = ({
+  id,
+  title,
+  taskKey,
+  index,
+  cursor,
+}) => {
   const {
     attributes,
     listeners,
@@ -39,7 +44,8 @@ const TaskSortable: React.FC<Task & {cursor: string}> = ({ id, title, taskKey, i
       className={`flex min-h-[7rem] w-[17rem] ${cursor} flex-col gap-2 rounded-lg border-[0.09rem] border-gray-200 bg-white p-4`}
     >
       <p className="select-none">
-        {id}-{title} at index {index} <span className="font-bold">{taskKey}</span>
+        {id}-{title} at index {index}{" "}
+        <span className="font-bold">{taskKey}</span>
       </p>
     </div>
   );
