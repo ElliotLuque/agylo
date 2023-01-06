@@ -69,7 +69,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
   const recentlyMovedToNewContainer = useRef(false);
 
   const [columns, setColumns] = useState<Column[]>([]);
-  const [clonedColumns, setClonedColumns] = useState<Column[] | null>(null);
+  const [clonedColumns, setClonedColumns] = useState<Column[]>([]);
 
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
@@ -428,7 +428,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
   const handleDragCancel = () => {
     if (clonedColumns) {
       setColumns(clonedColumns);
-      setClonedColumns(null);
+      setClonedColumns([]);
     }
 
     setActiveId(null);
