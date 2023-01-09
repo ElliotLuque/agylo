@@ -1,19 +1,22 @@
-import { z } from "zod";
-import { protectedProcedure, router } from "../trpc";
+import { z } from 'zod'
+import { protectedProcedure, router } from '../trpc'
 
 export const taskRouter = router({
   createTask: protectedProcedure
     .input(
       z.object({
-        title: z.string().regex(/^[^\s]*$/).max(100),
+        title: z
+          .string()
+          .regex(/^[^\s]*$/)
+          .max(100),
         columnId: z.number(),
         projectId: z.number(),
         index: z.number(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       return await prisma.$transaction(async (tx) => {
         const project = await tx.project.update({
@@ -25,7 +28,7 @@ export const taskRouter = router({
               increment: 1,
             },
           },
-        });
+        })
 
         if (project) {
           return await tx.task.create({
@@ -36,7 +39,7 @@ export const taskRouter = router({
             data: {
               index: input.index,
               title: input.title,
-              taskKey: project.key + "-" + project.taskCount,
+              taskKey: project.key + '-' + project.taskCount,
               column: {
                 connect: { id: input.columnId },
               },
@@ -44,9 +47,9 @@ export const taskRouter = router({
                 connect: { id: userId },
               },
             },
-          });
+          })
         }
-      });
+      })
     }),
   reorderTask: protectedProcedure
     .input(
@@ -55,10 +58,10 @@ export const taskRouter = router({
         sourceTaskIndex: z.number(),
         destinationTaskId: z.number(),
         destinationTaskIndex: z.number(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
+      const { prisma } = ctx
 
       const sourceTask = prisma.task.update({
         where: {
@@ -67,7 +70,7 @@ export const taskRouter = router({
         data: {
           index: input.destinationTaskIndex,
         },
-      });
+      })
 
       const destinationTask = prisma.task.update({
         where: {
@@ -76,9 +79,9 @@ export const taskRouter = router({
         data: {
           index: input.sourceTaskIndex,
         },
-      });
+      })
 
-      return await prisma.$transaction([sourceTask, destinationTask]);
+      return await prisma.$transaction([sourceTask, destinationTask])
     }),
   moveTaskToColumn: protectedProcedure
     .input(
@@ -88,10 +91,10 @@ export const taskRouter = router({
         oldTaskIndex: z.number(),
         newColumnId: z.number(),
         oldColumnId: z.number(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
+      const { prisma } = ctx
 
       const updateOldColumnTasks = prisma.task.updateMany({
         where: {
@@ -105,7 +108,7 @@ export const taskRouter = router({
             decrement: 1,
           },
         },
-      });
+      })
 
       const updateNewColumnTasks = prisma.task.updateMany({
         where: {
@@ -119,7 +122,7 @@ export const taskRouter = router({
             increment: 1,
           },
         },
-      });
+      })
 
       const updateMovedTask = prisma.task.update({
         where: {
@@ -133,8 +136,12 @@ export const taskRouter = router({
           },
           index: input.newTaskIndex,
         },
-      });
+      })
 
-      return prisma.$transaction([updateOldColumnTasks, updateNewColumnTasks, updateMovedTask]);
+      return prisma.$transaction([
+        updateOldColumnTasks,
+        updateNewColumnTasks,
+        updateMovedTask,
+      ])
     }),
-});
+})

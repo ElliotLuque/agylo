@@ -17,25 +17,25 @@ import {
   rectIntersection,
   defaultDropAnimationSideEffects,
   type DropAnimation,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core'
 import {
   SortableContext,
   arrayMove,
   horizontalListSortingStrategy,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Assignee, Column, Label } from "../../../../types/kanban";
-import ColumnSortable from "./columnSortable";
-import TaskSortable from "./taskSortable";
-import { createPortal } from "react-dom";
-import AddColumn from "./addColumn";
-import AddTask from "./addTask";
-import { arraysEqual } from "../../../../utils/arraysEqual";
-import { trpc } from "../../../../utils/trpc";
-import Head from "next/head";
-import LoadingSpinner from "../../../misc/loadingSpinner";
+} from '@dnd-kit/sortable'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { Assignee, Column, Label } from '../../../../types/kanban'
+import ColumnSortable from './columnSortable'
+import TaskSortable from './taskSortable'
+import { createPortal } from 'react-dom'
+import AddColumn from './addColumn'
+import AddTask from './addTask'
+import { arraysEqual } from '../../../../utils/arraysEqual'
+import { trpc } from '../../../../utils/trpc'
+import Head from 'next/head'
+import LoadingSpinner from '../../../misc/loadingSpinner'
 
 const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
   const {
@@ -46,56 +46,55 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
     { url: projectUrl },
     {
       onSuccess: (data) => {
-        setColumns(data?.columns as Column[]);
+        setColumns(data?.columns as Column[])
       },
       retry: false,
-    }
-  );
+    },
+  )
 
-  const { mutateAsync: orderColumn } = trpc.column.reorderColumn.useMutation();
-  const { mutateAsync: orderTaskInColumn } =
-    trpc.task.reorderTask.useMutation();
+  const { mutateAsync: orderColumn } = trpc.column.reorderColumn.useMutation()
+  const { mutateAsync: orderTaskInColumn } = trpc.task.reorderTask.useMutation()
   const { mutateAsync: moveTaskToColumn } =
-    trpc.task.moveTaskToColumn.useMutation();
+    trpc.task.moveTaskToColumn.useMutation()
 
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
 
-  const lastActiveIndex = useRef<number | null>(null);
-  const lastOriginalIndex = useRef<number | null>(null);
+  const lastActiveIndex = useRef<number | null>(null)
+  const lastOriginalIndex = useRef<number | null>(null)
 
-  const lastContainerId = useRef<UniqueIdentifier | null>(null);
-  const lastOverId = useRef<UniqueIdentifier | null>(null);
+  const lastContainerId = useRef<UniqueIdentifier | null>(null)
+  const lastOverId = useRef<UniqueIdentifier | null>(null)
 
-  const recentlyMovedToNewContainer = useRef(false);
+  const recentlyMovedToNewContainer = useRef(false)
 
-  const [columns, setColumns] = useState<Column[]>([]);
-  const [clonedColumns, setClonedColumns] = useState<Column[]>([]);
+  const [columns, setColumns] = useState<Column[]>([])
+  const [clonedColumns, setClonedColumns] = useState<Column[]>([])
 
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
-    [columns]
-  );
+    [columns],
+  )
   const taskIds = (column: Column) => {
-    return column.tasks.map((task) => task.taskKey);
-  };
+    return column.tasks.map((task) => task.taskKey)
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 1 } }),
     useSensor(TouchSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+    }),
+  )
 
   const dropAnimation: DropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
       styles: {
         active: {
-          opacity: "0.5",
+          opacity: '0.5',
         },
       },
     }),
-  };
+  }
 
   const collisionDetectionStrategy: CollisionDetection = useCallback(
     (args) => {
@@ -104,26 +103,26 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         return closestCenter({
           ...args,
           droppableContainers: args.droppableContainers.filter((container) => {
-            return columnsIds.includes(container.id as number);
+            return columnsIds.includes(container.id as number)
           }),
-        });
+        })
       }
 
       // Start by finding any intersecting droppable
-      const pointerIntersections = pointerWithin(args);
+      const pointerIntersections = pointerWithin(args)
 
       const intersections =
         pointerIntersections.length > 0
           ? // If there are droppables intersecting with the pointer, return those
             pointerIntersections
-          : rectIntersection(args);
-      let overId = getFirstCollision(intersections, "id");
+          : rectIntersection(args)
+      let overId = getFirstCollision(intersections, 'id')
       //console.log("intersections", intersections)
 
       if (overId != null) {
         const columnContainer = columns.find(
-          (column) => column.id === (overId as number)
-        );
+          (column) => column.id === (overId as number),
+        )
 
         // If a container is matched and it contains items (columns 'A', 'B', 'C')
         if (columnContainer && columnContainer.tasks?.length > 0) {
@@ -134,16 +133,16 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
               droppableContainers: args.droppableContainers.filter(
                 (container) => {
                   return taskIds(columnContainer).includes(
-                    container.id as string
-                  );
-                }
+                    container.id as string,
+                  )
+                },
               ),
-            })[0]?.id ?? overId;
+            })[0]?.id ?? overId
         }
 
-        lastOverId.current = overId;
+        lastOverId.current = overId
 
-        return [{ id: overId }];
+        return [{ id: overId }]
       }
 
       // // When a draggable item moves to a new container, the layout may shift
@@ -151,49 +150,49 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
       // // to the id of the draggable item that was moved to the new container, otherwise
       // // the previous `overId` will be returned which can cause items to incorrectly shift positions
       if (recentlyMovedToNewContainer.current) {
-        lastOverId.current = activeId;
+        lastOverId.current = activeId
       }
 
       // // If no droppable is matched, return the last match
-      return lastOverId.current ? [{ id: lastOverId.current }] : [];
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
     },
-    [activeId, columns, columnsIds]
-  );
+    [activeId, columns, columnsIds],
+  )
 
   useEffect(() => {
     requestAnimationFrame(() => {
-      recentlyMovedToNewContainer.current = false;
-    });
-  }, [columns]);
+      recentlyMovedToNewContainer.current = false
+    })
+  }, [columns])
 
   const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event;
+    const { active } = event
 
-    setActiveId(active.id as number);
+    setActiveId(active.id as number)
 
     // Find the task in columns array which has the same id as active.id
     const task = columns
       .map((column) => column.tasks)
       .flat()
-      .find((task) => task.taskKey === active.id);
+      .find((task) => task.taskKey === active.id)
 
-    setClonedColumns(columns);
+    setClonedColumns(columns)
 
     // Set the active original index and container id
-    lastOriginalIndex.current = task?.index as number;
-    lastContainerId.current = findContainer(active.id)?.id as UniqueIdentifier;
-  };
+    lastOriginalIndex.current = task?.index as number
+    lastContainerId.current = findContainer(active.id)?.id as UniqueIdentifier
+  }
 
   const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
+    const { active, over } = event
 
-    const activeId = active?.id;
-    const overId = over?.id as UniqueIdentifier;
+    const activeId = active?.id
+    const overId = over?.id as UniqueIdentifier
 
-    const activeContainer = findContainer(activeId);
-    const overContainer = findContainer(overId);
+    const activeContainer = findContainer(activeId)
+    const overContainer = findContainer(overId)
 
-    const lastContainer = findContainer(lastContainerId.current as number);
+    const lastContainer = findContainer(lastContainerId.current as number)
 
     if (
       overContainer !== undefined &&
@@ -202,10 +201,10 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
     ) {
       // Get index of over id
       const overIndex = overContainer.tasks.findIndex(
-        (task) => task.taskKey === overId
-      );
+        (task) => task.taskKey === overId,
+      )
 
-      lastActiveIndex.current = overIndex;
+      lastActiveIndex.current = overIndex
     }
 
     if (
@@ -214,31 +213,31 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
       overContainer === undefined ||
       activeContainer === overContainer
     )
-      return;
+      return
 
     // Task has moved to a new container
     if (activeContainer !== overContainer) {
-      if (!activeContainer) return;
+      if (!activeContainer) return
 
-      recentlyMovedToNewContainer.current = true;
+      recentlyMovedToNewContainer.current = true
 
       setColumns((prev) => {
         // Source
         const newActiveContainer = {
           ...activeContainer,
           tasks: activeContainer.tasks.filter(
-            (task) => task.taskKey !== activeId
+            (task) => task.taskKey !== activeId,
           ),
-        };
+        }
         const orderedNewActiveContainer = {
           ...newActiveContainer,
           tasks: newActiveContainer.tasks.map((task, index) => {
             return {
               ...task,
               index,
-            };
+            }
           }),
-        };
+        }
 
         // Destination
         const newOverContainer = {
@@ -247,7 +246,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
             ...overContainer.tasks,
             activeContainer.tasks.find((task) => task.taskKey === activeId),
           ],
-        };
+        }
 
         const orderedNewOverContainer = {
           ...newOverContainer,
@@ -255,30 +254,30 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
             return {
               ...task,
               index,
-            };
+            }
           }),
-        };
+        }
 
         const newColumns = prev.map((col) => {
           if (col.id === orderedNewActiveContainer.id) {
-            return orderedNewActiveContainer;
+            return orderedNewActiveContainer
           }
           if (col.id === orderedNewOverContainer.id) {
-            return orderedNewOverContainer;
+            return orderedNewOverContainer
           }
-          return col;
-        });
+          return col
+        })
 
-        return newColumns as Column[];
-      });
+        return newColumns as Column[]
+      })
     }
-  };
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+    const { active, over } = event
 
-    const activeId = active?.id;
-    const overId = over?.id as UniqueIdentifier;
+    const activeId = active?.id
+    const overId = over?.id as UniqueIdentifier
 
     // Task moving in column
     if (
@@ -287,48 +286,48 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
       !isColumnId(activeId)
     ) {
       setColumns((prev) => {
-        const activeContainer = findContainer(activeId);
-        const activeContainerId = activeContainer?.id as UniqueIdentifier;
+        const activeContainer = findContainer(activeId)
+        const activeContainerId = activeContainer?.id as UniqueIdentifier
 
         const activeItemIndex = activeContainer?.tasks.findIndex((item) => {
-          return item.taskKey === active.id;
-        });
+          return item.taskKey === active.id
+        })
         const activeItemId = activeContainer?.tasks[activeItemIndex as number]
-          ?.id as number;
+          ?.id as number
 
         const overItemIndex = activeContainer?.tasks.findIndex((item) => {
-          return item.taskKey === over?.id;
-        });
+          return item.taskKey === over?.id
+        })
         const overItemId = activeContainer?.tasks[overItemIndex as number]
-          ?.id as number;
+          ?.id as number
 
         if (
           activeItemIndex === undefined ||
           overItemIndex === undefined ||
           activeContainer === undefined
         )
-          return prev;
+          return prev
 
         const newTasks = arrayMove(
           activeContainer.tasks,
           activeItemIndex,
-          overItemIndex
-        );
+          overItemIndex,
+        )
         const orderedTasks = newTasks.map((task, index) => {
           return {
             ...task,
             index: index,
-          };
-        });
+          }
+        })
 
         const updatedColumn = {
           ...activeContainer,
           tasks: orderedTasks,
-        };
+        }
 
         const newColumns = prev.map((col) => {
-          return col.id === activeContainer.id ? updatedColumn : col;
-        });
+          return col.id === activeContainer.id ? updatedColumn : col
+        })
 
         // Tasks sorted
         if (
@@ -342,13 +341,13 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 sourceTaskIndex: activeItemIndex,
                 destinationTaskId: overItemId,
                 destinationTaskIndex: overItemIndex,
-              });
+              })
             } catch (error) {
-              console.log(error);
+              console.log(error)
             }
-          };
+          }
 
-          handleOrderTaskInColumn();
+          handleOrderTaskInColumn()
         }
 
         // Tasks moved
@@ -364,42 +363,42 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 taskId: activeItemId,
                 newColumnId: activeContainerId as number,
                 oldColumnId: lastContainerId.current as number,
-              });
+              })
             } catch (error) {
-              console.log(error);
+              console.log(error)
             }
-          };
+          }
 
-          handleMoveTaskToColumn();
+          handleMoveTaskToColumn()
         }
 
-        return newColumns;
-      });
+        return newColumns
+      })
     }
 
     // Columns sorting
     if (isColumnId(activeId)) {
       setColumns((prev) => {
-        const activeContainer = findContainer(activeId);
-        const overContainer = findContainer(overId);
+        const activeContainer = findContainer(activeId)
+        const overContainer = findContainer(overId)
 
         if (activeContainer === undefined || overContainer === undefined)
-          return prev;
+          return prev
 
-        const activeContainerIndex = getColumnIndex(activeContainer.id);
-        const overContainerIndex = getColumnIndex(overContainer.id);
+        const activeContainerIndex = getColumnIndex(activeContainer.id)
+        const overContainerIndex = getColumnIndex(overContainer.id)
 
         const updatedColumns = arrayMove(
           prev,
           activeContainerIndex,
-          overContainerIndex
-        );
+          overContainerIndex,
+        )
         const orderedColumns = updatedColumns.map((column, index) => {
           return {
             ...column,
             index: index,
-          };
-        });
+          }
+        })
 
         if (!arraysEqual(prev, orderedColumns as Column[])) {
           const handleOrderColumn = async () => {
@@ -409,61 +408,61 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 sourceIndex: activeContainerIndex,
                 destinationColumnId: overContainer.id as number,
                 destinationIndex: overContainerIndex,
-              });
+              })
             } catch (error) {
-              console.log(error);
+              console.log(error)
             }
-          };
+          }
 
-          handleOrderColumn();
+          handleOrderColumn()
         }
 
-        return orderedColumns;
-      });
+        return orderedColumns
+      })
     }
 
-    setActiveId(null);
-  };
+    setActiveId(null)
+  }
 
   const handleDragCancel = () => {
     if (clonedColumns) {
-      setColumns(clonedColumns);
-      setClonedColumns([]);
+      setColumns(clonedColumns)
+      setClonedColumns([])
     }
 
-    setActiveId(null);
-  };
+    setActiveId(null)
+  }
 
   const findContainer = (id: UniqueIdentifier) => {
     const preResult = columns.find((col) => {
       return col.tasks.find((task) => {
-        return task.taskKey === id;
-      });
-    });
+        return task.taskKey === id
+      })
+    })
 
     if (preResult) {
-      return preResult;
+      return preResult
     } else {
       return columns.find((col) => {
-        return col.id === id;
-      });
+        return col.id === id
+      })
     }
-  };
+  }
 
   const isColumnId = (id: UniqueIdentifier) => {
     const result = columns.find((col) => {
-      return col.id === id;
-    });
-    return result ? true : false;
-  };
+      return col.id === id
+    })
+    return result ? true : false
+  }
 
   const getColumnIndex = (id: UniqueIdentifier) => {
-    const column = findContainer(id) as Column;
-    return columns.indexOf(column);
-  };
+    const column = findContainer(id) as Column
+    return columns.indexOf(column)
+  }
 
   const renderColumnDragOverlay = (id: UniqueIdentifier) => {
-    const column = columns[getColumnIndex(id)];
+    const column = columns[getColumnIndex(id)]
     return (
       <ColumnSortable
         key={column?.id}
@@ -474,7 +473,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
       >
         {column?.tasks.map((task) => (
           <TaskSortable
-            cursor={"cursor-pointer"}
+            cursor={'cursor-pointer'}
             key={task.id}
             id={task.id}
             taskKey={task.taskKey}
@@ -493,23 +492,23 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
           column={column as Column}
         />
       </ColumnSortable>
-    );
-  };
+    )
+  }
 
   const renderTaskDragOverlay = (id: UniqueIdentifier) => {
     const columnParent = columns.find((col) => {
       return col.tasks.find((task) => {
-        return task.taskKey === id;
-      });
-    });
+        return task.taskKey === id
+      })
+    })
     const taskIndex = columnParent?.tasks.findIndex((task) => {
-      return task.taskKey === id;
-    });
-    const task = columnParent?.tasks[taskIndex as number];
+      return task.taskKey === id
+    })
+    const task = columnParent?.tasks[taskIndex as number]
 
     return (
       <TaskSortable
-        cursor={"cursor-grabbing"}
+        cursor={'cursor-grabbing'}
         key={task?.taskKey as string}
         id={task?.id as number}
         taskKey={task?.taskKey as string}
@@ -521,23 +520,23 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         commentCount={task?.commentCount as number}
         attachmentCount={task?.attachmentCount as number}
       />
-    );
-  };
+    )
+  }
 
   const createColumnCallback = (column: Column) => {
     setColumns((prev) => {
-      return [...prev, column];
-    });
-  };
+      return [...prev, column]
+    })
+  }
 
   const createTaskCallback = (column: Column) => {
     setColumns((prev) => {
       const updatedColumns = prev.map((col) => {
-        return col.id === column.id ? column : col;
-      });
-      return updatedColumns;
-    });
-  };
+        return col.id === column.id ? column : col
+      })
+      return updatedColumns
+    })
+  }
 
   if (error?.data?.httpStatus === 403) {
     return (
@@ -545,13 +544,13 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         <Head>
           <title> Not authorized - Agylo</title>
         </Head>
-        <div className="grid w-full place-items-center">
-          <h1 className="text-2xl">
+        <div className='grid w-full place-items-center'>
+          <h1 className='text-2xl'>
             You don&apos;t have access to this project
           </h1>
         </div>
       </>
-    );
+    )
   }
 
   if (error?.data?.httpStatus === 404) {
@@ -560,11 +559,11 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         <Head>
           <title> Not found - Agylo</title>
         </Head>
-        <div className="grid w-full place-items-center">
-          <h1 className="text-2xl">Project not found</h1>
+        <div className='grid w-full place-items-center'>
+          <h1 className='text-2xl'>Project not found</h1>
         </div>
       </>
-    );
+    )
   }
 
   if (isLoading) {
@@ -573,11 +572,11 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         <Head>
           <title>Agylo</title>
         </Head>
-        <div className="grid w-full place-items-center">
+        <div className='grid w-full place-items-center'>
           <LoadingSpinner height={48} width={48} />
         </div>
       </>
-    );
+    )
   }
 
   return (
@@ -609,7 +608,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 {column.tasks.map((task) => {
                   return (
                     <TaskSortable
-                      cursor={"cursor-pointer"}
+                      cursor={'cursor-pointer'}
                       key={task.taskKey}
                       id={task.id}
                       taskKey={task.taskKey}
@@ -621,7 +620,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                       commentCount={task.commentCount}
                       attachmentCount={task.attachmentCount}
                     />
-                  );
+                  )
                 })}
                 <AddTask
                   createTaskCallback={createTaskCallback}
@@ -630,7 +629,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 />
               </SortableContext>
             </ColumnSortable>
-          );
+          )
         })}
         <AddColumn
           columnsLength={columns.length}
@@ -646,10 +645,10 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
               : renderTaskDragOverlay(activeId)
             : null}
         </DragOverlay>,
-        document.body
+        document.body,
       )}
     </DndContext>
-  );
-};
+  )
+}
 
-export default KanbanBoard;
+export default KanbanBoard

@@ -1,7 +1,7 @@
-import { TRPCError } from "@trpc/server";
-import { router, protectedProcedure } from "../trpc";
-import { z } from "zod";
-import { Prisma } from "@prisma/client";
+import { TRPCError } from '@trpc/server'
+import { router, protectedProcedure } from '../trpc'
+import { z } from 'zod'
+import { Prisma } from '@prisma/client'
 
 export const projectRouter = router({
   createProject: protectedProcedure
@@ -11,11 +11,11 @@ export const projectRouter = router({
         name: z.string(),
         url: z.string().regex(/^[a-zA-Z0-9-]+$/),
         description: z.string().max(200).optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       return await prisma.projectParticipants.create({
         data: {
@@ -39,7 +39,7 @@ export const projectRouter = router({
             connect: { id: 1 },
           },
         },
-      });
+      })
     }),
   updateProject: protectedProcedure
     .input(
@@ -48,11 +48,11 @@ export const projectRouter = router({
         name: z.string(),
         url: z.string().regex(/^[a-zA-Z0-9-]+$/),
         description: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       const participant = await prisma.projectParticipants.findUnique({
         where: {
@@ -61,13 +61,13 @@ export const projectRouter = router({
             userId,
           },
         },
-      });
+      })
 
       if (!participant) {
         throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You dont have access to this project",
-        });
+          code: 'FORBIDDEN',
+          message: 'You dont have access to this project',
+        })
       }
 
       try {
@@ -80,14 +80,14 @@ export const projectRouter = router({
             url: input.url,
             description: input.description,
           },
-        });
+        })
       } catch (error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === "P2002") {
+          if (error.code === 'P2002') {
             throw new TRPCError({
-              code: "CONFLICT",
-              message: "Project url already exists!",
-            });
+              code: 'CONFLICT',
+              message: 'Project url already exists!',
+            })
           }
         }
       }
@@ -97,11 +97,11 @@ export const projectRouter = router({
       z.object({
         id: z.number(),
         iconId: z.number(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       const participant = await prisma.projectParticipants.findUnique({
         where: {
@@ -110,13 +110,13 @@ export const projectRouter = router({
             userId,
           },
         },
-      });
+      })
 
       if (!participant) {
         throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You dont have access to this project",
-        });
+          code: 'FORBIDDEN',
+          message: 'You dont have access to this project',
+        })
       }
 
       return await prisma.project.update({
@@ -130,13 +130,13 @@ export const projectRouter = router({
             },
           },
         },
-      });
+      })
     }),
   deleteProject: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       const participant = await prisma.projectParticipants.findUnique({
         where: {
@@ -145,24 +145,24 @@ export const projectRouter = router({
             userId,
           },
         },
-      });
+      })
 
       if (!participant) {
         throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You dont have access to this project",
-        });
+          code: 'FORBIDDEN',
+          message: 'You dont have access to this project',
+        })
       }
 
       return await prisma.project.delete({
         where: {
           id: input.id,
         },
-      });
+      })
     }),
   listUserProjects: protectedProcedure.query(async ({ ctx }) => {
-    const { prisma } = ctx;
-    const { id: userId } = ctx.session.user;
+    const { prisma } = ctx
+    const { id: userId } = ctx.session.user
 
     return await prisma.projectParticipants.findMany({
       where: {
@@ -175,13 +175,13 @@ export const projectRouter = router({
           },
         },
       },
-    });
+    })
   }),
   getKanbanData: protectedProcedure
     .input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
     .query(async ({ ctx, input }) => {
-      const { prisma } = ctx;
-      const { id: userId } = ctx.session.user;
+      const { prisma } = ctx
+      const { id: userId } = ctx.session.user
 
       const projectId = await prisma.project.findUnique({
         where: {
@@ -190,13 +190,13 @@ export const projectRouter = router({
         select: {
           id: true,
         },
-      });
+      })
 
       if (!projectId) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Project not found",
-        });
+          code: 'NOT_FOUND',
+          message: 'Project not found',
+        })
       }
 
       const participant = await prisma.projectParticipants.findUnique({
@@ -206,13 +206,13 @@ export const projectRouter = router({
             userId,
           },
         },
-      });
+      })
 
       if (!participant) {
         throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You dont have access to this project",
-        });
+          code: 'FORBIDDEN',
+          message: 'You dont have access to this project',
+        })
       }
 
       return await prisma.project.findUnique({
@@ -227,7 +227,7 @@ export const projectRouter = router({
           description: true,
           columns: {
             orderBy: {
-              index: "asc",
+              index: 'asc',
             },
             select: {
               id: true,
@@ -235,7 +235,7 @@ export const projectRouter = router({
               index: true,
               tasks: {
                 orderBy: {
-                  index: "asc",
+                  index: 'asc',
                 },
                 select: {
                   id: true,
@@ -267,12 +267,12 @@ export const projectRouter = router({
             },
           },
         },
-      });
+      })
     }),
   getProjectBasicInfo: protectedProcedure
     .input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
     .query(async ({ ctx, input }) => {
-      const { prisma } = ctx;
+      const { prisma } = ctx
 
       return await prisma.project.findUnique({
         where: {
@@ -281,6 +281,6 @@ export const projectRouter = router({
         include: {
           icon: true,
         },
-      });
+      })
     }),
-});
+})
