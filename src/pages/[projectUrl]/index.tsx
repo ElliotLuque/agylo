@@ -20,12 +20,6 @@ const KanbanPage: NextPageWithLayout = ({
   } = trpc.project.getProjectBasicInfo.useQuery(
     { url },
     {
-      onSuccess: () => {
-        // setColumns([]);
-        // projectData?.columns?.forEach((column) => {
-        //   setColumns((prev) => [...prev, column]);
-        // });
-      },
       retry: false,
     },
   )
