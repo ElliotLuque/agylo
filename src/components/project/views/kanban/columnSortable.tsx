@@ -40,7 +40,7 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
         ref={setNodeRef}
         style={style}
       >
-        <div className=" flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-4">
             <h2 className="select-none text-xl font-bold">{name}</h2>
           </div>
@@ -56,13 +56,13 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
 
   return (
     <div
-      className=" flex h-full min-w-[20rem] flex-col gap-5 rounded bg-white p-4"
+      className="flex h-full min-w-[20rem] flex-col gap-5 rounded bg-white p-4"
       ref={setNodeRef}
       style={style}
     >
       <div className="flex items-center justify-between gap-2">
         <div
-          className=" flex w-full cursor-grab items-center gap-4"
+          className="flex w-full cursor-grab items-center gap-4"
           {...attributes}
           {...listeners}
         >
@@ -71,7 +71,7 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
           </h2>
         </div>
         <div className="flex items-center gap-2">
-          <PlusIcon className="h-4 w-4 text-gray-900 hover:cursor-pointer " />
+          <PlusIcon className="h-4 w-4 text-gray-900 hover:cursor-pointer hover:bg-gray-200" />
           <EllipsisHorizontalIcon className="h-6 w-6 text-gray-900 hover:cursor-pointer" />
         </div>
       </div>

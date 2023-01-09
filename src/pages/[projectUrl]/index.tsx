@@ -9,8 +9,8 @@ import { protectedRouterPage } from "../../server/common/protected-router-page";
 import LoadingSpinner from "../../components/misc/loadingSpinner";
 
 import Head from "next/head";
-import Header from "../../components/common/header";
-import Layout from "../../components/common/layout";
+import Header from "../../layouts/header";
+import Layout from "../../layouts/layout";
 import KanbanBoard from "../../components/project/views/kanban/kanbanBoard";
 
 const KanbanPage: NextPageWithLayout = ({

@@ -3,7 +3,7 @@ import type { NextPageWithLayout } from "../_app";
 import { trpc } from "../../utils/trpc";
 import { type GetServerSideProps } from "next";
 import { protectedRouterPage } from "../../server/common/protected-router-page";
-import Layout from "../../components/common/layout";
+import Layout from "../../layouts/layout";
 
 const TeamPage: NextPageWithLayout = () => {
   return <div className="w-full">Team</div>;

@@ -8,8 +8,8 @@ import {
 } from "next";
 
 import Head from "next/head";
-import Toast from "../../components/common/toast";
-import Layout from "../../components/common/layout";
+import Toast from "../../components/alerts/toast";
+import Layout from "../../layouts/layout";
 import DeleteProjectDialog from "../../components/project/settings/general/deleteProjectDialog";
 import SettingsSection from "../../components/project/settings/general/sections/settingsSection";
 import DeleteSection from "../../components/project/settings/general/sections/deleteSection";

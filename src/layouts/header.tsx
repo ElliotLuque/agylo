@@ -1,5 +1,5 @@
 import Link from "next/link";
-import UserAvatar from "./userAvatar";
+import UserAvatar from "../components/misc/userAvatar";
 
 const Header: React.FC<{ name: string; description: string, url: string }> = ({
   name,

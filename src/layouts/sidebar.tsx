@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { trpc } from "../../utils/trpc";
+import { trpc } from "../utils/trpc";
 import { useState } from "react";
-import CreateProjectDialog from "../home/createProjectDialog";
-import { getIconBg } from "../../utils/colorSetter";
+import CreateProjectDialog from "../components/alerts/createProjectDialog";
+import { getIconBg } from "../utils/colorSetter";
 import {BellIcon, CheckCircleIcon, HomeIcon, PlusIcon} from "@heroicons/react/24/outline";
 
 const Navbar: React.FC = () => {
