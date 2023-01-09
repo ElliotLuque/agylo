@@ -3,7 +3,7 @@ import {
   defaultAnimateLayoutChanges,
   useSortable,
 } from '@dnd-kit/sortable'
-import type { Column } from '../../../../types/kanban'
+import type { Column } from '../../../../../types/kanban'
 import { CSS } from '@dnd-kit/utilities'
 import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
 
@@ -67,12 +67,16 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
           {...listeners}
         >
           <h2 className='select-none text-xl font-bold'>
-            {name}-{id}
+            {name}
           </h2>
         </div>
-        <div className='flex items-center gap-2'>
-          <PlusIcon className='h-4 w-4 text-gray-900 hover:cursor-pointer hover:bg-gray-200' />
-          <EllipsisHorizontalIcon className='h-6 w-6 text-gray-900 hover:cursor-pointer' />
+        <div className='flex h-6 items-center gap-2'>
+          <div className='rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
+            <PlusIcon className='h-full w-4 text-gray-900' />
+          </div>
+          <div className='rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
+            <EllipsisHorizontalIcon className='h-full w-5 text-gray-900' />
+          </div>
         </div>
       </div>
       <div className='flex flex-col gap-3'>{children}</div>

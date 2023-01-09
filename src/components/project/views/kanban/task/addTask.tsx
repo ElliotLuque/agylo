@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import type { Column, Task } from '../../../../types/kanban'
+import type { Column, Task } from '../../../../../types/kanban'
 import { useOnClickOutside } from 'usehooks-ts'
-import { useKeypress } from '../../../../utils/useKeypress'
-import { trpc } from '../../../../utils/trpc'
+import { useKeypress } from '../../../../../utils/useKeypress'
+import { trpc } from '../../../../../utils/trpc'
 import { useForm } from 'react-hook-form'
 import { PlusIcon } from '@heroicons/react/24/outline'
 
