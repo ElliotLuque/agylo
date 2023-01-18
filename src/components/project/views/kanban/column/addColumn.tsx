@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import type { Column } from '../../../../../types/kanban'
 import { trpc } from '../../../../../utils/trpc'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useKeypress } from '../../../../../utils/useKeypress'
@@ -7,33 +6,23 @@ import { useForm } from 'react-hook-form'
 import { PlusIcon } from '@heroicons/react/24/outline'
 
 const AddColumn: React.FC<{
-  createColumnCallback: (column: Column) => void
   projectId: number
   columnsLength: number
-}> = ({ createColumnCallback, projectId, columnsLength }) => {
+}> = ({ projectId, columnsLength }) => {
   const trpcUtils = trpc.useContext()
   const { mutateAsync: createColumn } = trpc.column.createColumn.useMutation()
 
   const handleCreateColumn = async (formData: { name: string }) => {
     try {
-      const newColumn = await createColumn({
+      await createColumn({
         name: formData.name.trim(),
         projectId,
         index: columnsLength,
       })
 
       setIsCreatingColumn(false)
-
-      trpcUtils.column.invalidate()
-
-      const buildColumn = {
-        id: newColumn.id,
-        name: newColumn.name,
-        index: newColumn.index,
-        tasks: [],
-      } as Column
-
-      createColumnCallback(buildColumn)
+      trpcUtils.project.invalidate()
+      reset({ name: '' })
     } catch (error) {
       console.log(error)
     }
@@ -49,7 +38,7 @@ const AddColumn: React.FC<{
   useOnClickOutside(ref, handleOutsideClick, 'mouseup')
   useKeypress('Escape', () => setIsCreatingColumn(false))
 
-  const { register, handleSubmit } = useForm<{ name: string }>({})
+  const { register, reset, handleSubmit } = useForm<{ name: string }>({})
 
   return isCreatingColumn ? (
     <div

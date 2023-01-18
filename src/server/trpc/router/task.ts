@@ -2,13 +2,30 @@ import { z } from 'zod'
 import { protectedProcedure, router } from '../trpc'
 
 export const taskRouter = router({
+  getTaskInfo: protectedProcedure
+    .input(
+      z.object({
+        key: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      return await prisma.task.findUnique({
+        where: {
+          taskKey: input.key,
+        },
+        include: {
+          assignee: true,
+          labels: true,
+          comments: true,
+        },
+      })
+    }),
   createTask: protectedProcedure
     .input(
       z.object({
-        title: z
-          .string()
-          .regex(/^[^\s]*$/)
-          .max(100),
+        title: z.string().max(100),
         columnId: z.number(),
         projectId: z.number(),
         index: z.number(),
@@ -51,19 +68,34 @@ export const taskRouter = router({
         }
       })
     }),
-  reorderTask: protectedProcedure
+  orderUpTask: protectedProcedure
     .input(
       z.object({
+        columnId: z.number(),
         sourceTaskId: z.number(),
         sourceTaskIndex: z.number(),
-        destinationTaskId: z.number(),
         destinationTaskIndex: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const { prisma } = ctx
 
-      const sourceTask = prisma.task.update({
+      const updateTasks = prisma.task.updateMany({
+        where: {
+          columnId: input.columnId,
+          index: {
+            gt: input.sourceTaskIndex,
+            lte: input.destinationTaskIndex,
+          },
+        },
+        data: {
+          index: {
+            increment: 1,
+          },
+        },
+      })
+
+      const updateMovedTask = prisma.task.update({
         where: {
           id: input.sourceTaskId,
         },
@@ -72,16 +104,7 @@ export const taskRouter = router({
         },
       })
 
-      const destinationTask = prisma.task.update({
-        where: {
-          id: input.destinationTaskId,
-        },
-        data: {
-          index: input.sourceTaskIndex,
-        },
-      })
-
-      return await prisma.$transaction([sourceTask, destinationTask])
+      return await prisma.$transaction([updateTasks, updateMovedTask])
     }),
   moveTaskToColumn: protectedProcedure
     .input(

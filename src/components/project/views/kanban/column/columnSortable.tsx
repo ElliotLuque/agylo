@@ -6,16 +6,25 @@ import {
 import type { Column } from '../../../../../types/kanban'
 import { CSS } from '@dnd-kit/utilities'
 import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
+import ColumnOptions from './misc/columnOptionsMenu'
+import { SelectColumn } from '../../../../../types/kanban-delete'
 
 interface Props {
   id: Column['id']
   index: Column['index']
   name: Column['name']
   tasksCount: number
+  availableColumns: SelectColumn[]
   children: React.ReactNode
 }
 
-const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
+const ColumnSortable: React.FC<Props> = ({
+  id,
+  name,
+  children,
+  tasksCount,
+  availableColumns
+}) => {
   const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({ ...args, wasDragging: true })
 
@@ -60,23 +69,24 @@ const ColumnSortable: React.FC<Props> = ({ id, name, children }) => {
       ref={setNodeRef}
       style={style}
     >
-      <div className='flex items-center justify-between gap-2'>
+      <div className='flex h-7 items-center justify-between gap-2'>
         <div
-          className='flex w-full cursor-grab items-center gap-4'
+          className='flex h-full w-full cursor-grab items-center gap-4'
           {...attributes}
           {...listeners}
         >
-          <h2 className='select-none text-xl font-bold'>
-            {name}
-          </h2>
+          <h2 className='select-none text-xl font-bold'>{name}</h2>
         </div>
-        <div className='flex h-6 items-center gap-2'>
-          <div className='rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
-            <PlusIcon className='h-full w-4 text-gray-900' />
+        <div className='flex h-full items-center gap-2'>
+          <div className='grid h-full place-content-center rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
+            <PlusIcon className='w-4 text-gray-900' />
           </div>
-          <div className='rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
-            <EllipsisHorizontalIcon className='h-full w-5 text-gray-900' />
-          </div>
+          <ColumnOptions
+            columnId={id}
+            columnName={name}
+            tasksCount={tasksCount}
+            availableColumns={availableColumns}
+          />
         </div>
       </div>
       <div className='flex flex-col gap-3'>{children}</div>

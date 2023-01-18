@@ -89,4 +89,54 @@ export const columnRouter = router({
         },
       })
     }),
+  deleteColumnAndTasks: protectedProcedure
+    .input(
+      z.object({
+        columnId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      const deleteTasks = prisma.task.deleteMany({
+        where: {
+          columnId: input.columnId,
+        },
+      })
+
+      const deleteColumn = prisma.column.delete({
+        where: {
+          id: input.columnId,
+        },
+      })
+
+      return await prisma.$transaction([deleteTasks, deleteColumn])
+    }),
+  deleteColumnAndReorderTasks: protectedProcedure
+    .input(
+      z.object({
+        columnId: z.number(),
+        newColumnId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      const updateColumnInTasks = prisma.task.updateMany({
+        where: {
+          columnId: input.columnId,
+        },
+        data: {
+          columnId: input.newColumnId,
+        },
+      })
+
+      const deleteColumn = prisma.column.delete({
+        where: {
+          id: input.columnId,
+        },
+      })
+
+      return await prisma.$transaction([updateColumnInTasks, deleteColumn])
+    }),
 })
