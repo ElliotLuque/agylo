@@ -1,16 +1,16 @@
 import { useRef, useState } from 'react'
-import type { Column, Task } from '../../../../../types/kanban'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useKeypress } from '../../../../../utils/useKeypress'
 import { trpc } from '../../../../../utils/trpc'
 import { useForm } from 'react-hook-form'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import LoadingSpinner from '../../../../misc/loadingSpinner'
 
 const AddTask: React.FC<{
-  createTaskCallback: (column: Column) => void
-  column: Column
+  columnId: number
+  columnLength: number
   projectId: number
-}> = ({ createTaskCallback, column, projectId }) => {
+}> = ({ projectId, columnId, columnLength }) => {
   const [isAdding, setIsAdding] = useState(false)
 
   const ref = useRef<HTMLDivElement>(null)
@@ -21,35 +21,25 @@ const AddTask: React.FC<{
   useOnClickOutside(ref, handleOutsideClick, 'mouseup')
   useKeypress('Escape', () => setIsAdding(false))
 
-  const { register, handleSubmit } = useForm<{ title: string }>({})
+  const { register, reset, handleSubmit } = useForm<{ title: string }>({})
 
   const trpcUtils = trpc.useContext()
-  const { mutateAsync: createTask } = trpc.task.createTask.useMutation()
+  const { mutateAsync: createTask, isLoading } =
+    trpc.task.createTask.useMutation()
 
   const handleCreateTask = async (formData: { title: string }) => {
     try {
-      const newTask = await createTask({
+      await createTask({
         title: formData.title.trim(),
         projectId,
-        columnId: column.id,
-        index: column.tasks.length,
+        columnId: columnId,
+        index: columnLength,
       })
 
-      if (!newTask) return
-
-      trpcUtils.task.invalidate()
+      trpcUtils.project.invalidate()
+      reset({ title: '' })
 
       setIsAdding(false)
-
-      const buildTask = {
-        id: newTask.id,
-        title: newTask.title,
-        index: newTask.index,
-        taskKey: newTask.taskKey,
-      } as Task
-
-      column.tasks.push(buildTask)
-      createTaskCallback(column)
     } catch (error) {
       console.log(error)
     }
@@ -60,15 +50,22 @@ const AddTask: React.FC<{
       ref={ref}
       className='flex min-h-[7rem] w-[17rem] flex-col gap-2 rounded-lg border-[0.09rem] border-gray-200 bg-white p-4'
     >
-      <form onSubmit={handleSubmit(handleCreateTask)}>
-        <input
-          {...register('title', { required: true })}
-          autoFocus
-          type='text'
-          className='h-[2rem] w-full rounded-lg p-2 focus:outline-none '
-          placeholder='Write a task title...'
-        />
-      </form>
+      <div className='flex flex-col justify-start'>
+        <form onSubmit={handleSubmit(handleCreateTask)}>
+          <input
+            {...register('title', { required: true })}
+            autoFocus
+            type='text'
+            className='h-[2rem] w-full rounded-lg p-1 focus:outline-none '
+            placeholder='Write a task title...'
+          />
+        </form>
+        {isLoading && (
+          <div className='w-10 pt-4'>
+            <LoadingSpinner classNames='w-9 h-9 p-2 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+          </div>
+        )}
+      </div>
     </div>
   ) : (
     <button

@@ -36,8 +36,11 @@ import { arraysEqual } from '../../../../utils/arraysEqual'
 import { trpc } from '../../../../utils/trpc'
 import Head from 'next/head'
 import LoadingSpinner from '../../../misc/loadingSpinner'
+import { SelectColumn } from '../../../../types/kanban-delete'
+import TaskViewDialog from './task/taskViewDialog'
 
-const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
+const KanbanBoard: React.FC<{ projectUrl: string, dialogTaskKey: string }> = ({ projectUrl, dialogTaskKey }) => {
+  const trpcUtils = trpc.useContext()
   const {
     data: projectData,
     isLoading,
@@ -53,7 +56,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
   )
 
   const { mutateAsync: orderColumn } = trpc.column.reorderColumn.useMutation()
-  const { mutateAsync: orderTaskInColumn } = trpc.task.reorderTask.useMutation()
+  const { mutateAsync: orderTaskInColumn } = trpc.task.orderUpTask.useMutation()
   const { mutateAsync: moveTaskToColumn } =
     trpc.task.moveTaskToColumn.useMutation()
 
@@ -69,6 +72,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
 
   const [columns, setColumns] = useState<Column[]>([])
   const [clonedColumns, setClonedColumns] = useState<Column[]>([])
+  const [selectedTaskKey, setSelectedTaskKey] = useState<string | null>(null)
 
   const columnsIds = useMemo(
     () => columns.map((column) => column.id),
@@ -337,11 +341,12 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
           const handleOrderTaskInColumn = async () => {
             try {
               await orderTaskInColumn({
+                columnId: activeContainerId as number,
                 sourceTaskId: activeItemId,
                 sourceTaskIndex: activeItemIndex,
-                destinationTaskId: overItemId,
                 destinationTaskIndex: overItemIndex,
               })
+              trpcUtils.project.invalidate()
             } catch (error) {
               console.log(error)
             }
@@ -364,6 +369,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 newColumnId: activeContainerId as number,
                 oldColumnId: lastContainerId.current as number,
               })
+              trpcUtils.project.invalidate()
             } catch (error) {
               console.log(error)
             }
@@ -409,6 +415,7 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
                 destinationColumnId: overContainer.id as number,
                 destinationIndex: overContainerIndex,
               })
+              trpcUtils.project.invalidate()
             } catch (error) {
               console.log(error)
             }
@@ -469,10 +476,16 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         id={column?.id as number}
         name={column?.name as string}
         index={column?.index as number}
+        availableColumns={columns
+          .map(convertToSelectOption)
+          .filter((col) => col.id !== column?.id)}
         tasksCount={column?.tasks.length as number}
       >
         {column?.tasks.map((task) => (
           <TaskSortable
+            onClick={() => {
+              return
+            }}
             cursor={'cursor-pointer'}
             key={task.id}
             id={task.id}
@@ -487,9 +500,9 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
           />
         ))}
         <AddTask
-          createTaskCallback={createTaskCallback}
           projectId={projectData?.id as number}
-          column={column as Column}
+          columnId={column?.id as number}
+          columnLength={column?.tasks.length as number}
         />
       </ColumnSortable>
     )
@@ -508,6 +521,9 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
 
     return (
       <TaskSortable
+        onClick={() => {
+          return
+        }}
         cursor={'cursor-grabbing'}
         key={task?.taskKey as string}
         id={task?.id as number}
@@ -521,21 +537,6 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
         attachmentCount={task?.attachmentCount as number}
       />
     )
-  }
-
-  const createColumnCallback = (column: Column) => {
-    setColumns((prev) => {
-      return [...prev, column]
-    })
-  }
-
-  const createTaskCallback = (column: Column) => {
-    setColumns((prev) => {
-      const updatedColumns = prev.map((col) => {
-        return col.id === column.id ? column : col
-      })
-      return updatedColumns
-    })
   }
 
   if (error?.data?.httpStatus === 403) {
@@ -573,81 +574,102 @@ const KanbanBoard: React.FC<{ projectUrl: string }> = ({ projectUrl }) => {
           <title>Agylo</title>
         </Head>
         <div className='grid w-full place-items-center'>
-          <LoadingSpinner height={48} width={48} />
+          <LoadingSpinner classNames='p-12 h-48 w-48 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
         </div>
       </>
     )
   }
 
+  const convertToSelectOption = (column: Column): SelectColumn => {
+    return {
+      id: column.id,
+      name: column.name,
+      tasksCount: column.tasks.length,
+    } as SelectColumn
+  }
+
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
-      collisionDetection={collisionDetectionStrategy}
-    >
-      <SortableContext
-        items={columnsIds}
-        strategy={horizontalListSortingStrategy}
-      >
-        {columns.map((column) => {
-          return (
-            <ColumnSortable
-              key={column.id}
-              id={column.id}
-              index={column.index}
-              name={column.name}
-              tasksCount={column.tasks.length}
-            >
-              <SortableContext
-                items={taskIds(column)}
-                strategy={verticalListSortingStrategy}
-              >
-                {column.tasks.map((task) => {
-                  return (
-                    <TaskSortable
-                      cursor={'cursor-pointer'}
-                      key={task.taskKey}
-                      id={task.id}
-                      taskKey={task.taskKey}
-                      title={task.title}
-                      index={task.index}
-                      assignee={task.assignee}
-                      priorityId={task.priorityId}
-                      labels={task.labels}
-                      commentCount={task.commentCount}
-                      attachmentCount={task.attachmentCount}
-                    />
-                  )
-                })}
-                <AddTask
-                  createTaskCallback={createTaskCallback}
-                  projectId={projectData?.id as number}
-                  column={column}
-                />
-              </SortableContext>
-            </ColumnSortable>
-          )
-        })}
-        <AddColumn
-          columnsLength={columns.length}
-          createColumnCallback={createColumnCallback}
-          projectId={projectData?.id as number}
+    <>
+      {dialogTaskKey !== '' && (
+        <TaskViewDialog
+          taskKey={dialogTaskKey}
+          projectName={projectData?.name as string}
         />
-      </SortableContext>
-      {createPortal(
-        <DragOverlay dropAnimation={dropAnimation}>
-          {activeId
-            ? columns.map((col) => col.id).includes(activeId as number)
-              ? renderColumnDragOverlay(activeId)
-              : renderTaskDragOverlay(activeId)
-            : null}
-        </DragOverlay>,
-        document.body,
       )}
-    </DndContext>
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+        collisionDetection={collisionDetectionStrategy}
+      >
+        <SortableContext
+          items={columnsIds}
+          strategy={horizontalListSortingStrategy}
+        >
+          {columns.map((column) => {
+            return (
+              <ColumnSortable
+                availableColumns={columns
+                  .map(convertToSelectOption)
+                  .filter((col) => col.id !== column.id)}
+                key={column.id}
+                id={column.id}
+                index={column.index}
+                name={column.name}
+                tasksCount={column.tasks.length}
+              >
+                <SortableContext
+                  items={taskIds(column)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {column.tasks.map((task) => {
+                    return (
+                      <TaskSortable
+                        onClick={() => {
+                          setSelectedTaskKey(task.taskKey)
+                        }}
+                        cursor={'cursor-pointer'}
+                        key={task.taskKey}
+                        id={task.id}
+                        taskKey={task.taskKey}
+                        title={task.title}
+                        index={task.index}
+                        assignee={task.assignee}
+                        priorityId={task.priorityId}
+                        labels={task.labels}
+                        commentCount={task.commentCount}
+                        attachmentCount={task.attachmentCount}
+                      />
+                    )
+                  })}
+                  <AddTask
+                    projectId={projectData?.id as number}
+                    columnId={column?.id as number}
+                    columnLength={column?.tasks.length as number}
+                  />
+                </SortableContext>
+              </ColumnSortable>
+            )
+          })}
+          <AddColumn
+            columnsLength={columns.length}
+            projectId={projectData?.id as number}
+          />
+        </SortableContext>
+        {createPortal(
+          <DragOverlay dropAnimation={dropAnimation}>
+            {activeId
+              ? columns.map((col) => col.id).includes(activeId as number)
+                ? renderColumnDragOverlay(activeId)
+                : renderTaskDragOverlay(activeId)
+              : null}
+          </DragOverlay>,
+          document.body,
+        )}
+      </DndContext>
+    </>
   )
 }
 

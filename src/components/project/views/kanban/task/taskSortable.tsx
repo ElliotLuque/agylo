@@ -1,13 +1,15 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { Task } from '../../../../../types/kanban'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const TaskSortable: React.FC<Task & { cursor: string }> = ({
+const TaskSortable: React.FC<Task & { cursor: string, onClick: () => void }> = ({
   id,
   title,
   taskKey,
   index,
-  cursor,
+  cursor
 }) => {
   const {
     attributes,
@@ -19,6 +21,9 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
   } = useSortable({
     id: taskKey,
   })
+
+  const router = useRouter()
+  const query = router.query
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -36,7 +41,11 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
   }
 
   return (
-    <div
+    <Link
+      href={{
+        pathname: router.pathname,
+        query: { ...query, selectedTask: taskKey },
+      }}
       {...attributes}
       {...listeners}
       ref={setNodeRef}
@@ -47,7 +56,7 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
         {id}-{title} at index {index}{' '}
         <span className='font-bold'>{taskKey}</span>
       </p>
-    </div>
+    </Link>
   )
 }
 

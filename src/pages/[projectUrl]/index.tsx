@@ -9,6 +9,7 @@ import Head from 'next/head'
 import Header from '../../layouts/header'
 import Layout from '../../layouts/layout'
 import KanbanBoard from '../../components/project/views/kanban/kanbanBoard'
+import { useRouter } from 'next/router'
 
 const KanbanPage: NextPageWithLayout = ({
   url,
@@ -23,6 +24,9 @@ const KanbanPage: NextPageWithLayout = ({
       retry: false,
     },
   )
+
+  const router = useRouter()
+  const query = router.query
 
   if (error?.data?.httpStatus === 403) {
     return (
@@ -59,7 +63,7 @@ const KanbanPage: NextPageWithLayout = ({
           <title>Agylo</title>
         </Head>
         <div className='grid w-full place-items-center'>
-          <LoadingSpinner height={48} width={48} />
+          <LoadingSpinner classNames='w-48 h-48 p-12' />
         </div>
       </>
     )
@@ -70,14 +74,17 @@ const KanbanPage: NextPageWithLayout = ({
       <Head>
         <title>{projectData?.name} - Agylo</title>
       </Head>
-      <div className='flex w-full flex-col px-7 py-3'>
+      <div className='flex w-full flex-col px-5 py-3'>
         <Header
           name={projectData?.name ?? 'Project'}
           description={projectData?.description ?? ''}
           url={projectData?.url as string}
         />
-        <div className='flex w-full gap-4 p-6'>
-          <KanbanBoard projectUrl={url} />
+        <div className='flex w-[78vw] gap-2 overflow-auto py-3'>
+          <KanbanBoard
+            dialogTaskKey={(query?.selectedTask as string) ?? ''}
+            projectUrl={url}
+          />
         </div>
       </div>
     </>
