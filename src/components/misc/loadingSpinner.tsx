@@ -1,12 +1,11 @@
-const LoadingSpinner: React.FC<{ height: number; width: number }> = ({
-  height,
-  width,
+const LoadingSpinner: React.FC<{ classNames: string }> = ({
+  classNames
 }) => {
   return (
     <div className='grid place-items-center' role='status'>
       <svg
         aria-hidden='true'
-        className={`mr-2 p-12 h-${height} w-${width} animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600`}
+        className={classNames}
         viewBox='0 0 100 101'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
