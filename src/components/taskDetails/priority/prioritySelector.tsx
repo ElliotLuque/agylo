@@ -51,7 +51,7 @@ const PrioritySelector: React.FC<{ priorityId: number | null; taskId: number }> 
                 {({ active }) => (
                   <button
                     onClick={() => handlePriorityChange(null)}
-                    className={`flex items-center gap-1 p-2 ${
+                    className={`flex items-center rounded gap-1 p-2 ${
                       active ? 'bg-gray-100' : 'bg-white'
                     }`}
                   >
@@ -64,7 +64,7 @@ const PrioritySelector: React.FC<{ priorityId: number | null; taskId: number }> 
                 {({ active }) => (
                   <button
                     onClick={() => handlePriorityChange(1)}
-                    className={`flex items-center gap-1 p-2 ${
+                    className={`flex items-center rounded gap-1 p-2 ${
                       active ? 'bg-gray-100' : 'bg-white'
                     }`}
                   >
@@ -77,7 +77,7 @@ const PrioritySelector: React.FC<{ priorityId: number | null; taskId: number }> 
                 {({ active }) => (
                   <button
                     onClick={() => handlePriorityChange(2)}
-                    className={`flex items-center gap-1 p-2 ${
+                    className={`flex items-center rounded gap-1 p-2 ${
                       active ? 'bg-gray-100' : 'bg-white'
                     }`}
                   >
@@ -90,7 +90,7 @@ const PrioritySelector: React.FC<{ priorityId: number | null; taskId: number }> 
                 {({ active }) => (
                   <button
                     onClick={() => handlePriorityChange(3)}
-                    className={`flex items-center gap-1 p-2 ${
+                    className={`flex items-center rounded gap-1 p-2 ${
                       active ? 'bg-gray-100' : 'bg-white'
                     }`}
                   >

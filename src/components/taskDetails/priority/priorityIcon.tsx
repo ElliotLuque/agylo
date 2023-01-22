@@ -22,7 +22,7 @@ const PriorityIcon: React.FC<{ priorityId: number | null }> = ({
     return (
       <div className='flex items-center gap-1 hover:cursor-pointer'>
         <EllipsisHorizontalIcon className='w-4 text-gray-800' />
-        <p className='text-md text-gray-900 '>No priority</p>
+        <p className='text-sm font-semibold text-gray-900 opacity-70'>No priority</p>
       </div>
     )
   }
