@@ -8,7 +8,7 @@ const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string }> 
 
   return (
     <Image
-      className='rounded-full p-1'
+      className='rounded-full'
       width={width}
       height={height}
       src={
