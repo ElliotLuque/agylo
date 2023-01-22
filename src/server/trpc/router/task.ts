@@ -15,10 +15,65 @@ export const taskRouter = router({
         where: {
           taskKey: input.key,
         },
-        include: {
-          assignee: true,
-          labels: true,
-          comments: true,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          taskKey: true,
+          priorityId: true,
+          createdAt: true,
+          assignee: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          author: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+          comments: {
+            select: {
+              id: true,
+              body: true,
+              createdAt: true,
+              author: {
+                select: {
+                  id: true,
+                  name: true,
+                  image: true,
+                },
+              },
+              attachments: { select: { url: true, filename: true } },
+            },
+          },
+          column: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          attachments: {
+            select: {
+              url: true,
+              filename: true,
+            },
+          },
+          labels: {
+            select: {
+              label: {
+                select: {
+                  id: true,
+                  name: true,
+                  color: true,
+                },
+              },
+            },
+          },
         },
       })
     }),
@@ -166,5 +221,24 @@ export const taskRouter = router({
         updateNewColumnTasks,
         updateMovedTask,
       ])
+    }),
+  updateTaskPriority: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.number(),
+        priorityId: z.number().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      return await prisma.task.update({
+        where: {
+          id: input.taskId,
+        },
+        data: {
+          priorityId: input.priorityId,
+        },
+      })
     }),
 })
