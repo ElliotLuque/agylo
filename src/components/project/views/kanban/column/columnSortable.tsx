@@ -6,7 +6,7 @@ import {
 import type { Column } from '../../../../../types/kanban'
 import { CSS } from '@dnd-kit/utilities'
 import { EllipsisHorizontalIcon, PlusIcon } from '@heroicons/react/24/outline'
-import ColumnOptions from './misc/columnOptionsMenu'
+import ColumnOptions from './options/columnOptionsMenu'
 import { SelectColumn } from '../../../../../types/kanban-delete'
 
 interface Props {
