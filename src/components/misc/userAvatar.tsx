@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string }> = ({
+const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string | null }> = ({
   width,
   height,
   imageUrl
@@ -13,7 +13,7 @@ const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string }> 
       height={height}
       src={
         imageUrl ??
-        'https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg'
+        '/default-user.jpg'
       }
       alt='User image'
     />
