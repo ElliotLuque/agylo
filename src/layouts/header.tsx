@@ -1,11 +1,15 @@
 import Link from 'next/link'
 import UserAvatar from '../components/misc/userAvatar'
+import { useSession } from 'next-auth/react';
 
 const Header: React.FC<{ name: string; description: string; url: string }> = ({
   name,
   description,
   url,
 }) => {
+
+  const session = useSession()
+
   return (
     <header className='z-10 flex w-full flex-row flex-wrap items-center justify-between py-2 px-2 '>
       <div className='flex flex-row items-center gap-4'>
@@ -21,7 +25,7 @@ const Header: React.FC<{ name: string; description: string; url: string }> = ({
         >
           <h1 className='text-lg'>Configuration</h1>
         </Link>
-        <UserAvatar width={42} height={42} />
+        <UserAvatar imageUrl={session.data?.user?.image as string} width={42} height={42} />
       </div>
     </header>
   )
