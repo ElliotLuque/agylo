@@ -1,14 +1,15 @@
 import Image from 'next/image'
 
-const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string | null }> = ({
+const UserAvatar: React.FC<{ width: number; height: number, imageUrl: string | null, isInvisible: boolean }> = ({
   width,
   height,
+  isInvisible,
   imageUrl
 }) => {
 
   return (
     <Image
-      className='rounded-full'
+      className={`rounded-full ${isInvisible ? 'invisible' : undefined }`}
       width={width}
       height={height}
       src={
