@@ -44,7 +44,7 @@ const Dashboard: NextPageWithLayout = () => {
         <CreateProjectDialog open={open} setOpen={setOpen} />
         <div className='flex flex-row flex-wrap items-center gap-7 py-6'>
           {isLoading ? (
-            <LoadingSpinner height={48} width={16} />
+            <LoadingSpinner classNames='h-48 w-16' />
           ) : (
             projects?.map((project) => (
               <motion.div
