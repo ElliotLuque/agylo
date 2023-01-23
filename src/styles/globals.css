@@ -1,9 +1,9 @@
 @tailwind base;
 
 @layer base {
-  button[role='button'] {
-    @apply cursor-default;
-  }
+	button[role='button'] {
+		@apply cursor-default;
+	}
 }
 
 @tailwind components;

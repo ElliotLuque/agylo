@@ -7,19 +7,19 @@
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: true,
-  swcMinify: true,
-  i18n: {
-    locales: ['en'],
-    defaultLocale: 'en',
-  },
-  images: {
-    domains: [
-      'images.unsplash.com',
-      'avatars.githubusercontent.com',
-      'lh3.googleusercontent.com',
-      'cdn-icons-png.flaticon.com',
-    ],
-  },
+	reactStrictMode: true,
+	swcMinify: true,
+	i18n: {
+		locales: ['en'],
+		defaultLocale: 'en',
+	},
+	images: {
+		domains: [
+			'images.unsplash.com',
+			'avatars.githubusercontent.com',
+			'lh3.googleusercontent.com',
+			'cdn-icons-png.flaticon.com',
+		],
+	},
 }
 export default config

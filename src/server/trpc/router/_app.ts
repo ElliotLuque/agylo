@@ -7,12 +7,12 @@ import { participantsRouter } from './participants'
 import { labelRouter } from './label'
 
 export const appRouter = router({
-  project: projectRouter,
-  colors: iconRouter,
-  column: columnRouter,
-  task: taskRouter,
-  participants: participantsRouter,
-  label: labelRouter
+	project: projectRouter,
+	colors: iconRouter,
+	column: columnRouter,
+	task: taskRouter,
+	participants: participantsRouter,
+	label: labelRouter,
 })
 
 // export type definition of API

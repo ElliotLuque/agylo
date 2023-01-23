@@ -1,31 +1,31 @@
 export type Task = {
-  id: number
-  title: string
-  labels: Label[]
-  assignee: Assignee
-  index: number
-  taskKey: string
-  commentCount: number | null
-  attachmentCount: number | null
-  priorityId: number
+	id: number
+	title: string
+	labels: Label[]
+	assignee: Assignee
+	index: number
+	taskKey: string
+	commentCount: number | null
+	attachmentCount: number | null
+	priorityId: number
 }
 
 export type Label = {
-  label: {
-    id: number
-    name: string
-    colorId: number
-  }
+	label: {
+		id: number
+		name: string
+		colorId: number
+	}
 }
 
 export type Assignee = {
-  id: string
-  image: string | null
+	id: string
+	image: string | null
 } | null
 
 export type Column = {
-  tasks: Task[]
-  id: number
-  name: string
-  index: number
+	tasks: Task[]
+	id: number
+	name: string
+	index: number
 }

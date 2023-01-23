@@ -1,16 +1,30 @@
 {
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "plugins": ["@typescript-eslint", "tailwindcss"],
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:tailwindcss/recommended"
-  ],
-  "rules": {
-    "@typescript-eslint/consistent-type-imports": "warn"
-  }
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"plugins": ["@typescript-eslint", "tailwindcss", "prettier"],
+	"extends": [
+		"next/core-web-vitals",
+		"plugin:prettier/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:tailwindcss/recommended"
+	],
+	"rules": {
+		"@typescript-eslint/consistent-type-imports": "warn",
+		"prettier/prettier": [
+			"error",
+			{
+				"useTabs": true,
+				"trailingComma": "all",
+				"tabWidth": 2,
+				"semi": false,
+				"singleQuote": true,
+				"jsxSingleQuote": true,
+				"plugins": ["prettier-plugin-tailwindcss"],
+				"pluginSearchDirs": false,
+				"endOfLine": "auto"
+			}
+		]
+	}
 }
