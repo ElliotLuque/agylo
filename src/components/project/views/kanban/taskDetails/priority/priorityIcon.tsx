@@ -1,4 +1,5 @@
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon } from '@heroicons/react/24/solid'
 
 const PriorityIcon: React.FC<{ priorityId: number | null }> = ({
   priorityId,
@@ -21,7 +22,7 @@ const PriorityIcon: React.FC<{ priorityId: number | null }> = ({
   if (priorityId === null) {
     return (
       <div className='flex items-center gap-1 hover:cursor-pointer'>
-        <EllipsisHorizontalIcon className='w-4 text-gray-800' />
+        <EllipsisHorizontalIcon className='w-4 text-gray-800 mt-1' />
         <p className='text-sm font-semibold text-gray-900 opacity-70'>No priority</p>
       </div>
     )
@@ -29,10 +30,11 @@ const PriorityIcon: React.FC<{ priorityId: number | null }> = ({
 
   return (
     <div
-      className={`rounded px-1.5 py-1 text-sm font-semibold ${
+      className={`inline-flex items-center gap-1 rounded px-1.5 py-1 text-sm font-semibold ${
         getPriorityInfo(priorityId)?.color
       } ${getPriorityInfo(priorityId)?.bgColor}`}
     >
+      <ChartBarIcon className={`w-3 h-3 mt-0.5 ${getPriorityInfo(priorityId)?.color}`} />
       {getPriorityInfo(priorityId)?.name}
     </div>
   )
