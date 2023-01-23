@@ -16,16 +16,14 @@ const Header: React.FC<{ name: string; description: string; url: string }> = ({
         <h1 className='text-lg'>{name}</h1>
       </div>
       <div className='flex flex-row items-center gap-4'>
-        <h1 className='text-lg'>Search</h1>
         <Link
           href={{
             pathname: '/[projectUrl]/settings',
             query: { projectUrl: url },
           }}
         >
-          <h1 className='text-lg'>Configuration</h1>
+          <h1 className='text-lg'>Project configuration</h1>
         </Link>
-        <UserAvatar imageUrl={session.data?.user?.image as string} width={42} height={42} />
       </div>
     </header>
   )
