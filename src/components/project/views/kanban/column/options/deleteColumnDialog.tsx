@@ -5,6 +5,7 @@ import LoadingSpinner from '../../../../../misc/loadingSpinner'
 import ColumnListSelector from './columnListSelector'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { SelectColumn } from '../../../../../../types/kanban-delete'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 
 const DeleteColumnDialog: React.FC<{
   open: boolean
@@ -101,14 +102,17 @@ const DeleteColumnDialog: React.FC<{
                 >
                   <Dialog.Panel className=' max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                     <Dialog.Title
-                      as='h3'
-                      className='pb-5 text-xl font-medium leading-6 text-gray-800'
+                      as='div'
+                      className='flex items-center gap-3 pb-5'
                     >
-                      Delete column and tasks
+                      <ExclamationTriangleIcon className='mt-1 inline-block h-6 w-6 text-red-500' />
+                      <h3 className='text-xl font-medium leading-6 text-gray-800'>
+                        Delete column and tasks
+                      </h3>
                     </Dialog.Title>
                     <p className='text-sm'>
-                      <span className='font-bold'>Warning!</span> This column contains tasks and it&apos;s the only column
-                      remaining.
+                      <span className='font-bold'>Warning!</span> This column
+                      contains tasks and it&apos;s the only column remaining.
                     </p>
                     <p className='mt-3 text-sm'>
                       You will delete the column and all tasks in it.
@@ -180,16 +184,20 @@ const DeleteColumnDialog: React.FC<{
                 >
                   <Dialog.Panel className='max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                     <Dialog.Title
-                      as='h3'
-                      className='pb-4 text-xl font-medium leading-6 text-gray-800'
+                      as='div'
+                      className='flex items-center gap-3 pb-5'
                     >
-                      Move tasks from column
+                      <ExclamationTriangleIcon className='mt-1 inline-block h-6 w-6 text-red-500' />
+                      <h3 className='text-xl font-medium leading-6 text-gray-800'>
+                        Relocate tasks to another column
+                      </h3>
                     </Dialog.Title>
+
                     <p className='text-sm text-gray-900'>
                       This column contains tasks, please select a column to move
-                      the current tasks
+                      the current tasks.
                     </p>
-                    <div className='mt-7 flex items-center justify-between'>
+                    <div className='mt-9 flex items-center justify-between'>
                       <div className='flex w-28 flex-col items-center justify-center gap-3'>
                         <span className='select-none rounded-lg bg-gray-100 p-2 text-xs line-through'>
                           {columnDeleteName}
@@ -271,10 +279,13 @@ const DeleteColumnDialog: React.FC<{
               >
                 <Dialog.Panel className=' max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                   <Dialog.Title
-                    as='h3'
-                    className='pb-5 text-xl font-medium leading-6 text-gray-800'
+                    as='div'
+                    className='flex items-center gap-3 pb-5'
                   >
-                    Delete column
+                    <ExclamationTriangleIcon className='mt-1 inline-block h-6 w-6 text-red-500' />
+                    <h3 className='text-xl font-medium leading-6 text-gray-800'>
+                      Delete column
+                    </h3>
                   </Dialog.Title>
                   <p className='text-sm'>
                     This column doesn't contain tasks, you can safely delete it.
