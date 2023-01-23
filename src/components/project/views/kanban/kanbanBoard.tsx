@@ -37,7 +37,7 @@ import { trpc } from '../../../../utils/trpc'
 import Head from 'next/head'
 import LoadingSpinner from '../../../misc/loadingSpinner'
 import { SelectColumn } from '../../../../types/kanban-delete'
-import TaskViewDialog from './task/taskViewDialog'
+import TaskDetailsDialog from './taskDetails/taskDetailsDialog'
 
 const KanbanBoard: React.FC<{ projectUrl: string, dialogTaskKey: string }> = ({ projectUrl, dialogTaskKey }) => {
   const trpcUtils = trpc.useContext()
@@ -591,9 +591,10 @@ const KanbanBoard: React.FC<{ projectUrl: string, dialogTaskKey: string }> = ({ 
   return (
     <>
       {dialogTaskKey !== '' && (
-        <TaskViewDialog
+        <TaskDetailsDialog
           taskKey={dialogTaskKey}
           projectName={projectData?.name as string}
+          projectId={projectData?.id as number}
         />
       )}
       <DndContext
