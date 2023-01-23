@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { protectedProcedure, router } from '../trpc'
 
 export const participantsRouter = router({
-  projectParticipants: protectedProcedure
+  getProjectParticipants: protectedProcedure
     .input(
       z.object({
         projectId: z.number(),
