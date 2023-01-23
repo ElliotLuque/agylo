@@ -22,6 +22,8 @@ export const taskRouter = router({
           taskKey: true,
           priorityId: true,
           createdAt: true,
+          commentCount: true,
+          attachmentCount: true,
           assignee: {
             select: {
               id: true,
@@ -37,6 +39,7 @@ export const taskRouter = router({
             },
           },
           comments: {
+            take: 3,
             select: {
               id: true,
               body: true,
@@ -58,6 +61,7 @@ export const taskRouter = router({
             },
           },
           attachments: {
+            take: 3,
             select: {
               url: true,
               filename: true,
@@ -238,6 +242,61 @@ export const taskRouter = router({
         },
         data: {
           priorityId: input.priorityId,
+        },
+      })
+    }),
+  renameTask: protectedProcedure
+    .input(
+      z.object({
+        taskKey: z.string(),
+        newTitle: z.string().max(80),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      return await prisma.task.update({
+        where: {
+          taskKey: input.taskKey,
+        },
+        data: {
+          title: input.newTitle,
+        },
+      })
+    }),
+  assignTask: protectedProcedure
+    .input(
+      z.object({
+        taskId: z.number(),
+        assigneeId: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { prisma } = ctx
+
+      if (input.assigneeId === null) {
+        return await prisma.task.update({
+          where: {
+            id: input.taskId,
+          },
+          data: {
+            assignee: {
+              disconnect: true,
+            },
+          },
+        })
+      }
+
+      return await prisma.task.update({
+        where: {
+          id: input.taskId,
+        },
+        data: {
+          assignee: {
+            connect: {
+              id: input.assigneeId,
+            },
+          },
         },
       })
     }),
