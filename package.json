@@ -29,7 +29,7 @@
     "@trpc/next": "^10.0.0",
     "@trpc/react-query": "^10.0.0",
     "@trpc/server": "^10.0.0",
-    "framer-motion": "^7.9.0",
+    "framer-motion": "8.5.2",
     "next": "13.0.2",
     "next-auth": "4.17.0",
     "nodemailer": "^6.8.0",
