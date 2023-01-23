@@ -3,6 +3,7 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import { useState, Fragment } from 'react'
 import DeleteColumnDialog from './deleteColumnDialog'
 import { SelectColumn } from '../../../../../../types/kanban-delete'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 
 const ColumnOptions: React.FC<{
   tasksCount: number
@@ -22,7 +23,7 @@ const ColumnOptions: React.FC<{
         open={openDeleteDialog}
         setOpen={setDeleteDialog}
       />
-      <Menu as='div' className='relative z-20 grid place-content-center'>
+      <Menu as='div' className='relative z-10 grid place-content-center'>
         <div>
           <Menu.Button className='flex flex-col items-center justify-center rounded-md p-1 focus:outline-none hover:cursor-pointer hover:bg-gray-100'>
             <EllipsisHorizontalIcon className='h-6 w-6 text-gray-900' />
@@ -44,9 +45,10 @@ const ColumnOptions: React.FC<{
                   <button
                     className={`${
                       active ? 'bg-gray-100' : 'bg-white'
-                    } group flex  w-full items-center rounded-md p-2 text-sm text-gray-900`}
+                    } group flex  w-full items-center justify-between gap-1 rounded-md p-2 text-sm text-gray-900`}
                   >
-                    Rename
+                    <p>Rename</p>
+                    <PencilSquareIcon className='h-3.5 w-3.5 text-gray-900 opacity-70' />
                   </button>
                 )}
               </Menu.Item>
@@ -56,9 +58,10 @@ const ColumnOptions: React.FC<{
                     onClick={() => setDeleteDialog(true)}
                     className={`${
                       active ? 'bg-gray-100' : 'bg-white'
-                    } group flex w-full items-center rounded-md p-2 text-sm text-gray-900`}
+                    } group flex w-full items-center justify-between gap-1 rounded-md p-2 text-sm text-gray-900`}
                   >
-                    Delete
+                    <p>Delete</p>
+                    <TrashIcon className='h-4 w-4 text-red-500' />
                   </button>
                 )}
               </Menu.Item>
