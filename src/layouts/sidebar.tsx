@@ -9,26 +9,41 @@ import {
   HomeIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline'
+import UserAvatar from '../components/misc/userAvatar'
+import { useSession } from 'next-auth/react'
 
 const Navbar: React.FC = () => {
+  const session = useSession()
+
   return (
-    <div className='mt-10 flex flex-col justify-center gap-6 text-lg font-semibold text-gray-800'>
+    <div className='mt-3 flex flex-col justify-center gap-6 font-semibold text-gray-800'>
+      <div className='mb-5 flex cursor-pointer items-center gap-3.5'>
+        <UserAvatar
+          isInvisible={false}
+          imageUrl={session.data?.user?.image as string}
+          width={28}
+          height={28}
+        />
+        <h1 className='text-md text-gray-800 opacity-90'>
+          {session.data?.user?.name}
+        </h1>
+      </div>
       <Link href='/dashboard'>
         <div className='flex items-center gap-3'>
           <HomeIcon className='h-7 w-7' />
-          <h1>Home</h1>
+          <h1 className='text-lg'>Home</h1>
         </div>
       </Link>
       <Link href='/my-tasks'>
         <div className='flex items-center gap-3'>
           <CheckCircleIcon className='h-7 w-7' />
-          <h1>My tasks</h1>
+          <h1 className='text-lg'>My tasks</h1>
         </div>
       </Link>
       <div>
         <div className='flex cursor-default items-center gap-3'>
           <BellIcon className='h-7 w-7 opacity-40' />
-          <h1 className='opacity-40 '>
+          <h1 className='text-lg opacity-40'>
             Inbox <span className='text-sm'>(Coming soon!)</span>
           </h1>
         </div>
