@@ -11,12 +11,9 @@ import {
 import { motion } from 'framer-motion'
 import LabelIcon from '../taskDetails/labels/labelIcon'
 
-const TaskSortable: React.FC<
-	Task & { cursor: string; onClick: () => void }
-> = ({
+const TaskSortable: React.FC<Task & { cursor: string }> = ({
 	title,
 	taskKey,
-	index,
 	assignee,
 	cursor,
 	labels,

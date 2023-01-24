@@ -9,7 +9,7 @@ const LandingPage: NextPage = () => {
 			<header>
 				<nav className='flex flex-wrap items-center justify-between bg-gradient-to-b from-[#15162c] to-[#2e026d] p-6'>
 					<Link
-						className='mr-6 flex flex-shrink-0 flex-row items-center text-white'
+						className='mr-6 flex shrink-0 flex-row items-center text-white'
 						href='/'
 					>
 						Logo

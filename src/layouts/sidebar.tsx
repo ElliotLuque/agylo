@@ -77,7 +77,7 @@ const Sidebar: React.FC = () => {
 				setOpen={setOpenCreateDialog}
 			/>
 
-			<aside className='border-r-1 fixed top-0 z-10 h-screen w-72 border border-gray-200 bg-white'>
+			<aside className='fixed top-0 z-10 h-screen w-72 border-r border-gray-200 bg-white'>
 				<div className='flex h-full flex-col gap-6 py-4 px-7'>
 					<h1 className='mt-5 text-2xl font-bold text-indigo-500'> Agylo</h1>
 					<Navbar />
@@ -89,7 +89,7 @@ const Sidebar: React.FC = () => {
 								className='h-5 w-5 hover:cursor-pointer'
 							/>
 						</div>
-						<div className='h-76 ml-1.5 mt-5 mb-4 flex flex-col gap-3.5 overflow-auto'>
+						<div className='ml-1.5 mt-5 mb-4 flex h-56 flex-col gap-3.5 overflow-auto'>
 							{userProjects?.map((project) => {
 								return (
 									<ProjectItem

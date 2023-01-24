@@ -36,8 +36,8 @@ import { arraysEqual } from '../../../../utils/arraysEqual'
 import { trpc } from '../../../../utils/trpc'
 import Head from 'next/head'
 import LoadingSpinner from '../../../misc/loadingSpinner'
-import { SelectColumn } from '../../../../types/kanban-delete'
 import TaskDetailsDialog from './taskDetails/taskDetailsDialog'
+import type { SelectColumn } from '../../../../types/kanban-delete'
 
 const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 	projectUrl,
@@ -75,7 +75,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 
 	const [columns, setColumns] = useState<Column[]>([])
 	const [clonedColumns, setClonedColumns] = useState<Column[]>([])
-	const [selectedTaskKey, setSelectedTaskKey] = useState<string | null>(null)
 
 	const columnsIds = useMemo(
 		() => columns.map((column) => column.id),
@@ -305,8 +304,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 				const overItemIndex = activeContainer?.tasks.findIndex((item) => {
 					return item.taskKey === over?.id
 				})
-				const overItemId = activeContainer?.tasks[overItemIndex as number]
-					?.id as number
 
 				if (
 					activeItemIndex === undefined ||
@@ -486,9 +483,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 			>
 				{column?.tasks.map((task) => (
 					<TaskSortable
-						onClick={() => {
-							return
-						}}
 						cursor={'cursor-pointer'}
 						key={task.id}
 						id={task.id}
@@ -524,9 +518,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 
 		return (
 			<TaskSortable
-				onClick={() => {
-					return
-				}}
 				cursor={'cursor-grabbing'}
 				key={task?.taskKey as string}
 				id={task?.id as number}
@@ -631,9 +622,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 									{column.tasks.map((task) => {
 										return (
 											<TaskSortable
-												onClick={() => {
-													setSelectedTaskKey(task.taskKey)
-												}}
 												cursor={'cursor-pointer'}
 												key={task.taskKey}
 												id={task.id}

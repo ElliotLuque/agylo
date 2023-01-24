@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
-import { SelectColumn } from '../../../../../../types/kanban-delete'
+import type { SelectColumn } from '../../../../../../types/kanban-delete'
 
 const ColumnListSelector: React.FC<{
 	setSelectedColumn: React.Dispatch<React.SetStateAction<SelectColumn>>
@@ -17,7 +17,7 @@ const ColumnListSelector: React.FC<{
 				}}
 			>
 				<div className='relative '>
-					<Listbox.Button className='relative w-full cursor-default rounded-lg bg-white p-3 pr-9 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm'>
+					<Listbox.Button className='relative w-full cursor-default rounded-lg bg-white p-3 pr-9 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm'>
 						<div className='flex items-center justify-between'>
 							<span className='block truncate text-xs'>
 								{selectedColumn?.name}
@@ -40,7 +40,8 @@ const ColumnListSelector: React.FC<{
 						leaveFrom='opacity-100'
 						leaveTo='opacity-0'
 					>
-						<Listbox.Options className='scroll absolute mt-1 max-h-44 w-full overflow-auto rounded-lg bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-indigo-400 scrollbar-thumb-rounded-md focus:outline-none sm:text-sm'>
+						{/* eslint-disable-next-line tailwindcss/no-custom-classname*/}
+						<Listbox.Options className='scroll scrollbar-thumb-rounded-md absolute mt-1 max-h-44 w-full overflow-auto rounded-lg bg-white py-1 text-base shadow-lg outline-none ring-1 ring-black/5 scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-indigo-400 sm:text-sm'>
 							{columns.map((column, colIndex) => (
 								<Listbox.Option
 									key={colIndex}

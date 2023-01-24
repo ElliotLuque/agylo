@@ -3,15 +3,19 @@
 	"parserOptions": {
 		"project": "./tsconfig.json"
 	},
-	"plugins": ["@typescript-eslint", "tailwindcss", "prettier"],
 	"extends": [
+		"eslint:recommended",
 		"next/core-web-vitals",
 		"plugin:prettier/recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:tailwindcss/recommended"
 	],
+	"plugins": ["@typescript-eslint", "tailwindcss", "prettier"],
 	"rules": {
 		"@typescript-eslint/consistent-type-imports": "warn",
+		"tailwindcss/classnames-order": "off",
+		"tailwindcss/no-custom-classname": "warn",
+		"tailwindcss/no-contradicting-classname": "error",
 		"prettier/prettier": [
 			"error",
 			{
@@ -21,9 +25,9 @@
 				"semi": false,
 				"singleQuote": true,
 				"jsxSingleQuote": true,
+				"endOfLine": "auto",
 				"plugins": ["prettier-plugin-tailwindcss"],
-				"pluginSearchDirs": false,
-				"endOfLine": "auto"
+				"pluginSearchDirs": false
 			}
 		]
 	}

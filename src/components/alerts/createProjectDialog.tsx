@@ -61,7 +61,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 						leaveFrom='opacity-100'
 						leaveTo='opacity-0'
 					>
-						<div className='fixed inset-0 bg-black bg-opacity-30' />
+						<div className='fixed inset-0 bg-black/30' />
 					</Transition.Child>
 
 					<div className='fixed inset-0 overflow-y-auto'>
@@ -210,7 +210,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 													errors.description
 														? 'border-red-400 bg-red-50 focus:ring-red-200'
 														: 'focus:border-indigo-400 focus:ring-indigo-200'
-												}  focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400`}
+												}  focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400`}
 												placeholder='Write your project description...'
 											/>
 											{errors.description && (

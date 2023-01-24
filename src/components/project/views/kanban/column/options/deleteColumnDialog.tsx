@@ -4,7 +4,7 @@ import { trpc } from '../../../../../../utils/trpc'
 import LoadingSpinner from '../../../../../misc/loadingSpinner'
 import ColumnListSelector from './columnListSelector'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import { SelectColumn } from '../../../../../../types/kanban-delete'
+import type { SelectColumn } from '../../../../../../types/kanban-delete'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 
 const DeleteColumnDialog: React.FC<{
@@ -86,7 +86,7 @@ const DeleteColumnDialog: React.FC<{
 							leaveFrom='opacity-100'
 							leaveTo='opacity-0'
 						>
-							<div className='fixed inset-0 bg-black bg-opacity-25' />
+							<div className='fixed inset-0 bg-black/5' />
 						</Transition.Child>
 
 						<div className='fixed inset-0 overflow-y-auto'>
@@ -100,7 +100,7 @@ const DeleteColumnDialog: React.FC<{
 									leaveFrom='opacity-100 scale-100'
 									leaveTo='opacity-0 scale-95'
 								>
-									<Dialog.Panel className=' max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+									<Dialog.Panel className=' max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
 										<Dialog.Title
 											as='div'
 											className='flex items-center gap-3 pb-5'
@@ -138,7 +138,7 @@ const DeleteColumnDialog: React.FC<{
 												</button>
 												<button
 													type='submit'
-													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
+													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
 												>
 													Delete column and tasks
 												</button>
@@ -168,7 +168,7 @@ const DeleteColumnDialog: React.FC<{
 							leaveFrom='opacity-100'
 							leaveTo='opacity-0'
 						>
-							<div className='fixed inset-0 bg-black bg-opacity-25' />
+							<div className='fixed inset-0 bg-black/25' />
 						</Transition.Child>
 
 						<div className='fixed inset-0 overflow-y-auto'>
@@ -182,7 +182,7 @@ const DeleteColumnDialog: React.FC<{
 									leaveFrom='opacity-100 scale-100'
 									leaveTo='opacity-0 scale-95'
 								>
-									<Dialog.Panel className='max-w-md transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+									<Dialog.Panel className='max-w-md rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
 										<Dialog.Title
 											as='div'
 											className='flex items-center gap-3 pb-5'
@@ -263,7 +263,7 @@ const DeleteColumnDialog: React.FC<{
 						leaveFrom='opacity-100'
 						leaveTo='opacity-0'
 					>
-						<div className='fixed inset-0 bg-black bg-opacity-25' />
+						<div className='fixed inset-0 bg-black/25' />
 					</Transition.Child>
 
 					<div className='fixed inset-0 overflow-y-auto'>
@@ -277,7 +277,7 @@ const DeleteColumnDialog: React.FC<{
 								leaveFrom='opacity-100 scale-100'
 								leaveTo='opacity-0 scale-95'
 							>
-								<Dialog.Panel className=' max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+								<Dialog.Panel className=' max-w-md overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
 									<Dialog.Title
 										as='div'
 										className='flex items-center gap-3 pb-5'
@@ -288,7 +288,8 @@ const DeleteColumnDialog: React.FC<{
 										</h3>
 									</Dialog.Title>
 									<p className='text-sm'>
-										This column doesn't contain tasks, you can safely delete it.
+										This column doesn&apos;t contain tasks, you can safely
+										delete it.
 									</p>
 									<form
 										className='mt-8 flex justify-between'

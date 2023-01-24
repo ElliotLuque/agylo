@@ -16,7 +16,6 @@ import { useForm } from 'react-hook-form'
 import LabelIcon from './labels/labelIcon'
 import LabelSelector from './labels/labelSelector'
 import { trpc } from '../../../../../utils/trpc'
-import SkeletonPiece from '../../../../skeletons/skeletonPiece'
 import TaskDetailsSkeletonLoader from './taskDetailsSkeletonLoader'
 
 interface TaskProps {
@@ -70,7 +69,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 		if (taskData?.title) {
 			reset({ title: taskData?.title })
 		}
-	}, [taskData?.title])
+	}, [taskData?.title, reset])
 
 	return (
 		<>
@@ -97,7 +96,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 						leaveFrom='opacity-100'
 						leaveTo='opacity-0'
 					>
-						<div className='fixed inset-0 bg-black bg-opacity-25' />
+						<div className='fixed inset-0 bg-black/25' />
 					</Transition.Child>
 
 					<div className='fixed inset-0 overflow-y-auto'>
@@ -111,7 +110,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 								leaveFrom='opacity-100 scale-100'
 								leaveTo='opacity-0 scale-95'
 							>
-								<Dialog.Panel className='min-w-[35vw] max-w-md transform rounded-2xl bg-white px-7 py-5 text-left align-middle shadow-xl transition-all'>
+								<Dialog.Panel className='min-w-[35vw] max-w-md rounded-2xl bg-white px-7 py-5 text-left align-middle shadow-xl transition-all'>
 									{isLoading ? (
 										<TaskDetailsSkeletonLoader setOpen={setOpen} />
 									) : (
@@ -170,7 +169,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 														<h3 className='text-base font-medium'>Status</h3>
 													</div>
 													<div className='row-start-1 flex items-center'>
-														<p className='cursor-defa ult pl-1 text-sm font-semibold'>
+														<p className='cursor-default pl-1 text-sm font-semibold'>
 															{taskData?.column.name}
 														</p>
 													</div>

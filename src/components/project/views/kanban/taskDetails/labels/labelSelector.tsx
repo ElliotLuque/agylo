@@ -1,5 +1,5 @@
 import { Combobox, Popover } from '@headlessui/react'
-import { CheckIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { motion } from 'framer-motion'
 import { trpc } from '../../../../../../utils/trpc'
 import { useState } from 'react'
@@ -31,7 +31,7 @@ const LabelSelector: React.FC<{
 
 			<Popover.Panel
 				as='div'
-				className='absolute top-8 left-1 z-30 mt-2 w-32 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+				className='absolute top-8 left-1 z-30 mt-2 w-32 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'
 			>
 				<motion.div
 					initial={{ scale: 0.95, opacity: 0 }}

@@ -54,7 +54,7 @@ const AssigneeSelector: React.FC<{
 			name: assigneeName,
 			image: assigneeImage,
 		})
-	}, [assigneeId])
+	}, [assigneeId, assigneeName, assigneeImage])
 
 	return (
 		<>
@@ -63,7 +63,7 @@ const AssigneeSelector: React.FC<{
 				as='div'
 				className='relative z-30 grid place-content-center'
 			>
-				<Listbox.Button className='flex select-none items-center gap-2 rounded-md p-1 focus:outline-none hover:cursor-pointer hover:bg-gray-50'>
+				<Listbox.Button className='flex cursor-pointer select-none items-center gap-2 rounded-md bg-white p-1 outline-none hover:bg-gray-50'>
 					<UserAvatar
 						isInvisible={false}
 						width={28}
@@ -87,7 +87,7 @@ const AssigneeSelector: React.FC<{
 					leaveFrom='transform opacity-100 scale-100'
 					leaveTo='transform opacity-0 scale-95'
 				>
-					<Listbox.Options className='absolute top-8 left-1 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+					<Listbox.Options className='absolute top-8 left-1 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
 						<div className='px-1 py-2'>
 							<Listbox.Option value={null}>
 								{({ active }) => (
