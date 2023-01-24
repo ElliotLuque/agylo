@@ -24,9 +24,23 @@ async function main() {
 		data: [{ name: 'admin' }, { name: 'member' }],
 	})
 
-	console.log({ roles })
+	const labelColors = await prisma.labelColor.createMany({
+		data: [
+			{ background: 'bg-gray-100', foreground: 'text-gray-500' },
+			{ background: 'bg-lime-200', foreground: 'text-lime-600' },
+			{ background: 'bg-emerald-100', foreground: 'text-emerald-500' },
+			{ background: 'bg-sky-100', foreground: 'text-sky-400' },
+			{ background: 'bg-teal-100', foreground: 'text-teal-500' },
+			{ background: 'bg-violet-100', foreground: 'text-violet-500' },
+			{ background: 'bg-fuchsia-100', foreground: 'text-fuchsia-400' },
+			{ background: 'bg-pink-100', foreground: 'text-pink-400' },
+		],
+	})
+
 	console.log({ icons })
 	console.log({ priorities })
+	console.log({ roles })
+	console.log({ labelColors })
 }
 main()
 	.then(async () => {
