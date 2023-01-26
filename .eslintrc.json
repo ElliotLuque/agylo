@@ -17,7 +17,7 @@
 		"tailwindcss/no-custom-classname": "warn",
 		"tailwindcss/no-contradicting-classname": "error",
 		"prettier/prettier": [
-			"error",
+			"warn",
 			{
 				"useTabs": true,
 				"trailingComma": "all",
