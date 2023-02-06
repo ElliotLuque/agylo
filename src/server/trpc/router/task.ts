@@ -127,7 +127,7 @@ export const taskRouter = router({
 				}
 			})
 		}),
-	orderUpTask: protectedProcedure
+	orderTask: protectedProcedure
 		.input(
 			z.object({
 				columnId: z.number(),
@@ -143,13 +143,25 @@ export const taskRouter = router({
 				where: {
 					columnId: input.columnId,
 					index: {
-						gt: input.sourceTaskIndex,
-						lte: input.destinationTaskIndex,
+						gte:
+							input.destinationTaskIndex > input.sourceTaskIndex
+								? input.sourceTaskIndex
+								: input.destinationTaskIndex,
+						lte:
+							input.sourceTaskIndex > input.destinationTaskIndex
+								? input.sourceTaskIndex
+								: input.destinationTaskIndex,
+					},
+					AND: {
+						id: {
+							not: input.sourceTaskId,
+						},
 					},
 				},
 				data: {
 					index: {
-						increment: 1,
+						increment:
+							input.destinationTaskIndex > input.sourceTaskIndex ? -1 : 1,
 					},
 				},
 			})
@@ -226,6 +238,21 @@ export const taskRouter = router({
 				updateMovedTask,
 			])
 		}),
+	deleteTask: protectedProcedure
+		.input(
+			z.object({
+				taskKey: z.string(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { prisma } = ctx
+
+			return await prisma.task.delete({
+				where: {
+					taskKey: input.taskKey,
+				},
+			})
+		}),
 	updateTaskPriority: protectedProcedure
 		.input(
 			z.object({
@@ -245,7 +272,7 @@ export const taskRouter = router({
 				},
 			})
 		}),
-	renameTask: protectedProcedure
+	renameTaskTitle: protectedProcedure
 		.input(
 			z.object({
 				taskKey: z.string(),
@@ -261,6 +288,25 @@ export const taskRouter = router({
 				},
 				data: {
 					title: input.newTitle,
+				},
+			})
+		}),
+	renameTaskDescription: protectedProcedure
+		.input(
+			z.object({
+				taskKey: z.string(),
+				newDescription: z.string().max(1000),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { prisma } = ctx
+
+			return await prisma.task.update({
+				where: {
+					taskKey: input.taskKey,
+				},
+				data: {
+					description: input.newDescription,
 				},
 			})
 		}),

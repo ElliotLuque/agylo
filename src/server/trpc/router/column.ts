@@ -42,7 +42,7 @@ export const columnRouter = router({
 				},
 			})
 		}),
-	reorderColumn: protectedProcedure
+	orderColumn: protectedProcedure
 		.input(
 			z.object({
 				sourceColumnId: z.number(),
@@ -54,7 +54,32 @@ export const columnRouter = router({
 		.mutation(async ({ ctx, input }) => {
 			const { prisma } = ctx
 
-			const sourceColumn = prisma.column.update({
+			const updateColumns = prisma.column.updateMany({
+				where: {
+					index: {
+						gte:
+							input.destinationIndex > input.sourceIndex
+								? input.sourceIndex
+								: input.destinationIndex,
+						lte:
+							input.destinationIndex > input.sourceIndex
+								? input.destinationIndex
+								: input.sourceIndex,
+					},
+					AND: {
+						id: {
+							not: input.sourceColumnId,
+						},
+					},
+				},
+				data: {
+					index: {
+						increment: input.destinationIndex > input.sourceIndex ? -1 : 1,
+					},
+				},
+			})
+
+			const updateSourceColumn = prisma.column.update({
 				where: {
 					id: input.sourceColumnId,
 				},
@@ -63,16 +88,7 @@ export const columnRouter = router({
 				},
 			})
 
-			const destinationColumn = prisma.column.update({
-				where: {
-					id: input.destinationColumnId,
-				},
-				data: {
-					index: input.sourceIndex,
-				},
-			})
-
-			return await prisma.$transaction([sourceColumn, destinationColumn])
+			return await prisma.$transaction([updateColumns, updateSourceColumn])
 		}),
 	deleteColumn: protectedProcedure
 		.input(
