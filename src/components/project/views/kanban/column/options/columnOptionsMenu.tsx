@@ -45,7 +45,7 @@ const ColumnOptions: React.FC<{
 									<button
 										className={`${
 											active ? 'bg-gray-100' : 'bg-white'
-										} group flex  w-full items-center justify-between gap-1 rounded-md p-2 text-sm text-gray-900`}
+										} group flex  w-full items-center justify-between gap-1 rounded-md p-2 text-base text-gray-800`}
 									>
 										<p>Rename</p>
 										<PencilSquareIcon className='h-3.5 w-3.5 text-gray-900 opacity-70' />
@@ -58,7 +58,7 @@ const ColumnOptions: React.FC<{
 										onClick={() => setDeleteDialog(true)}
 										className={`${
 											active ? 'bg-gray-100' : 'bg-white'
-										} group flex w-full items-center justify-between gap-1 rounded-md p-2 text-sm text-gray-900`}
+										} group flex w-full items-center justify-between gap-1 rounded-md p-2 text-base text-gray-800`}
 									>
 										<p>Delete</p>
 										<TrashIcon className='h-4 w-4 text-red-500' />
