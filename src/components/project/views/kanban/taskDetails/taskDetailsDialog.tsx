@@ -1,6 +1,6 @@
 import { Dialog, Tab, Transition } from '@headlessui/react'
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { EllipsisHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import {
 	CalendarDaysIcon,
 	BookmarkIcon,
@@ -13,10 +13,11 @@ import AssigneeSelector from './assignee/assigneeSelector'
 import PrioritySelector from './priority/prioritySelector'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useForm } from 'react-hook-form'
-import LabelIcon from './labels/labelIcon'
 import LabelSelector from './labels/labelSelector'
 import { trpc } from '../../../../../utils/trpc'
 import TaskDetailsSkeletonLoader from './taskDetailsSkeletonLoader'
+import TaskDetailsMenu from './taskDetailsMenu'
+import LabelDialogIcon from './labels/labelDialogIcon'
 
 interface TaskProps {
 	taskKey: string
@@ -24,28 +25,57 @@ interface TaskProps {
 	projectId: number
 }
 
+type LabelDialogItem = {
+	id: number
+	name: string
+	colorId: number
+}
+
 const TaskDetailsDialog: React.FC<TaskProps> = ({
 	taskKey,
 	projectName,
 	projectId,
 }) => {
-	const { data: taskData, isLoading } = trpc.task.getTaskInfo.useQuery({
-		key: taskKey,
-	})
-	const { mutateAsync: renameTask } = trpc.task.renameTask.useMutation()
+	const { data: taskData, isLoading } = trpc.task.getTaskInfo.useQuery(
+		{
+			key: taskKey,
+		},
+		{
+			onSuccess: (data) => {
+				setTaskLabels(
+					data?.labels?.map((label) => ({
+						id: label.label.id,
+						name: label.label.name,
+						colorId: label.label.color.id,
+					})) as LabelDialogItem[],
+				)
+			},
+			retry: false,
+		},
+	)
+	const { mutateAsync: renameTaskDescription } =
+		trpc.task.renameTaskDescription.useMutation()
+	const { mutateAsync: renameTask } = trpc.task.renameTaskTitle.useMutation()
 
 	const trpcUtils = trpc.useContext()
 	const [open, setOpen] = useState(true)
 
 	const titleRef = useRef<HTMLFormElement>(null)
+	const descriptionRef = useRef<HTMLFormElement>(null)
 
-	const handleOutsideClick = () => handleRenameTask(getValues())
+	const [taskLabels, setTaskLabels] = useState<LabelDialogItem[]>([])
 
-	useOnClickOutside(titleRef, handleOutsideClick, 'mouseup')
+	const handleOutsideTitleClick = () => handleRenameTitle(getTitleValues())
+	const handleOutsideDescriptionClick = () =>
+		handleRenameDescription(getDescriptionValues())
 
-	const handleRenameTask = async (data: { title: string }) => {
+	useOnClickOutside(titleRef, handleOutsideTitleClick, 'mouseup')
+
+	useOnClickOutside(descriptionRef, handleOutsideDescriptionClick, 'mouseup')
+
+	const handleRenameTitle = async (data: { title: string }) => {
 		try {
-			if (data.title !== taskData?.title && open) {
+			if (data.title !== taskData?.title) {
 				if (document.activeElement instanceof HTMLElement) {
 					document.activeElement.blur()
 				}
@@ -58,18 +88,67 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 		}
 	}
 
-	const { register, handleSubmit, getValues, reset } = useForm<{
+	const handleRenameDescription = async (data: { description: string }) => {
+		try {
+			if (data.description !== taskData?.description) {
+				if (document.activeElement instanceof HTMLElement) {
+					document.activeElement.blur()
+				}
+				await renameTaskDescription({
+					taskKey,
+					newDescription: data.description,
+				})
+				trpcUtils.task.invalidate()
+				trpcUtils.project.invalidate()
+			}
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const handleEnterPress = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			handleRenameDescription(getDescriptionValues())
+		}
+	}
+
+	const {
+		register: registerTitle,
+		handleSubmit: handleTitleSubmit,
+		getValues: getTitleValues,
+		reset: resetTitle,
+	} = useForm<{
 		title: string
 	}>({})
+
+	const {
+		register: registerDescription,
+		handleSubmit: handleDescriptionSubmit,
+		getValues: getDescriptionValues,
+		reset: resetDescription,
+	} = useForm<{ description: string }>()
 
 	const router = useRouter()
 	const query = router.query
 
 	useEffect(() => {
 		if (taskData?.title) {
-			reset({ title: taskData?.title })
+			resetTitle({ title: taskData?.title })
 		}
-	}, [taskData?.title, reset])
+		if (taskData?.description) {
+			resetDescription({ description: taskData?.description })
+		}
+	}, [taskData?.title, resetTitle, taskData?.description, resetDescription])
+
+	const removeLabelCallback = (labelId: number) => {
+		const newLabels = taskLabels.filter((label) => label.id !== labelId)
+		setTaskLabels(newLabels)
+	}
+
+	const addLabelCallback = (label: LabelDialogItem) => {
+		const newLabels = [...taskLabels, label]
+		setTaskLabels(newLabels)
+	}
 
 	return (
 		<>
@@ -110,7 +189,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 								leaveFrom='opacity-100 scale-100'
 								leaveTo='opacity-0 scale-95'
 							>
-								<Dialog.Panel className='min-w-[35vw] max-w-md rounded-2xl bg-white px-7 py-5 text-left align-middle shadow-xl transition-all'>
+								<Dialog.Panel className='min-w-[35vw] max-w-md rounded-2xl bg-white px-7 py-5 text-left align-middle shadow-xl transition-all lg:min-w-[55vw] 2xl:min-w-[40vw]'>
 									{isLoading ? (
 										<TaskDetailsSkeletonLoader setOpen={setOpen} />
 									) : (
@@ -125,7 +204,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													</span>
 												</div>
 												<div className='flex items-center gap-2'>
-													<EllipsisHorizontalIcon className='mt-[0.07rem] h-5 w-5 cursor-pointer text-gray-900 opacity-80' />
+													<TaskDetailsMenu taskKey={taskKey} />
 													<button
 														className='focus:outline-none'
 														onClick={() => {
@@ -149,12 +228,12 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 												<form
 													className='align-middle'
 													ref={titleRef}
-													onSubmit={handleSubmit(handleRenameTask)}
+													onSubmit={handleTitleSubmit(handleRenameTitle)}
 												>
 													<input
 														spellCheck='false'
 														type='text'
-														{...register('title', {
+														{...registerTitle('title', {
 															required: true,
 															maxLength: 80,
 														})}
@@ -163,7 +242,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 												</form>
 											</Dialog.Title>
 											<div className='flex flex-col justify-center'>
-												<div className='grid w-[22rem] grid-cols-[8rem_1fr] grid-rows-5 gap-y-1.5 pl-1'>
+												<div className='grid w-[22rem] grid-cols-[8rem_1fr] grid-rows-5 gap-y-1.5 pl-1 2xl:gap-x-7'>
 													<div className='row-start-1 flex items-center gap-3 text-gray-900 opacity-70'>
 														<BookmarkIcon className='mt-0.5 h-4 w-4' />
 														<h3 className='text-base font-medium'>Status</h3>
@@ -194,22 +273,30 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													</div>
 													<div className='row-start-3 flex w-[25rem] flex-col justify-center'>
 														<div className='flex items-center gap-1 '>
-															<div className='mt-1 flex flex-wrap items-center gap-1'>
-																{taskData?.labels?.map((label, index) => (
-																	<LabelIcon
+															<div className='mt-1 flex flex-wrap items-center gap-2'>
+																{taskLabels.map((label, index) => (
+																	<LabelDialogIcon
 																		key={index}
-																		colorId={label.label.color.id}
-																		name={label.label.name}
-																		classNames='text-sm '
+																		id={label.id}
+																		colorId={label.colorId}
+																		name={label.name}
+																		taskKey={taskData?.taskKey as string}
+																		removeLabelCallback={(id) => {
+																			removeLabelCallback(id)
+																		}}
 																	/>
 																))}
 																<LabelSelector
+																	taskId={taskData?.id as number}
 																	projectId={projectId as number}
 																	labelIds={
 																		taskData?.labels.map(
 																			(label) => label.label.id,
 																		) as Array<number>
 																	}
+																	addLabelCallback={(label) => {
+																		addLabelCallback(label)
+																	}}
 																/>
 															</div>
 														</div>
@@ -237,9 +324,31 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 												<h1 className='mt-5 mb-2 text-2xl font-medium text-gray-800'>
 													Description
 												</h1>
-												<p className='mb-7 text-sm text-gray-500'>
-													{taskData?.description}
-												</p>
+												<form
+													onSubmit={handleDescriptionSubmit(
+														handleRenameDescription,
+													)}
+													ref={descriptionRef}
+													className='mb-2 w-[64vw] sm:w-[54vw] md:w-[40vw] lg:w-[37vw] xl:w-[40vw] 2xl:w-10/12'
+												>
+													<textarea
+														rows={3}
+														spellCheck='false'
+														{...registerDescription('description', {
+															maxLength: {
+																value: 150,
+																message:
+																	'must have a maximum of 200 characters',
+															},
+														})}
+														onKeyDown={(e) => {
+															handleEnterPress(e)
+														}}
+														className={`w-full resize-none overflow-auto bg-white p-1 text-sm text-gray-900 outline-indigo-300`}
+														placeholder='Write your project description...'
+													/>
+												</form>
+
 												<Tab.Group>
 													<Tab.List className='flex items-center gap-5 border-b border-b-gray-200'>
 														<Tab
@@ -273,19 +382,25 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													</Tab.List>
 													<Tab.Panels>
 														<Tab.Panel>
-															<div className='mt-6'>
-																<form>
+															<div className='mt-5 '>
+																<form className='flex h-24 flex-col items-end justify-end rounded-lg bg-gray-100 p-3'>
 																	<textarea
 																		spellCheck={false}
 																		rows={3}
-																		className={`h-24 w-full resize-none rounded-lg bg-gray-100 p-3 text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-50`}
+																		className={`w-full resize-none rounded-lg bg-gray-100 text-sm text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-50`}
 																		placeholder='Write a comment...'
 																	/>
+																	<button
+																		className='rounded bg-indigo-500 p-2 text-sm font-medium text-white'
+																		type='submit'
+																	>
+																		Comment
+																	</button>
 																</form>
 															</div>
 														</Tab.Panel>
 														<Tab.Panel>
-															<p className='mt-5'>attachm akiii</p>
+															<p className='mt-5'>attachments aquiii</p>
 														</Tab.Panel>
 													</Tab.Panels>
 												</Tab.Group>
