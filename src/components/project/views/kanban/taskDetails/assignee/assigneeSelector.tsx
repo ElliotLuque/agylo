@@ -41,8 +41,8 @@ const AssigneeSelector: React.FC<{
 				image: assigneeImage,
 			})
 			await assignTask({ assigneeId, taskId })
-			trpcUtils.task.invalidate()
-			trpcUtils.project.invalidate()
+			trpcUtils.task.getTaskInfo.invalidate()
+			trpcUtils.project.getKanbanData.invalidate()
 		} catch (error) {
 			console.log(error)
 		}
@@ -59,7 +59,7 @@ const AssigneeSelector: React.FC<{
 	return (
 		<>
 			<Listbox
-				onChange={setSelectedAssignee}
+				onChange={() => handleAssignTask}
 				as='div'
 				className='relative z-30 grid place-content-center'
 			>
@@ -90,10 +90,10 @@ const AssigneeSelector: React.FC<{
 					<Listbox.Options className='absolute top-8 left-1 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none'>
 						<div className='px-1 py-2'>
 							<Listbox.Option value={null}>
-								{({ active }) => (
+								{({ active, selected }) => (
 									<button
-										className={`${
-											active ? 'bg-gray-100' : 'bg-white'
+										className={`${active ? 'bg-gray-100' : 'bg-white'} ${
+											selected ? 'bg-indigo-100' : 'bg-white'
 										} flex w-full items-center gap-2 rounded-md p-2 text-sm text-gray-900`}
 										onClick={() => {
 											handleAssignTask(null, null, null)
