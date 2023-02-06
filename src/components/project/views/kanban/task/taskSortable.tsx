@@ -47,7 +47,7 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
 				transition={{ duration: 0.3 }}
 				ref={setNodeRef}
 				style={style}
-				className='min-h-[6rem] w-[18rem] rounded-lg border-[0.115rem] border-dashed border-gray-300 bg-gray-50 px-3.5 pt-2 pb-2.5 '
+				className='min-h-[6rem] w-full rounded-lg border-[0.115rem] border-dashed border-gray-300 bg-gray-50 px-3.5 pt-2 pb-2.5 '
 			>
 				<div className='invisible flex flex-col gap-1'>
 					<div className='flex items-center gap-2'>
@@ -55,13 +55,13 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
 							{title}
 						</p>
 					</div>
-					<div className='flex items-center gap-2'>
+					<div className='mt-1 mb-7 flex flex-wrap items-center gap-2'>
 						{labels?.map((label, index) => (
 							<LabelIcon
 								key={index}
 								colorId={label.label.colorId}
 								name={label.label.name}
-								classNames='mt-2 mb-6 text-xs'
+								classNames='text-xs'
 							/>
 						))}
 					</div>
@@ -98,21 +98,21 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
 			{...listeners}
 			ref={setNodeRef}
 			style={style}
-			className={`flex min-h-[6rem] w-[18rem] ${cursor} flex-col justify-between rounded-lg border-[0.09rem] border-gray-200 bg-white px-3.5 pt-2 pb-2.5 focus:outline-none`}
+			className={`flex min-h-[6.5rem] w-full ${cursor} flex-col justify-between rounded-lg border-[0.09rem] border-gray-200 bg-white px-3.5 pt-2 pb-2.5 focus:outline-none`}
 		>
 			<div className='flex flex-col gap-1'>
 				<div className='flex items-center gap-2'>
-					<p className='select-none truncate font-medium text-gray-700'>
+					<p className='select-none truncate text-lg font-medium text-gray-700'>
 						{title}
 					</p>
 				</div>
-				<div className='flex items-center gap-2'>
+				<div className='mt-1 mb-6 flex flex-wrap items-center gap-2'>
 					{labels?.map((label, index) => (
 						<LabelIcon
 							key={index}
 							colorId={label.label.colorId}
 							name={label.label.name}
-							classNames='mt-2 mb-6 text-xs'
+							classNames=' text-sm'
 						/>
 					))}
 				</div>
@@ -123,7 +123,6 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
 					width={25}
 					height={25}
 					imageUrl={assignee?.image as string}
-					isInvisible={false}
 				/>
 				<div className='flex items-center gap-2 text-gray-900 opacity-70'>
 					{commentCount !== null && commentCount > 0 && (

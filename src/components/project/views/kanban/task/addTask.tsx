@@ -48,7 +48,7 @@ const AddTask: React.FC<{
 	return isAdding ? (
 		<div
 			ref={ref}
-			className='flex min-h-[7rem] w-[17rem] flex-col gap-2 rounded-lg border-[0.09rem] border-gray-200 bg-white p-4'
+			className='flex min-h-[6.5rem] w-full flex-col gap-2 rounded-lg border-[0.09rem] border-gray-200 bg-white p-4'
 		>
 			<div className='flex flex-col justify-start'>
 				<form onSubmit={handleSubmit(handleCreateTask)}>
@@ -56,7 +56,7 @@ const AddTask: React.FC<{
 						{...register('title', { required: true })}
 						autoFocus
 						type='text'
-						className='h-[2rem] w-full rounded-lg p-1 focus:outline-none '
+						className='h-[2rem] w-full select-none truncate rounded-lg p-1 text-lg font-medium text-gray-700 placeholder:text-base placeholder:font-normal focus:outline-none'
 						placeholder='Write a task title...'
 					/>
 				</form>
@@ -70,10 +70,10 @@ const AddTask: React.FC<{
 	) : (
 		<button
 			onClick={handleInsideClick}
-			className='flex min-h-[2rem] w-[17rem] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg p-4  hover:bg-gray-50'
+			className='flex min-h-[2rem] w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-lg p-4  hover:bg-gray-50'
 		>
 			<div className='flex w-full items-center justify-center gap-3'>
-				<PlusIcon className='h-[1.2rem] w-[1.2rem] text-gray-900 opacity-70' />
+				<PlusIcon className='mt-0.5 h-[1.1rem] w-[1.1rem] text-gray-900 opacity-70' />
 				<p className='select-none text-sm font-medium text-gray-900 opacity-70'>
 					Add task
 				</p>

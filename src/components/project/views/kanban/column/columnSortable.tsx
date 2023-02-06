@@ -45,7 +45,7 @@ const ColumnSortable: React.FC<Props> = ({
 	if (isDragging) {
 		return (
 			<div
-				className='flex h-full min-w-[20rem] flex-col gap-5 rounded-lg border-2 border-dashed border-gray-200 p-4 opacity-50 shadow'
+				className='flex h-full min-w-[23rem] flex-col gap-5 rounded-lg border-2 border-dashed border-gray-200 p-4 opacity-50 shadow'
 				ref={setNodeRef}
 				style={style}
 			>
@@ -65,7 +65,7 @@ const ColumnSortable: React.FC<Props> = ({
 
 	return (
 		<div
-			className='flex h-full min-w-[20rem] flex-col gap-5 rounded bg-white p-4'
+			className='flex h-full min-w-[23rem] flex-col gap-5 rounded bg-white p-4'
 			ref={setNodeRef}
 			style={style}
 		>

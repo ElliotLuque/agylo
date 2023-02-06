@@ -43,7 +43,7 @@ const AddColumn: React.FC<{
 	return isCreatingColumn ? (
 		<div
 			ref={ref}
-			className='flex min-w-[20rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg border-2 border-dashed border-gray-200 p-4'
+			className='flex min-w-[23rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg border-2 border-dashed border-gray-200 p-4'
 		>
 			<div className='flex w-full items-center justify-between'>
 				<form onSubmit={handleSubmit(handleCreateColumn)}>
@@ -51,7 +51,7 @@ const AddColumn: React.FC<{
 						{...register('name', { required: true })}
 						autoFocus
 						type='text'
-						className='h-[2rem] w-full rounded-lg p-2 text-xl font-bold text-gray-900 placeholder:text-base placeholder:text-gray-900 placeholder:opacity-70 focus:outline-none'
+						className='h-[2rem] w-full select-none rounded-lg p-2 text-xl font-bold placeholder:text-base placeholder:font-normal focus:outline-none'
 						placeholder='Write a column title...'
 					/>
 				</form>
@@ -60,7 +60,7 @@ const AddColumn: React.FC<{
 	) : (
 		<button
 			onClick={handleInsideClick}
-			className='flex min-h-[25rem] min-w-[20rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg p-4  hover:bg-gray-50'
+			className='flex min-h-[25rem] min-w-[23rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg p-4  hover:bg-gray-50'
 		>
 			<div className='flex items-center gap-3'>
 				<PlusIcon className='h-[1.2rem] w-[1.2rem] text-gray-900 opacity-70' />
