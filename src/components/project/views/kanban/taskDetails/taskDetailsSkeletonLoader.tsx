@@ -8,7 +8,7 @@ const TaskDetailsSkeletonLoader: React.FC<{
 }> = ({ setOpen }) => {
 	return (
 		<div>
-			<div className='mb-9 mt-2 flex items-center justify-between'>
+			<div className='mb-6 mt-2 flex items-center justify-between'>
 				<div className='flex items-center gap-2 font-bold'>
 					<SkeletonPiece classNames='w-16 h-6 rounded' />
 					<SkeletonPiece classNames='w-20 h-6 rounded' />
@@ -25,15 +25,15 @@ const TaskDetailsSkeletonLoader: React.FC<{
 					</button>
 				</div>
 			</div>
-			<Dialog.Title as='div' className='pb-8'>
+			<Dialog.Title as='div' className='pb-6'>
 				<SkeletonPiece classNames='w-72 h-12 rounded-xl' />
 			</Dialog.Title>
 			<div className='flex flex-col justify-center'>
-				<div className='mb-8 grid w-[22rem] grid-cols-[1rem_8rem_1fr] grid-rows-5 items-center gap-y-4 gap-x-2 pl-1'>
+				<div className='mb-6 grid w-[22rem] grid-cols-[1rem_7.5rem_1fr] grid-rows-5 items-center gap-y-3 gap-x-2 pl-1'>
 					{/* First row */}
 					<SkeletonPiece classNames='row-start-1 w-5 h-5 rounded-lg' />
 					<div className='row-start-1 ml-1 flex items-center'>
-						<SkeletonPiece classNames='w-16 h-5 rounded' />
+						<SkeletonPiece classNames='w-16 h-4 rounded' />
 					</div>
 					<div className='row-start-1 flex items-center'>
 						<SkeletonPiece classNames='w-24 h-5 rounded-lg' />
@@ -42,7 +42,7 @@ const TaskDetailsSkeletonLoader: React.FC<{
 					{/* Second row */}
 					<SkeletonPiece classNames='row-start-2 w-5 h-5 rounded-lg' />
 					<div className='row-start-2 ml-1 flex items-center'>
-						<SkeletonPiece classNames='w-24 h-5 rounded' />
+						<SkeletonPiece classNames='w-24 h-4 rounded' />
 					</div>
 					<div className='row-start-2 flex items-center gap-2'>
 						<SkeletonPiece classNames='w-7 h-7 rounded-full' />
@@ -52,11 +52,11 @@ const TaskDetailsSkeletonLoader: React.FC<{
 					{/* Third row */}
 					<SkeletonPiece classNames='row-start-3 w-5 h-5 rounded-lg' />
 					<div className='row-start-3 ml-1 flex items-center'>
-						<SkeletonPiece classNames='w-20 h-5 rounded' />
+						<SkeletonPiece classNames='w-20 h-4 rounded' />
 					</div>
 					<div className='row-start-3 flex w-[25rem] flex-col justify-center'>
 						<div className='flex items-center gap-1 '>
-							<div className='mt-1 flex flex-wrap items-center gap-1'>
+							<div className='mt-1 flex flex-wrap items-center gap-0.5'>
 								<SkeletonPiece classNames='w-14 h-6 rounded' />
 								<SkeletonPiece classNames='w-14 h-6 rounded ml-1' />
 								<SkeletonPiece classNames='w-14 h-6 rounded ml-1' />
@@ -67,7 +67,7 @@ const TaskDetailsSkeletonLoader: React.FC<{
 					{/* Fourth row */}
 					<SkeletonPiece classNames='row-start-4 w-5 h-5 rounded-lg' />
 					<div className='row-start-4 ml-1 flex items-center'>
-						<SkeletonPiece classNames='w-24 h-5 rounded' />
+						<SkeletonPiece classNames='w-24 h-4 rounded' />
 					</div>
 					<div className='row-start-4 flex cursor-pointer items-center'>
 						<SkeletonPiece classNames='w-16 h-6 rounded-md' />
@@ -76,17 +76,17 @@ const TaskDetailsSkeletonLoader: React.FC<{
 					{/* Fifth row */}
 					<SkeletonPiece classNames='row-start-5 w-5 h-5 rounded-lg' />
 					<div className='row-start-5 ml-1 flex items-center'>
-						<SkeletonPiece classNames='w-20 h-5 rounded' />
+						<SkeletonPiece classNames='w-20 h-4 rounded' />
 					</div>
 					<div className='row-start-5 flex items-center'>
 						<SkeletonPiece classNames='w-14 h-6 rounded' />
 					</div>
 				</div>
-				<SkeletonPiece classNames='w-36 h-8 mb-6 rounded' />
+				<SkeletonPiece classNames='w-36 h-9 mb-6 rounded' />
 				<div className='mb-7 flex flex-col gap-2'>
-					<SkeletonPiece classNames='w-72 h-4 rounded' />
-					<SkeletonPiece classNames='w-80 h-4 rounded' />
-					<SkeletonPiece classNames='w-64 h-4 rounded' />
+					<SkeletonPiece classNames='w-72 h-4 rounded xl:w-8/12' />
+					<SkeletonPiece classNames='w-80 h-4 rounded xl:w-5/6' />
+					<SkeletonPiece classNames='w-64 h-4 rounded xl:w-6/12' />
 				</div>
 				{/* <Tab.Group>
                       <Tab.List className='flex items-center gap-5 border-b border-b-gray-200'>
