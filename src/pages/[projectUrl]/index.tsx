@@ -3,7 +3,6 @@ import { trpc } from '../../utils/trpc'
 import type { NextPageWithLayout } from '../_app'
 import { type InferGetServerSidePropsType, type GetServerSideProps } from 'next'
 import { protectedRouterPage } from '../../server/common/protected-router-page'
-import LoadingSpinner from '../../components/misc/loadingSpinner'
 
 import Head from 'next/head'
 import Header from '../../layouts/header'
@@ -11,14 +10,22 @@ import Layout from '../../layouts/layout'
 import KanbanBoard from '../../components/project/views/kanban/kanbanBoard'
 import { useRouter } from 'next/router'
 
+export type ParticipantsInfo = {
+	user: {
+		id: string
+		name: string | null
+		image: string | null
+	}
+}[]
+
 const KanbanPage: NextPageWithLayout = ({
 	url,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	const {
 		data: projectData,
-		isLoading,
 		error,
-	} = trpc.project.getProjectBasicInfo.useQuery(
+		isLoading,
+	} = trpc.project.getProjectInfo.useQuery(
 		{ url },
 		{
 			retry: false,
@@ -56,31 +63,22 @@ const KanbanPage: NextPageWithLayout = ({
 		)
 	}
 
-	if (isLoading) {
-		return (
-			<>
-				<Head>
-					<title>Agylo</title>
-				</Head>
-				<div className='grid w-full place-items-center'>
-					<LoadingSpinner classNames='w-48 h-48 p-12' />
-				</div>
-			</>
-		)
-	}
-
 	return (
 		<>
 			<Head>
 				<title>{projectData?.name} - Agylo</title>
 			</Head>
-			<div className='flex w-full flex-col px-5 py-3'>
+			<div className='m-5 flex w-full flex-col'>
 				<Header
 					name={projectData?.name ?? 'Project'}
 					description={projectData?.description ?? ''}
 					url={projectData?.url as string}
+					iconId={projectData?.iconId as number}
+					participants={projectData?.participants as ParticipantsInfo}
+					participantsCount={projectData?._count.participants as number}
+					isLoading={isLoading}
 				/>
-				<div className='flex w-[78vw] gap-2 overflow-auto py-3'>
+				<div className='mt-3 flex w-[78vw] gap-2 py-3'>
 					<KanbanBoard
 						dialogTaskKey={(query?.selectedTask as string) ?? ''}
 						projectUrl={url}
