@@ -4,7 +4,7 @@ const UserAvatar: React.FC<{
 	width: number
 	height: number
 	imageUrl: string | null
-	isInvisible: boolean
+	isInvisible?: boolean
 }> = ({ width, height, isInvisible, imageUrl }) => {
 	return (
 		<Image
