@@ -91,6 +91,7 @@ model Task {
   title       String
   description String?   @db.Text
   taskKey     String  @unique
+  dueDate     DateTime?
   createdAt   DateTime @default(now())
   index       Int
 
