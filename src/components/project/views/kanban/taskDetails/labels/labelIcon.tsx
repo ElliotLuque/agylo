@@ -1,8 +1,9 @@
 const LabelIcon: React.FC<{
+	onClick?: () => void
 	colorId: number
 	name: string
 	classNames: string
-}> = ({ colorId, name, classNames }) => {
+}> = ({ onClick, colorId, name, classNames }) => {
 	const labels = [
 		{ id: 1, bgColor: 'bg-gray-100', color: 'text-gray-500' },
 		{ id: 2, bgColor: 'bg-lime-200', color: 'text-lime-600' },
@@ -20,9 +21,10 @@ const LabelIcon: React.FC<{
 
 	return (
 		<div
+			onClick={onClick}
 			className={`${classNames} w-fit select-none rounded-lg px-1.5 py-1 font-semibold ${
 				getLabel(colorId)?.bgColor
-			} ${getLabel(colorId)?.color} cursor-default`}
+			} ${getLabel(colorId)?.color}`}
 		>
 			{name}
 		</div>
