@@ -35,9 +35,9 @@ import AddTask from './task/addTask'
 import { arraysEqual } from '../../../../utils/arraysEqual'
 import { trpc } from '../../../../utils/trpc'
 import Head from 'next/head'
-import LoadingSpinner from '../../../misc/loadingSpinner'
 import TaskDetailsDialog from './taskDetails/taskDetailsDialog'
 import type { SelectColumn } from '../../../../types/kanban-delete'
+import KanbanBoardSkeletonLoader from './kanbanBoardSkeletonLoader'
 
 const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 	projectUrl,
@@ -53,13 +53,16 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 		{
 			onSuccess: (data) => {
 				setColumns(data?.columns as Column[])
+				setProjectId(data?.id as number)
 			},
 			retry: false,
 		},
 	)
 
-	const { mutateAsync: orderColumn } = trpc.column.reorderColumn.useMutation()
-	const { mutateAsync: orderTaskInColumn } = trpc.task.orderUpTask.useMutation()
+	const [projectId, setProjectId] = useState<number>(0)
+
+	const { mutateAsync: orderColumn } = trpc.column.orderColumn.useMutation()
+	const { mutateAsync: orderTaskInColumn } = trpc.task.orderTask.useMutation()
 	const { mutateAsync: moveTaskToColumn } =
 		trpc.task.moveTaskToColumn.useMutation()
 
@@ -560,20 +563,6 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 			</>
 		)
 	}
-
-	if (isLoading) {
-		return (
-			<>
-				<Head>
-					<title>Agylo</title>
-				</Head>
-				<div className='grid w-full place-items-center'>
-					<LoadingSpinner classNames='p-12 h-48 w-48 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
-				</div>
-			</>
-		)
-	}
-
 	const convertToSelectOption = (column: Column): SelectColumn => {
 		return {
 			id: column.id,
@@ -588,79 +577,83 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 				<TaskDetailsDialog
 					taskKey={dialogTaskKey}
 					projectName={projectData?.name as string}
-					projectId={projectData?.id as number}
+					projectId={projectId}
 				/>
 			)}
-			<DndContext
-				sensors={sensors}
-				onDragStart={handleDragStart}
-				onDragOver={handleDragOver}
-				onDragEnd={handleDragEnd}
-				onDragCancel={handleDragCancel}
-				collisionDetection={collisionDetectionStrategy}
-			>
-				<SortableContext
-					items={columnsIds}
-					strategy={horizontalListSortingStrategy}
+			{isLoading || columns.length <= 0 ? (
+				<KanbanBoardSkeletonLoader />
+			) : (
+				<DndContext
+					sensors={sensors}
+					onDragStart={handleDragStart}
+					onDragOver={handleDragOver}
+					onDragEnd={handleDragEnd}
+					onDragCancel={handleDragCancel}
+					collisionDetection={collisionDetectionStrategy}
 				>
-					{columns.map((column) => {
-						return (
-							<ColumnSortable
-								availableColumns={columns
-									.map(convertToSelectOption)
-									.filter((col) => col.id !== column.id)}
-								key={column.id}
-								id={column.id}
-								index={column.index}
-								name={column.name}
-								tasksCount={column.tasks.length}
-							>
-								<SortableContext
-									items={taskIds(column)}
-									strategy={verticalListSortingStrategy}
+					<SortableContext
+						items={columnsIds}
+						strategy={horizontalListSortingStrategy}
+					>
+						{columns.map((column) => {
+							return (
+								<ColumnSortable
+									availableColumns={columns
+										.map(convertToSelectOption)
+										.filter((col) => col.id !== column.id)}
+									key={column.id}
+									id={column.id}
+									index={column.index}
+									name={column.name}
+									tasksCount={column.tasks.length}
 								>
-									{column.tasks.map((task) => {
-										return (
-											<TaskSortable
-												cursor={'cursor-pointer'}
-												key={task.taskKey}
-												id={task.id}
-												taskKey={task.taskKey}
-												title={task.title}
-												index={task.index}
-												assignee={task.assignee}
-												priorityId={task.priorityId}
-												labels={task.labels}
-												commentCount={task.commentCount}
-												attachmentCount={task.attachmentCount}
-											/>
-										)
-									})}
-									<AddTask
-										projectId={projectData?.id as number}
-										columnId={column?.id as number}
-										columnLength={column?.tasks.length as number}
-									/>
-								</SortableContext>
-							</ColumnSortable>
-						)
-					})}
-					<AddColumn
-						columnsLength={columns.length}
-						projectId={projectData?.id as number}
-					/>
-				</SortableContext>
-				{createPortal(
-					<DragOverlay dropAnimation={dropAnimation}>
-						{activeId
-							? columns.map((col) => col.id).includes(activeId as number)
-								? renderColumnDragOverlay(activeId)
-								: renderTaskDragOverlay(activeId)
-							: null}
-					</DragOverlay>,
-					document.body,
-				)}
-			</DndContext>
+									<SortableContext
+										items={taskIds(column)}
+										strategy={verticalListSortingStrategy}
+									>
+										{column.tasks.map((task) => {
+											return (
+												<TaskSortable
+													cursor={'cursor-pointer'}
+													key={task.taskKey}
+													id={task.id}
+													taskKey={task.taskKey}
+													title={task.title}
+													index={task.index}
+													assignee={task.assignee}
+													priorityId={task.priorityId}
+													labels={task.labels}
+													commentCount={task.commentCount}
+													attachmentCount={task.attachmentCount}
+												/>
+											)
+										})}
+										<AddTask
+											projectId={projectData?.id as number}
+											columnId={column?.id as number}
+											columnLength={column?.tasks.length as number}
+										/>
+									</SortableContext>
+								</ColumnSortable>
+							)
+						})}
+						<AddColumn
+							columnsLength={columns.length}
+							projectId={projectData?.id as number}
+						/>
+					</SortableContext>
+					{createPortal(
+						<DragOverlay dropAnimation={dropAnimation}>
+							{activeId
+								? columns.map((col) => col.id).includes(activeId as number)
+									? renderColumnDragOverlay(activeId)
+									: renderTaskDragOverlay(activeId)
+								: null}
+						</DragOverlay>,
+						document.body,
+					)}
+				</DndContext>
+			)}
 		</>
 	)
 }
