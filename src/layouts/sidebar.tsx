@@ -59,7 +59,9 @@ const ProjectItem: React.FC<{ name: string; url: string; iconId: number }> = ({
 }) => {
 	return (
 		<Link className='flex items-center gap-2 align-middle' href={`/${url}`}>
-			<span className={`mr-3 h-3 w-3 rounded-sm ${getIconBg(iconId)}`}></span>
+			<span
+				className={`mr-3 mt-1 h-3 w-3 rounded-sm ${getIconBg(iconId)}`}
+			></span>
 			<p className='text-base font-bold text-gray-800'>{name}</p>
 		</Link>
 	)
@@ -79,7 +81,7 @@ const Sidebar: React.FC = () => {
 
 			<aside className='fixed top-0 z-10 h-screen w-72 border-r border-gray-200 bg-white'>
 				<div className='flex h-full flex-col gap-6 py-4 px-7'>
-					<h1 className='mt-5 text-2xl font-bold text-indigo-500'> Agylo</h1>
+					<h1 className='mt-5 text-xl font-black text-gray-800'>AGYLO</h1>
 					<Navbar />
 					<div className='mt-8'>
 						<div className='flex w-full items-center justify-between'>
