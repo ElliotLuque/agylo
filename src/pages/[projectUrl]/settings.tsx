@@ -12,6 +12,8 @@ import SettingsSection from '../../components/project/settings/general/sections/
 import DeleteSection from '../../components/project/settings/general/sections/deleteSection'
 import IconSection from '../../components/project/settings/general/sections/iconSection'
 import LoadingSpinner from '../../components/misc/loadingSpinner'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 
 const SettingsPage: NextPageWithLayout = ({
 	url,
@@ -33,7 +35,7 @@ const SettingsPage: NextPageWithLayout = ({
 					<title>Agylo</title>
 				</Head>
 				<div className='grid w-full place-items-center'>
-					<LoadingSpinner classNames='w-48 h-48' />
+					<LoadingSpinner classNames='w-48 h-48 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
 				</div>
 			</>
 		)
@@ -52,7 +54,7 @@ const SettingsPage: NextPageWithLayout = ({
 				projectName={projectInfo?.name as string}
 			/>
 
-			<div className='absolute right-28 top-36'>
+			<div className='fixed right-20 top-24'>
 				<Toast
 					message='Project updated successfully!'
 					isOpen={toast}
@@ -64,6 +66,15 @@ const SettingsPage: NextPageWithLayout = ({
 					error
 				/>
 			</div>
+			<Link
+				href={{
+					pathname: '/[projectUrl]',
+					query: { projectUrl: url },
+				}}
+				className='absolute left-[24vw] top-12'
+			>
+				<ArrowLeftIcon className='h-8 w-8' />
+			</Link>
 			<div className='w-full'>
 				<div className='flex flex-col items-center justify-center'>
 					<div className='mx-4 flex w-[32rem] flex-col gap-5 divide-y p-5'>
