@@ -283,4 +283,27 @@ export const projectRouter = router({
 				},
 			})
 		}),
+	getProjectInfo: protectedProcedure
+		.input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
+		.query(async ({ ctx, input }) => {
+			const { prisma } = ctx
+
+			return await prisma.project.findUnique({
+				where: {
+					url: input.url,
+				},
+				include: {
+					_count: true,
+					icon: true,
+					participants: {
+						take: 3,
+						select: {
+							user: {
+								select: { id: true, name: true, image: true },
+							},
+						},
+					},
+				},
+			})
+		}),
 })
