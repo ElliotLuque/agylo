@@ -19,6 +19,7 @@ const config = {
 			'avatars.githubusercontent.com',
 			'lh3.googleusercontent.com',
 			'cdn-icons-png.flaticon.com',
+			'images-image-uploader.up.railway.app',
 		],
 	},
 }
