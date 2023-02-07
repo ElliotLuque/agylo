@@ -20,8 +20,6 @@ model Comment {
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
 
-  attachments   Attachment[]
-
   @@index([authorId])
   @@index([taskId])
 }
@@ -31,13 +29,9 @@ model Attachment {
   url           String   @db.Text
   filename      String
 
-  comment       Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId     Int?
-
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
 
-  @@index([commentId])
   @@index([taskId])
 }
 
@@ -95,8 +89,8 @@ model Task {
   createdAt   DateTime @default(now())
   index       Int
 
-  commentCount Int?
-  attachmentCount Int?
+  commentCount Int
+  attachmentCount Int
 
   column      Column   @relation(fields: [columnId], references: [id], onDelete: NoAction)
   columnId    Int
