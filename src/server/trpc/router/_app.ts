@@ -5,6 +5,8 @@ import { iconRouter } from './icon'
 import { taskRouter } from './task'
 import { participantsRouter } from './participants'
 import { labelRouter } from './label'
+import { attachmentRouter } from './attachment'
+import { commentsRouter } from './comments'
 
 export const appRouter = router({
 	project: projectRouter,
@@ -13,6 +15,8 @@ export const appRouter = router({
 	task: taskRouter,
 	participants: participantsRouter,
 	label: labelRouter,
+	attachments: attachmentRouter,
+	comments: commentsRouter,
 })
 
 // export type definition of API
