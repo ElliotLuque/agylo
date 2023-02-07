@@ -38,33 +38,10 @@ export const taskRouter = router({
 							image: true,
 						},
 					},
-					comments: {
-						take: 3,
-						select: {
-							id: true,
-							body: true,
-							createdAt: true,
-							author: {
-								select: {
-									id: true,
-									name: true,
-									image: true,
-								},
-							},
-							attachments: { select: { url: true, filename: true } },
-						},
-					},
 					column: {
 						select: {
 							id: true,
 							name: true,
-						},
-					},
-					attachments: {
-						take: 3,
-						select: {
-							url: true,
-							filename: true,
 						},
 					},
 					labels: {
@@ -115,6 +92,8 @@ export const taskRouter = router({
 						data: {
 							index: input.index,
 							title: input.title,
+							attachmentCount: 0,
+							commentCount: 0,
 							taskKey: project.key + '-' + project.taskCount,
 							column: {
 								connect: { id: input.columnId },
