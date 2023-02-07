@@ -138,12 +138,21 @@ export const columnRouter = router({
 		.mutation(async ({ ctx, input }) => {
 			const { prisma } = ctx
 
-			const updateColumnInTasks = prisma.task.updateMany({
+			const newColumnLength = await prisma.task.count({
+				where: {
+					columnId: input.newColumnId,
+				},
+			})
+
+			const updateTasksInOldColumn = prisma.task.updateMany({
 				where: {
 					columnId: input.columnId,
 				},
 				data: {
 					columnId: input.newColumnId,
+					index: {
+						increment: newColumnLength,
+					},
 				},
 			})
 
@@ -153,6 +162,6 @@ export const columnRouter = router({
 				},
 			})
 
-			return await prisma.$transaction([updateColumnInTasks, deleteColumn])
+			return await prisma.$transaction([updateTasksInOldColumn, deleteColumn])
 		}),
 })
