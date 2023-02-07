@@ -18,6 +18,9 @@ import { trpc } from '../../../../../utils/trpc'
 import TaskDetailsSkeletonLoader from './taskDetailsSkeletonLoader'
 import TaskDetailsMenu from './taskDetailsMenu'
 import LabelDialogIcon from './labels/labelDialogIcon'
+import DatepickerComponent from './datepicker/datepickerComponent'
+import AttachmentList from './attachment/attachmentList'
+import CommentsList from './comments/commentsList'
 
 interface TaskProps {
 	taskKey: string
@@ -306,6 +309,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 														<h3 className='text-base font-medium'>Due date</h3>
 													</div>
 													<div className='row-start-4 flex cursor-pointer items-center'>
+														{/* <DatepickerComponent /> */}
 														<p className='text-sm text-gray-800'>
 															30 Feb, 2022
 														</p>
@@ -345,7 +349,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 															handleEnterPress(e)
 														}}
 														className={`w-full resize-none overflow-auto bg-white p-1 text-sm text-gray-900 outline-indigo-300`}
-														placeholder='Write your project description...'
+														placeholder='Add a description...'
 													/>
 												</form>
 
@@ -382,25 +386,10 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													</Tab.List>
 													<Tab.Panels>
 														<Tab.Panel>
-															<div className='mt-5 '>
-																<form className='flex h-24 flex-col items-end justify-end rounded-lg bg-gray-100 p-3'>
-																	<textarea
-																		spellCheck={false}
-																		rows={3}
-																		className={`w-full resize-none rounded-lg bg-gray-100 text-sm text-gray-800 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-50`}
-																		placeholder='Write a comment...'
-																	/>
-																	<button
-																		className='rounded bg-indigo-500 p-2 text-sm font-medium text-white'
-																		type='submit'
-																	>
-																		Comment
-																	</button>
-																</form>
-															</div>
+															<CommentsList taskKey={taskKey} />
 														</Tab.Panel>
 														<Tab.Panel>
-															<p className='mt-5'>attachments aquiii</p>
+															<AttachmentList taskKey={taskKey} />
 														</Tab.Panel>
 													</Tab.Panels>
 												</Tab.Group>
