@@ -10,14 +10,17 @@ import {
 	PlusIcon,
 } from '@heroicons/react/24/outline'
 import UserAvatar from '../components/misc/userAvatar'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 const Navbar: React.FC = () => {
 	const session = useSession()
 
 	return (
 		<div className='mt-3 flex flex-col justify-center gap-6 font-semibold text-gray-800'>
-			<div className='mb-5 flex cursor-pointer items-center gap-3.5'>
+			<div
+				onClick={() => signOut()}
+				className='mb-5 flex cursor-pointer items-center gap-3.5'
+			>
 				<UserAvatar
 					isInvisible={false}
 					imageUrl={session.data?.user?.image as string}
