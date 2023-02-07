@@ -55,7 +55,7 @@ const LabelSelector: React.FC<{
 	const ref = useRef<HTMLDivElement>(null)
 
 	const handleOutsideClick = () => {
-		setOpen(false), setQuery('')
+		setOpen(false)
 	}
 
 	useOnClickOutside(ref, handleOutsideClick, 'mousedown')
