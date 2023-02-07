@@ -580,7 +580,7 @@ const KanbanBoard: React.FC<{ projectUrl: string; dialogTaskKey: string }> = ({
 					projectId={projectId}
 				/>
 			)}
-			{isLoading || columns.length <= 0 ? (
+			{isLoading || (columns.length <= 0 && isLoading) ? (
 				<KanbanBoardSkeletonLoader />
 			) : (
 				<DndContext
