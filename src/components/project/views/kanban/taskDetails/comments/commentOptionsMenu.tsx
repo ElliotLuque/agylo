@@ -51,7 +51,7 @@ const CommentOptionsMenu: React.FC<{ commentId: number; taskKey: string }> = ({
 											active ? 'bg-gray-100' : 'bg-white'
 										} group flex w-full items-center justify-between gap-1 rounded-md p-2 text-sm text-gray-800`}
 									>
-										<p>Delete</p>
+										<p className='select-none'>Delete</p>
 										<TrashIcon className='h-4 w-4 text-red-500' />
 									</button>
 								)}
