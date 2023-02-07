@@ -46,7 +46,7 @@ const Header: React.FC<{
 					<h1 className='text-4xl font-semibold text-gray-800'>{name}</h1>
 					<InformationCircleIcon
 						onClick={() => setOpenDialog(true)}
-						className='ml-1 mt-3 h-5 w-5 cursor-pointer stroke-2 text-gray-800/50'
+						className='mt-3 h-5 w-5 cursor-pointer stroke-2 text-gray-800/50'
 					/>
 				</div>
 				<div className='flex h-full items-center gap-5'>
