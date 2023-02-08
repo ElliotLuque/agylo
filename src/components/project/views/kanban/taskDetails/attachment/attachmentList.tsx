@@ -4,9 +4,7 @@ import {
 	ArrowDownTrayIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
-	EllipsisHorizontalIcon,
 } from '@heroicons/react/24/outline'
-import Image from 'next/image'
 import { DocumentIcon, PlusIcon } from '@heroicons/react/24/solid'
 import AttachmentOptionsMenu from './attachmentOptionsMenu'
 
