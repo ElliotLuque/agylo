@@ -23,6 +23,7 @@ import AttachmentList from './attachment/attachmentList'
 import CommentsList from './comments/commentsList'
 import CommentListSkeletonLoader from './comments/commentListSkeleton'
 import SkeletonPiece from '../../../../skeletons/skeletonPiece'
+import dayjs from 'dayjs'
 
 interface TaskProps {
 	taskKey: string
@@ -321,7 +322,9 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													<div className='row-start-4 flex cursor-pointer items-center'>
 														{/* <DatepickerComponent /> */}
 														<p className='text-sm text-gray-800'>
-															30 Feb, 2022
+															{String(
+																dayjs(taskData?.dueDate).format('DD MMM, YYYY'),
+															)}
 														</p>
 													</div>
 													<div className='row-start-5 flex items-center gap-3 text-gray-900 opacity-70'>

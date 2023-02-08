@@ -22,6 +22,7 @@ export const taskRouter = router({
 					taskKey: true,
 					priorityId: true,
 					createdAt: true,
+					dueDate: true,
 					commentCount: true,
 					attachmentCount: true,
 					assignee: {
