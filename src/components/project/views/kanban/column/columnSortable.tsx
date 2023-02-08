@@ -78,8 +78,8 @@ const ColumnSortable: React.FC<Props> = ({
 					<h2 className='select-none text-xl font-bold'>{name}</h2>
 				</div>
 				<div className='flex h-full items-center gap-2'>
-					<div className='grid h-full place-content-center rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
-						<PlusIcon className='w-4 text-gray-900' />
+					<div className='grid h-[32px] w-[32px] place-content-center rounded p-1 hover:cursor-pointer hover:bg-gray-100'>
+						<PlusIcon className='h-4 w-4 text-gray-900' />
 					</div>
 					<ColumnOptions
 						columnId={id}
