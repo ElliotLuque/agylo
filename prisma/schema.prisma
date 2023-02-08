@@ -26,8 +26,8 @@ model Comment {
 
 model Attachment {
   id            Int      @id @default(autoincrement())
-  url           String   @db.Text
   filename      String
+  key           String   @unique
 
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
