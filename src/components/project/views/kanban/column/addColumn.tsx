@@ -43,7 +43,7 @@ const AddColumn: React.FC<{
 	return isCreatingColumn ? (
 		<div
 			ref={ref}
-			className='flex min-w-[23rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg border-2 border-dashed border-gray-200 p-4'
+			className='flex min-h-[25rem] min-w-[23rem] cursor-pointer flex-col items-start justify-start gap-2 rounded-lg border-2 border-dashed border-gray-200 p-4'
 		>
 			<div className='flex w-full items-center justify-between'>
 				<form onSubmit={handleSubmit(handleCreateColumn)}>
