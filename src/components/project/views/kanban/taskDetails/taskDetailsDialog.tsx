@@ -21,6 +21,8 @@ import LabelDialogIcon from './labels/labelDialogIcon'
 import DatepickerComponent from './datepicker/datepickerComponent'
 import AttachmentList from './attachment/attachmentList'
 import CommentsList from './comments/commentsList'
+import CommentListSkeletonLoader from './comments/commentListSkeleton'
+import SkeletonPiece from '../../../../skeletons/skeletonPiece'
 
 interface TaskProps {
 	taskKey: string
@@ -194,7 +196,15 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 							>
 								<Dialog.Panel className='min-w-[35vw] max-w-md rounded-2xl bg-white px-7 py-5 text-left align-middle shadow-xl transition-all lg:min-w-[55vw] 2xl:min-w-[40vw]'>
 									{isLoading ? (
-										<TaskDetailsSkeletonLoader setOpen={setOpen} />
+										<>
+											<TaskDetailsSkeletonLoader setOpen={setOpen} />
+											<div className='mb-6 flex items-center gap-2'>
+												<SkeletonPiece classNames='w-32 h-9 rounded' />
+												<SkeletonPiece classNames='w-32 h-9 rounded' />
+											</div>
+											<CommentListSkeletonLoader />
+											<SkeletonPiece classNames='mt-6 w-[95%] h-20 rounded' />
+										</>
 									) : (
 										<div>
 											<div className='flex items-center justify-between pb-2'>
@@ -374,7 +384,7 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 														</Tab>
 														<Tab
 															className={({ selected }) =>
-																`select-none border-b-[0.13rem] px-0.5 pb-1 text-base font-medium focus:outline-none ${
+																`inline-flex select-none items-center gap-1.5 border-b-[0.13rem] px-0.5 pb-1 text-base font-medium focus:outline-none ${
 																	selected
 																		? 'border-b-indigo-500 text-indigo-500'
 																		: 'border-b-white text-gray-500'
@@ -382,6 +392,12 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 															}
 														>
 															Attachments
+															{taskData?.attachmentCount &&
+															taskData?.attachmentCount > 0 ? (
+																<span className='rounded-full bg-indigo-100 py-0.5 px-2 text-xs text-indigo-500'>
+																	{taskData?.attachmentCount}
+																</span>
+															) : undefined}
 														</Tab>
 													</Tab.List>
 													<Tab.Panels>
