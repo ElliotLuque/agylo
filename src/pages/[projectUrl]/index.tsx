@@ -66,7 +66,7 @@ const KanbanPage: NextPageWithLayout = ({
 	return (
 		<>
 			<Head>
-				<title>{projectData?.name} - Agylo</title>
+				<title>{isLoading ? 'Agylo' : projectData?.name + ' - Agylo'}</title>
 			</Head>
 			<div className='m-5 flex w-full flex-col'>
 				<Header
