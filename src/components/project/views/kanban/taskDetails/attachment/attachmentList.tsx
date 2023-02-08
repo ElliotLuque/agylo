@@ -1,10 +1,17 @@
 import { useRef, useState } from 'react'
 import { trpc } from '../../../../../../utils/trpc'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+	ArrowDownTrayIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	EllipsisHorizontalIcon,
+} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { DocumentIcon, PlusIcon } from '@heroicons/react/24/solid'
+import AttachmentOptionsMenu from './attachmentOptionsMenu'
 
 const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
+	const trpcUtils = trpc.useContext()
 	const [page, setPage] = useState(0)
 
 	const fileInputRef = useRef<HTMLInputElement>(null)
@@ -15,31 +22,61 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 			page,
 		})
 
+	const { mutateAsync: downloadUrl } =
+		trpc.attachments.getDownloadUrl.useMutation()
+
+	const { mutateAsync: uploadUrl } = trpc.attachments.getUploadUrl.useMutation()
+
 	const uploadFile = async () => {
 		const file = fileInputRef.current?.files?.[0]
 		if (!file) return
 
-		console.log('upload', file)
+		const filename = file.name
+		const filetype = file.type
+
+		const url = await uploadUrl({
+			filename,
+			type: filetype,
+			taskKey,
+		})
+
+		const upload = await fetch(url, {
+			method: 'PUT',
+			body: file,
+		})
+
+		if (upload.ok) {
+			setPage(0)
+			trpcUtils.attachments.getTaskAttachments.invalidate()
+			trpcUtils.task.getTaskInfo.invalidate()
+			trpcUtils.project.getKanbanData.invalidate()
+		}
 	}
 
 	const handleUpload = async () => {
+		fileInputRef.current?.value && (fileInputRef.current.value = '')
 		fileInputRef.current?.click()
+	}
+
+	const handleDownload = async (attachmentKey: string) => {
+		const url = await downloadUrl({ attachmentKey })
+		window.open(url, '_blank')
 	}
 
 	return (
 		<div className='mt-6 flex flex-col justify-center gap-3'>
-			<div className='mb-2 flex items-center justify-between gap-4'>
+			<div className='mb-2 flex items-center justify-between'>
 				<button
 					onClick={handleUpload}
-					className='flex w-full items-center gap-3'
+					className='flex w-full items-center gap-3 rounded-lg outline-none hover:bg-gray-50'
 				>
 					<input
 						ref={fileInputRef}
 						onChange={uploadFile}
 						type='file'
-						className='hidden'
+						className='hidden outline-none'
 					/>
-					<div className='flex items-center justify-center rounded-xl border-2 border-indigo-200 bg-white p-1'>
+					<div className='flex items-center justify-center rounded-xl border-2 border-indigo-200 bg-white p-1 outline-none'>
 						<PlusIcon className='h-6 w-6 text-indigo-400' />
 					</div>
 					<p className='text-sm font-semibold text-indigo-400'>
@@ -49,7 +86,7 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 				{(attachmentsPage?.totalPages as number) > 1 && (
 					<div className='flex w-full items-center justify-end gap-2'>
 						<button
-							className='disabled:opacity-30'
+							className='outline-none disabled:opacity-30'
 							disabled={page === 0}
 							onClick={() => {
 								setPage(page - 1)
@@ -59,7 +96,7 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 						</button>
 						<p className='text-gray-800'>{page + 1}</p>
 						<button
-							className='disabled:opacity-30'
+							className='outline-none disabled:opacity-30'
 							disabled={page === (attachmentsPage?.totalPages as number) - 1}
 							onClick={() => {
 								setPage(page + 1)
@@ -71,13 +108,22 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 				)}
 			</div>
 			{attachmentsPage?.attachments.map((attachment, index) => (
-				<div key={index} className='flex items-center gap-4'>
-					<div className='flex items-center justify-center rounded-xl bg-indigo-200 p-2'>
-						<DocumentIcon className='h-6 w-6 text-indigo-400' />
+				<div key={index} className='flex w-full items-center justify-between '>
+					<div className='flex items-center gap-3'>
+						<div className='flex items-center justify-center rounded-xl bg-indigo-200 p-2'>
+							<DocumentIcon className='h-6 w-6 text-indigo-400' />
+						</div>
+						<p className='text-sm font-medium text-gray-800'>
+							{attachment.filename}
+						</p>
 					</div>
-					<p className='text-sm font-medium text-gray-800'>
-						{attachment.filename}
-					</p>
+					<div className='flex items-center gap-2'>
+						<ArrowDownTrayIcon
+							onClick={() => handleDownload(attachment.key)}
+							className='h-[32px] w-[32px] cursor-pointer rounded-md p-2 text-gray-800 hover:bg-gray-100'
+						/>
+						<AttachmentOptionsMenu attachmentKey={attachment.key} />
+					</div>
 				</div>
 			))}
 		</div>

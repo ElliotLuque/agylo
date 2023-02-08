@@ -65,8 +65,8 @@ const CommentsList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 										<div className='flex items-center justify-between'>
 											<div className='flex items-center gap-2'>
 												<UserAvatar
-													height={25}
-													width={25}
+													height={30}
+													width={30}
 													imageUrl={comment.author.image}
 												/>
 												<p className='text-sm font-semibold text-gray-800'>
