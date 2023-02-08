@@ -57,10 +57,10 @@ export const attachmentRouter = router({
 			const s3 = new S3({
 				signatureVersion: 'v4',
 				credentials: {
-					accessKeyId: env.AWS_ACCESS_KEY_ID,
-					secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+					accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+					secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
 				},
-				region: env.AWS_REGION,
+				region: env.AWS_S3_REGION,
 			})
 
 			const uuidFileName = randomUUID()
@@ -69,7 +69,7 @@ export const attachmentRouter = router({
 				.pop()}`
 
 			const post = s3.getSignedUrl('putObject', {
-				Bucket: env.AWS_BUCKET_NAME,
+				Bucket: env.AWS_S3_BUCKET_NAME,
 				Expires: 60,
 				Key: key,
 			})
@@ -111,14 +111,14 @@ export const attachmentRouter = router({
 			const s3 = new S3({
 				signatureVersion: 'v4',
 				credentials: {
-					accessKeyId: env.AWS_ACCESS_KEY_ID,
-					secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+					accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+					secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
 				},
-				region: env.AWS_REGION,
+				region: env.AWS_S3_REGION,
 			})
 
 			return s3.getSignedUrl('getObject', {
-				Bucket: env.AWS_BUCKET_NAME,
+				Bucket: env.AWS_S3_BUCKET_NAME,
 				Key: input.attachmentKey,
 			})
 		}),
@@ -134,10 +134,10 @@ export const attachmentRouter = router({
 			const s3 = new S3({
 				signatureVersion: 'v4',
 				credentials: {
-					accessKeyId: env.AWS_ACCESS_KEY_ID,
-					secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+					accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+					secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
 				},
-				region: env.AWS_REGION,
+				region: env.AWS_S3_REGION,
 			})
 
 			const deleteAttachment = prisma.attachment.delete({
@@ -161,7 +161,7 @@ export const attachmentRouter = router({
 
 			return s3
 				.deleteObject({
-					Bucket: env.AWS_BUCKET_NAME,
+					Bucket: env.AWS_S3_BUCKET_NAME,
 					Key: input.attachmentKey,
 				})
 				.promise()
