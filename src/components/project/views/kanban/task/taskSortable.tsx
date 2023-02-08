@@ -67,7 +67,7 @@ const TaskSortable: React.FC<Task & { cursor: string }> = ({
 					</div>
 				</div>
 
-				<div className='flex items-center justify-between'>
+				<div className='invisible flex items-center justify-between'>
 					<UserAvatar width={25} height={25} imageUrl={null} isInvisible />
 					<div className='flex items-center gap-2 text-gray-900 opacity-70'>
 						{commentCount !== null && commentCount > 0 && (
