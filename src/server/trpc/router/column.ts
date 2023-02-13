@@ -27,7 +27,7 @@ export const columnRouter = router({
 		.input(
 			z.object({
 				columnId: z.number(),
-				name: z.string().min(5),
+				name: z.string().min(1),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

@@ -4,6 +4,7 @@ import { useState, Fragment } from 'react'
 import DeleteColumnDialog from './deleteColumnDialog'
 import type { SelectColumn } from '../../../../../../types/kanban-delete'
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
+import RenameColumnDialog from './renameColumnDialog'
 
 const ColumnOptions: React.FC<{
 	tasksCount: number
@@ -11,7 +12,8 @@ const ColumnOptions: React.FC<{
 	columnName: string
 	availableColumns: SelectColumn[]
 }> = ({ columnId, columnName, tasksCount, availableColumns }) => {
-	const [openDeleteDialog, setDeleteDialog] = useState<boolean>(false)
+	const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false)
+	const [openRenameDialog, setOpenRenameDialog] = useState<boolean>(false)
 
 	return (
 		<>
@@ -21,7 +23,13 @@ const ColumnOptions: React.FC<{
 				columnDeleteTasksCount={tasksCount}
 				availableColumns={availableColumns}
 				open={openDeleteDialog}
-				setOpen={setDeleteDialog}
+				setOpen={setOpenDeleteDialog}
+			/>
+			<RenameColumnDialog
+				columnId={columnId}
+				columnName={columnName}
+				open={openRenameDialog}
+				setOpen={setOpenRenameDialog}
 			/>
 			<Menu as='div' className='relative z-10 grid place-content-center'>
 				<div>
@@ -43,6 +51,7 @@ const ColumnOptions: React.FC<{
 							<Menu.Item>
 								{({ active }) => (
 									<button
+										onClick={() => setOpenRenameDialog(true)}
 										className={`${
 											active ? 'bg-gray-100' : 'bg-white'
 										} group flex  w-full items-center justify-between gap-1 rounded-md p-2 text-base text-gray-800`}
@@ -55,7 +64,7 @@ const ColumnOptions: React.FC<{
 							<Menu.Item>
 								{({ active }) => (
 									<button
-										onClick={() => setDeleteDialog(true)}
+										onClick={() => setOpenDeleteDialog(true)}
 										className={`${
 											active ? 'bg-gray-100' : 'bg-white'
 										} group flex w-full items-center justify-between gap-1 rounded-md p-2 text-base text-gray-800`}
