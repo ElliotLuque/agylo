@@ -6,6 +6,7 @@ import { Fragment, useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
 import Toast from '../../../../alerts/toast'
 import TaskDetailsDeleteDialog from './taskDetailsDeleteDialog'
+import { env } from '../../../../../env/client.mjs'
 
 const TaskDetailsMenu: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 	const router = useRouter()
@@ -51,7 +52,7 @@ const TaskDetailsMenu: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 								{({ active }) => (
 									<button
 										onClick={() => {
-											copyValue('localhost:3000' + path)
+											copyValue(env.NEXT_PUBLIC_URL + path)
 											setOpenToast(true)
 											setTimeout(() => {
 												setOpenToast(false)
