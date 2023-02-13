@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect } from 'react'
 import { trpc } from '../../../../../../utils/trpc'
 import { useForm } from 'react-hook-form'
+import LoadingSpinner from '../../../../../misc/loadingSpinner'
 
 const RenameColumnDialog: React.FC<{
 	columnId: number
@@ -103,17 +104,34 @@ const RenameColumnDialog: React.FC<{
 													Please enter a name
 												</p>
 											)}
-											<div className='mt-3 flex w-full flex-row items-center justify-between'>
-												<button
-													disabled={!isValid}
-													type='submit'
-													className={`mt-3 w-full rounded-lg  px-5 ${
-														isValid ? 'bg-indigo-500' : 'bg-indigo-300'
-													}
-													 py-2.5 text-center text-base font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:focus:ring-indigo-800 dark:hover:bg-indigo-700`}
-												>
-													Rename column
-												</button>
+											<div className='mt-3 flex w-full flex-row items-center'>
+												{isLoading ? (
+													<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+												) : (
+													<span className='h-8 w-8 p-1' />
+												)}
+												<div className='flex w-full items-center justify-end gap-3'>
+													<button
+														onClick={() => {
+															setOpen(false)
+														}}
+														type='button'
+														className={`mt-3 rounded-lg  border 
+													 border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:focus:ring-indigo-800 dark:hover:bg-indigo-700`}
+													>
+														Cancel
+													</button>
+													<button
+														disabled={!isValid}
+														type='submit'
+														className={`mt-3 rounded-lg  px-5 ${
+															isValid ? 'bg-indigo-500' : 'bg-indigo-300'
+														}
+													 py-2.5 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:focus:ring-indigo-800 dark:hover:bg-indigo-700`}
+													>
+														Rename column
+													</button>
+												</div>
 											</div>
 										</div>
 									</form>
