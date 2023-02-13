@@ -6,7 +6,8 @@ const ProjectInfoDialog: React.FC<{
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	name: string
 	description: string
-}> = ({ open, setOpen, name, description }) => {
+	participantsCount: number
+}> = ({ open, setOpen, name, description, participantsCount }) => {
 	return (
 		<>
 			<Transition appear show={open} as={Fragment}>
@@ -34,17 +35,24 @@ const ProjectInfoDialog: React.FC<{
 								leaveFrom='opacity-100 scale-100'
 								leaveTo='opacity-0 scale-95'
 							>
-								<Dialog.Panel className=' max-w-md overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all'>
+								<Dialog.Panel className='w-72 max-w-md overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all'>
 									<Dialog.Title
 										as='div'
 										className='flex items-center gap-3 pb-5'
 									>
 										<h3 className='text-2xl font-medium leading-6 text-gray-800'>
-											Project details
+											{name} details
 										</h3>
 									</Dialog.Title>
-									{name}
-									{description}
+									<div className='flex flex-col justify-center'>
+										<p className='text-sm text-gray-500'>{description}</p>
+										<div className='flex items-center'>
+											<p className='text-sm text-gray-500'>Participants: </p>
+											<p className='text-sm text-gray-500'>
+												{participantsCount}
+											</p>
+										</div>
+									</div>
 								</Dialog.Panel>
 							</Transition.Child>
 						</div>

@@ -35,6 +35,7 @@ const Header: React.FC<{
 	) : (
 		<>
 			<ProjectInfoDialog
+				participantsCount={participantsCount}
 				open={openDialog}
 				setOpen={setOpenDialog}
 				name={name}
