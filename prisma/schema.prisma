@@ -28,11 +28,15 @@ model Attachment {
   id            Int      @id @default(autoincrement())
   filename      String
   key           String   @unique
+  
+  author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      String
 
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId        Int
 
   @@index([taskId])
+  @@index([authorId])
 }
 
 model LabelColor {
@@ -189,6 +193,7 @@ model User {
   createdTasks  Task[]   @relation("author")
   assignedTasks Task[]   @relation("assignee")
   comments      Comment[]
+  attachments   Attachment[]
 
 }
 
