@@ -39,6 +39,13 @@ export const attachmentRouter = router({
 						id: true,
 						filename: true,
 						key: true,
+						author: {
+							select: {
+								id: true,
+								name: true,
+								image: true,
+							},
+						},
 					},
 				}),
 			}
@@ -53,6 +60,8 @@ export const attachmentRouter = router({
 		)
 		.mutation(async ({ ctx, input }) => {
 			const { prisma } = ctx
+
+			const { user } = ctx.session
 
 			const s3 = new S3({
 				signatureVersion: 'v4',
@@ -76,6 +85,11 @@ export const attachmentRouter = router({
 
 			const createAttachment = prisma.attachment.create({
 				data: {
+					author: {
+						connect: {
+							id: user.id,
+						},
+					},
 					filename: input.filename,
 					key,
 					task: {
