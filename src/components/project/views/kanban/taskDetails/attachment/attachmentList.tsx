@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { DocumentIcon, PlusIcon } from '@heroicons/react/24/solid'
 import AttachmentOptionsMenu from './attachmentOptionsMenu'
+import { useSession } from 'next-auth/react'
 
 const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 	const trpcUtils = trpc.useContext()
@@ -60,6 +61,8 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 		const url = await downloadUrl({ attachmentKey })
 		window.open(url, '_blank')
 	}
+
+	const session = useSession()
 
 	return (
 		<div className='mt-6 flex flex-col justify-center gap-3'>
@@ -120,7 +123,9 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 							onClick={() => handleDownload(attachment.key)}
 							className='h-[32px] w-[32px] cursor-pointer rounded-md p-2 text-gray-800 hover:bg-gray-100'
 						/>
-						<AttachmentOptionsMenu attachmentKey={attachment.key} />
+						{attachment.author.id === session?.data?.user?.id && (
+							<AttachmentOptionsMenu attachmentKey={attachment.key} />
+						)}
 					</div>
 				</div>
 			))}
