@@ -322,9 +322,13 @@ const TaskDetailsDialog: React.FC<TaskProps> = ({
 													<div className='row-start-4 flex cursor-pointer items-center'>
 														{/* <DatepickerComponent /> */}
 														<p className='text-sm text-gray-800'>
-															{String(
-																dayjs(taskData?.dueDate).format('DD MMM, YYYY'),
-															)}
+															{taskData?.dueDate
+																? String(
+																		dayjs(taskData?.dueDate).format(
+																			'DD MMM, YYYY',
+																		),
+																  )
+																: 'No due date'}
 														</p>
 													</div>
 													<div className='row-start-5 flex items-center gap-3 text-gray-900 opacity-70'>
