@@ -29,6 +29,12 @@ const CommentsList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 
 	const handleAddComment = async (data: { body: string }) => {
 		try {
+			if (data.body !== '') {
+				if (document.activeElement instanceof HTMLElement) {
+					document.activeElement.blur()
+				}
+			}
+
 			await addComment({ taskKey, body: data.body })
 			reset({ body: '' })
 
