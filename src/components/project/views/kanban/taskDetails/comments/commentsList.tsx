@@ -33,14 +33,14 @@ const CommentsList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 				if (document.activeElement instanceof HTMLElement) {
 					document.activeElement.blur()
 				}
+
+				await addComment({ taskKey, body: data.body })
+				reset({ body: '' })
+
+				trpcUtils.comments.getCommentsFromTask.invalidate()
+				trpcUtils.task.getTaskInfo.invalidate()
+				trpcUtils.project.getKanbanData.invalidate()
 			}
-
-			await addComment({ taskKey, body: data.body })
-			reset({ body: '' })
-
-			trpcUtils.comments.getCommentsFromTask.invalidate()
-			trpcUtils.task.getTaskInfo.invalidate()
-			trpcUtils.project.getKanbanData.invalidate()
 		} catch (error) {
 			console.log(error)
 		}
