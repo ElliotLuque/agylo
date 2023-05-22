@@ -35,7 +35,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 					name='description'
 					content='An app for managing tasks and projects in kanban boards'
 				/>
-				<link rel='icon' href='/favicon.ico' />
+				<link rel='icon' href='/logo.svg' sizes='any' type='image/svg+xml' />
 			</Head>
 			{getLayout(<Component {...pageProps} />)}
 		</SessionProvider>

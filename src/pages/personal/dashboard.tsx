@@ -2,14 +2,14 @@ import { motion } from 'framer-motion'
 import type { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { type ReactElement, useState } from 'react'
-import CreateProjectDialog from '../components/alerts/createProjectDialog'
+import CreateProjectDialog from '../../components/alerts/createProjectDialog'
 
-import LoadingSpinner from '../components/misc/loadingSpinner'
-import { protectedPage } from '../server/common/protected-page'
-import { trpc } from '../utils/trpc'
-import type { NextPageWithLayout } from './_app'
+import LoadingSpinner from '../../components/misc/loadingSpinner'
+import { protectedPage } from '../../server/common/protected-page'
+import { trpc } from '../../utils/trpc'
+import type { NextPageWithLayout } from '../_app'
 import Head from 'next/head'
-import Layout from '../layouts/layout'
+import Layout from '../../layouts/layout'
 
 const ProjectItem: React.FC<{
 	url: string

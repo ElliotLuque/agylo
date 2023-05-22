@@ -35,7 +35,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
 		{
 			onSuccess: () => {
 				setOpen(false)
-				router.push('/dashboard')
+				router.push('/me/dashboard')
 				trpcUtils.project.invalidate()
 			},
 		},

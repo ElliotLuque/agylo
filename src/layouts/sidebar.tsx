@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline'
 import UserAvatar from '../components/misc/userAvatar'
 import { signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 const Navbar: React.FC = () => {
 	const session = useSession()
@@ -31,13 +32,13 @@ const Navbar: React.FC = () => {
 					{session.data?.user?.name}
 				</h1>
 			</div>
-			<Link href='/dashboard'>
+			<Link href='/personal/dashboard'>
 				<div className='flex items-center gap-3'>
 					<HomeIcon className='h-7 w-7' />
 					<h1 className='text-lg'>Home</h1>
 				</div>
 			</Link>
-			<Link href='/my-tasks'>
+			<Link href='/personal/my-tasks'>
 				<div className='flex items-center gap-3'>
 					<CheckCircleIcon className='h-7 w-7' />
 					<h1 className='text-lg'>My tasks</h1>
@@ -84,7 +85,13 @@ const Sidebar: React.FC = () => {
 
 			<aside className='fixed top-0 z-10 h-screen w-72 border-r border-gray-200 bg-white'>
 				<div className='flex h-full flex-col gap-6 py-4 px-7'>
-					<h1 className='mt-5 text-xl font-black text-gray-800'>AGYLO</h1>
+					<div className='my-5 flex w-full items-center gap-1'>
+						<Image src='/agylo.svg' width={50} height={50} alt='logo' />
+						{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+						<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
+							agylo
+						</p>
+					</div>
 					<Navbar />
 					<div className='mt-8'>
 						<div className='flex w-full items-center justify-between'>

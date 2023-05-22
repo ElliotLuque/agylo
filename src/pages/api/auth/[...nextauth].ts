@@ -35,6 +35,10 @@ export const authOptions: NextAuthOptions = {
 		}),
 		// ...add more providers here
 	],
+	pages: {
+		signIn: '/auth/signin',
+		verifyRequest: '/auth/verify-request',
+	},
 }
 
 export default NextAuth(authOptions)
