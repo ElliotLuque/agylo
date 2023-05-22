@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { protectedProcedure, router } from '../trpc'
+import { Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
 
 export const taskRouter = router({
 	getTaskInfo: protectedProcedure
@@ -326,4 +328,98 @@ export const taskRouter = router({
 				},
 			})
 		}),
+	assignedTasksByPriority: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const priorities = await prisma.task.groupBy({
+			by: ['priorityId'],
+			where: {
+				assigneeId: userId,
+			},
+			_count: {
+				id: true,
+			},
+		})
+
+		const prioritiesChart = [
+			{
+				name: 'Low',
+				value: priorities?.find((item) => item.priorityId === 1)?._count.id,
+			},
+			{
+				name: 'Medium',
+				value: priorities?.find((item) => item.priorityId === 2)?._count.id,
+			},
+			{
+				name: 'High',
+				value: priorities?.find((item) => item.priorityId === 3)?._count.id,
+			},
+		]
+
+		return prioritiesChart
+	}),
+	totalTasksInMyProjects: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const userProjects = await prisma.projectParticipants.findMany({
+			where: {
+				userId,
+			},
+			select: {
+				projectId: true,
+			},
+		})
+
+		return await prisma.task.count({
+			where: {
+				column: {
+					projectId: {
+						in: userProjects.map((project) => project.projectId),
+					},
+				},
+			},
+		})
+	}),
+	assignedTasksByProject: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const tasks =
+			(await prisma.$queryRaw`SELECT COUNT(DISTINCT agylo.Task.id) AS 'Tasks', agylo.Project.name FROM Task INNER JOIN agylo.\`Column\` ON agylo.Task.columnId = agylo.\`Column\`.id INNER JOIN agylo.ProjectParticipants ON agylo.\`Column\`.projectId = agylo.ProjectParticipants.projectId INNER JOIN agylo.Project ON agylo.ProjectParticipants.projectId = agylo.Project.id WHERE assigneeId = ${userId} GROUP BY agylo.Project.id`) as {
+				name: string
+				Tasks: bigint
+			}[]
+
+		const result = tasks.map((item) => {
+			const obj = {
+				name: item.name,
+				Tasks: Number(item.Tasks),
+			}
+			return obj
+		})
+
+		return result
+	}),
+	lastWeekTasks: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const weeklyTasks =
+			(await prisma.$queryRaw`SELECT COUNT(id) AS 'Created tasks', DATE_FORMAT(createdAt, '%Y-%m-%d') AS 'Date' FROM agylo.Task WHERE createdAt BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() AND authorId = ${userId} GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d') ORDER BY DATE_FORMAT(createdAt, '%Y-%m-%d') ASC`) as {
+				'Created tasks': bigint
+				Date: Date
+			}[]
+
+		const result = weeklyTasks.map((item) => {
+			const obj = {
+				date: dayjs(item.Date).format('DD MMM'),
+				'Created tasks': Number(item['Created tasks']),
+			}
+			return obj
+		})
+
+		return result
+	}),
 })

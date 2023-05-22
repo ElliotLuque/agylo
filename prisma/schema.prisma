@@ -27,7 +27,9 @@ model Comment {
 model Attachment {
   id            Int      @id @default(autoincrement())
   filename      String
+  filesize      Int
   key           String   @unique
+  createdAt     DateTime @default(now())
   
   author        User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId      String

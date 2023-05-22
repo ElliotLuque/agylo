@@ -32,9 +32,11 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 
 		const filename = file.name
 		const filetype = file.type
+		const filesize = file.size
 
 		const url = await uploadUrl({
 			filename,
+			filesize,
 			type: filetype,
 			taskKey,
 		})

@@ -3,6 +3,26 @@ import { router, protectedProcedure } from '../trpc'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 
+export interface IActivityItem {
+	taskKey: string
+	iconId: number
+	activityUrl: string
+	title: string
+	createdAt: Date
+	author: {
+		id: string
+		name: string
+		image: string
+	}
+	attachments?: {
+		filename: string
+		filesize: number
+	}
+	comments?: {
+		body: string
+	}
+}
+
 export const projectRouter = router({
 	createProject: protectedProcedure
 		.input(
@@ -177,6 +197,16 @@ export const projectRouter = router({
 			},
 		})
 	}),
+	countUserProjects: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		return await prisma.projectParticipants.count({
+			where: {
+				userId,
+			},
+		})
+	}),
 	getKanbanData: protectedProcedure
 		.input(z.object({ url: z.string().regex(/^[a-zA-Z0-9-]+$/) }))
 		.query(async ({ ctx, input }) => {
@@ -306,4 +336,122 @@ export const projectRouter = router({
 				},
 			})
 		}),
+	getDashboardActivity: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const projectData = await prisma.projectParticipants.findMany({
+			where: {
+				userId,
+			},
+			select: {
+				project: {
+					select: {
+						iconId: true,
+						url: true,
+						columns: {
+							select: {
+								tasks: {
+									select: {
+										taskKey: true,
+										title: true,
+										attachments: {
+											select: {
+												filename: true,
+												filesize: true,
+												createdAt: true,
+												author: {
+													select: {
+														id: true,
+														name: true,
+														image: true,
+													},
+												},
+											},
+											orderBy: {
+												createdAt: 'desc',
+											},
+										},
+										comments: {
+											select: {
+												body: true,
+												createdAt: true,
+												author: {
+													select: {
+														id: true,
+														name: true,
+														image: true,
+													},
+												},
+											},
+											orderBy: {
+												createdAt: 'desc',
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+
+		const activity: IActivityItem[] = []
+
+		projectData.map((project) => {
+			project.project.columns.map((column) => {
+				column.tasks.map((task) => {
+					// Get attachments
+					task.attachments.map((attachment) => {
+						activity.push({
+							activityUrl: `${project.project.url}?selectedTask=${task.taskKey}`,
+							iconId: project.project.iconId as number,
+							taskKey: task.taskKey,
+							title: task.title,
+							createdAt: attachment.createdAt,
+							author: {
+								id: attachment.author.id,
+								image: attachment.author.image as string,
+								name: attachment.author.name as string,
+							},
+							attachments: {
+								filename: attachment.filename,
+								filesize: attachment.filesize,
+							},
+						})
+					})
+
+					// Get comments
+					task.comments.map((comment) => {
+						activity.push({
+							activityUrl: `${project.project.url}?selectedTask=${task.taskKey}`,
+							iconId: project.project.iconId as number,
+							taskKey: task.taskKey,
+							title: task.title,
+							createdAt: comment.createdAt,
+							author: {
+								id: comment.author.id,
+								image: comment.author.image as string,
+								name: comment.author.name as string,
+							},
+							comments: {
+								body: comment.body,
+							},
+						})
+					})
+				})
+			})
+		})
+
+		// Sort by date
+		activity.sort((a, b) => {
+			return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		})
+
+		// Delete user in session
+		const myActivity = activity.filter((item) => item.author.id !== userId)
+
+		return myActivity
+	}),
 })

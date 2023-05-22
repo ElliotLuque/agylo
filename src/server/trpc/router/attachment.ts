@@ -55,6 +55,7 @@ export const attachmentRouter = router({
 			z.object({
 				taskKey: z.string(),
 				filename: z.string(),
+				filesize: z.number(),
 				type: z.string(),
 			}),
 		)
@@ -91,6 +92,7 @@ export const attachmentRouter = router({
 						},
 					},
 					filename: input.filename,
+					filesize: input.filesize,
 					key,
 					task: {
 						connect: {
