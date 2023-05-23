@@ -8,9 +8,12 @@ import { getCsrfToken, signIn } from 'next-auth/react'
 import Image from 'next/image'
 import GoogleIcon from '../../components/misc/icons/google'
 import GithubIcon from '../../components/misc/icons/github'
-import { SparklesIcon } from '@heroicons/react/24/outline'
+import {
+	ExclamationCircleIcon,
+	SparklesIcon,
+} from '@heroicons/react/24/outline'
 
-const SignInPage: NextPage = ({
+const AuthErrorPage: NextPage = ({
 	csrfToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 	return (
@@ -78,6 +81,12 @@ const SignInPage: NextPage = ({
 								We&apos;ll email you a magic code for a password-free sign in.
 							</p>
 						</div>
+						<div className='mt-12 flex gap-2 rounded-lg bg-red-100 px-5 py-3'>
+							<ExclamationCircleIcon className='mt-1 h-5 w-5 text-red-700' />
+							<p className='text-[1rem] text-red-700 '>
+								Something went wrong! Please try again.
+							</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -88,21 +97,9 @@ const SignInPage: NextPage = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const csrfToken = await getCsrfToken(context)
 
-	const error = context.query?.error
-
-	if (error) {
-		// redirect to error page
-		return {
-			redirect: {
-				destination: '/auth/error',
-				permanent: false,
-			},
-		}
-	}
-
 	return {
 		props: { csrfToken },
 	}
 }
 
-export default SignInPage
+export default AuthErrorPage
