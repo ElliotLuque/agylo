@@ -342,6 +342,7 @@ export const projectRouter = router({
 					participants: {
 						take: 3,
 						select: {
+							roleId: true,
 							user: {
 								select: { id: true, name: true, image: true },
 							},

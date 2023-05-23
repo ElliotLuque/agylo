@@ -9,6 +9,7 @@ import Header from '../../layouts/header'
 import Layout from '../../layouts/layout'
 import KanbanBoard from '../../components/project/views/kanban/kanbanBoard'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 
 export type ParticipantsInfo = {
 	user: {
@@ -32,6 +33,7 @@ const KanbanPage: NextPageWithLayout = ({
 		},
 	)
 
+	const session = useSession()
 	const router = useRouter()
 	const query = router.query
 
@@ -60,6 +62,10 @@ const KanbanPage: NextPageWithLayout = ({
 		)
 	}
 
+	const role = projectData?.participants.find(
+		(participant) => participant.user.id === session.data?.user?.id,
+	)?.roleId
+
 	return (
 		<>
 			<Head>
@@ -74,6 +80,7 @@ const KanbanPage: NextPageWithLayout = ({
 					participants={projectData?.participants as ParticipantsInfo}
 					participantsCount={projectData?._count.participants as number}
 					isLoading={isLoading}
+					canEdit={role === 1}
 				/>
 				<div className='mt-3 flex w-[78vw] gap-2 py-3'>
 					<KanbanBoard

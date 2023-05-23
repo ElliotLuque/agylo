@@ -10,6 +10,7 @@ import { useState } from 'react'
 import type { ParticipantsInfo } from '../pages/[projectUrl]'
 import Image from 'next/image'
 import HeaderSkeletonLoader from './headerSkeletonLoader'
+import { useSession } from 'next-auth/react'
 
 const Header: React.FC<{
 	name: string
@@ -19,6 +20,7 @@ const Header: React.FC<{
 	iconId: number
 	participants: ParticipantsInfo
 	participantsCount: number
+	canEdit: boolean
 }> = ({
 	name,
 	description,
@@ -27,6 +29,7 @@ const Header: React.FC<{
 	isLoading,
 	participants,
 	participantsCount,
+	canEdit,
 }) => {
 	const [openDialog, setOpenDialog] = useState(false)
 
@@ -78,21 +81,25 @@ const Header: React.FC<{
 					<div className='flex items-center gap-2 rounded-lg border-2 p-2'>
 						<input
 							type='text'
-							className='w-32 text-sm text-gray-700 outline-none'
+							className={`${
+								canEdit ? 'w-32' : 'w-60'
+							} text-sm text-gray-700 outline-none`}
 							placeholder='Search...'
 						/>
 						<MagnifyingGlassIcon className='mt-0.5 h-3.5 w-3.5 cursor-pointer stroke-2 text-gray-800 placeholder:font-medium' />
 					</div>
-					<Link
-						className='flex items-center gap-2 font-semibold text-gray-800 hover:text-gray-900'
-						href={{
-							pathname: '/[projectUrl]/settings',
-							query: { projectUrl: url },
-						}}
-					>
-						<Cog6ToothIcon className='h-5 w-5' />
-						<h1 className='text-lg'>Configuration</h1>
-					</Link>
+					{canEdit ? (
+						<Link
+							className='flex items-center gap-2 font-semibold text-gray-800 hover:text-gray-900'
+							href={{
+								pathname: '/[projectUrl]/settings',
+								query: { projectUrl: url },
+							}}
+						>
+							<Cog6ToothIcon className='h-5 w-5' />
+							<h1 className='text-lg'>Configuration</h1>
+						</Link>
+					) : null}
 				</div>
 			</header>
 		</>
