@@ -269,7 +269,8 @@ const Dashboard: NextPageWithLayout = () => {
 						<Subtitle className='text-gray-500'>
 							{String(dayjs(new Date()).format('DD MMM'))}
 						</Subtitle>
-						<div className='mt-10 flex h-[39rem] flex-col overflow-scroll'>
+						{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+						<div className='mt-10 flex h-[39rem] flex-col overflow-auto scrollbar-thin'>
 							{activity?.map((item, idx) => (
 								<ActivityItem key={idx} data={item} />
 							))}
