@@ -23,7 +23,7 @@ dayjs.extend(relativeTime)
 
 const priorityColors: Record<number, string> = {
 	1: 'text-blue-500',
-	2: 'text-yellow-600',
+	2: 'text-amber-500',
 	3: 'text-red-500',
 }
 
