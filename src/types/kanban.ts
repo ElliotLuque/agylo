@@ -2,12 +2,13 @@ export type Task = {
 	id: number
 	title: string
 	labels: Label[]
-	assignee: Assignee
-	index: number
+	assignee?: Assignee
+	index?: number
 	taskKey: string
 	commentCount: number | null
 	attachmentCount: number | null
-	priorityId: number
+	priorityId: number | null
+	createdAt?: Date
 }
 
 export type Label = {

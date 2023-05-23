@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { protectedProcedure, router } from '../trpc'
-import { Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 
 export const taskRouter = router({
@@ -421,5 +420,56 @@ export const taskRouter = router({
 		})
 
 		return result
+	}),
+	myTasks: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const tasks = await prisma.projectParticipants.findMany({
+			where: {
+				userId,
+			},
+			select: {
+				project: {
+					select: {
+						url: true,
+						iconId: true,
+						name: true,
+						description: true,
+						columns: {
+							select: {
+								tasks: {
+									select: {
+										id: true,
+										title: true,
+										taskKey: true,
+										createdAt: true,
+										priorityId: true,
+										attachmentCount: true,
+										commentCount: true,
+										labels: {
+											select: {
+												label: {
+													select: {
+														id: true,
+														name: true,
+														colorId: true,
+													},
+												},
+											},
+										},
+									},
+									where: {
+										assigneeId: userId,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+
+		return tasks
 	}),
 })

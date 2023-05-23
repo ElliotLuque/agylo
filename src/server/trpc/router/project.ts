@@ -174,6 +174,20 @@ export const projectRouter = router({
 				})
 			}
 
+			await prisma.task.deleteMany({
+				where: {
+					column: {
+						projectId: input.id,
+					},
+				},
+			})
+
+			await prisma.column.deleteMany({
+				where: {
+					projectId: input.id,
+				},
+			})
+
 			return await prisma.project.delete({
 				where: {
 					id: input.id,

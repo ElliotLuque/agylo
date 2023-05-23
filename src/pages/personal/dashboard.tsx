@@ -31,10 +31,11 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import type { IActivityItem } from '../../server/trpc/router/project'
 import UserAvatar from '../../components/misc/userAvatar'
 
-import dayjs from 'dayjs'
 import Link from 'next/link'
 import { env } from '../../env/client.mjs'
 import { getIconFg } from '../../utils/colorSetter'
+
+import dayjs from 'dayjs'
 dayjs.extend(relativeTime)
 
 function formatRelativeDate(date: Date) {
@@ -263,7 +264,7 @@ const Dashboard: NextPageWithLayout = () => {
 							</Card>
 						</Col>
 					</Grid>
-					<Card className='h-full  w-[38rem]'>
+					<Card className='h-full w-[38rem]'>
 						<Title className='text-3xl font-bold'>Activity</Title>
 						<Subtitle className='text-gray-500'>
 							{String(dayjs(new Date()).format('DD MMM'))}

@@ -62,7 +62,7 @@ const AddTask: React.FC<{
 				</form>
 				{isLoading && (
 					<div className='w-10 pt-4'>
-						<LoadingSpinner classNames='w-9 h-9 p-2 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+						<LoadingSpinner classNames='w-9 h-9 p-2 animate-spin fill-indigo-500 text-gray-200' />
 					</div>
 				)}
 			</div>

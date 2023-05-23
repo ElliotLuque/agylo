@@ -38,6 +38,7 @@ export const attachmentRouter = router({
 					select: {
 						id: true,
 						filename: true,
+						filesize: true,
 						key: true,
 						author: {
 							select: {

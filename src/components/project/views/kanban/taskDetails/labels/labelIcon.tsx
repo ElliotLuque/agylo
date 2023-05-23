@@ -2,7 +2,7 @@ const LabelIcon: React.FC<{
 	onClick?: () => void
 	colorId: number
 	name: string
-	classNames: string
+	classNames?: string
 }> = ({ onClick, colorId, name, classNames }) => {
 	const labels = [
 		{ id: 1, bgColor: 'bg-gray-100', color: 'text-gray-500' },

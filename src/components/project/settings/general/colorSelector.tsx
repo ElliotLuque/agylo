@@ -43,7 +43,7 @@ const ColorSelector: React.FC<{
 				leaveFrom='opacity-100 translate-y-0'
 				leaveTo='opacity-0 translate-y-1'
 			>
-				<Popover.Button className='w-full rounded-lg bg-indigo-500 p-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'>
+				<Popover.Button className='w-full rounded-lg bg-indigo-500 p-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800'>
 					Change icon
 				</Popover.Button>
 
@@ -68,7 +68,7 @@ const ColorSelector: React.FC<{
 						</div>
 						<button
 							onClick={handleSave}
-							className='w-full rounded-lg bg-indigo-500 px-2 py-2.5 text-center text-base font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+							className='w-full rounded-lg bg-indigo-500 px-2 py-2.5 text-center text-base font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 sm:w-auto'
 						>
 							Save
 						</button>

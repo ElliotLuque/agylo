@@ -35,7 +35,7 @@ const SettingsPage: NextPageWithLayout = ({
 					<title>Agylo</title>
 				</Head>
 				<div className='grid w-full place-items-center'>
-					<LoadingSpinner classNames='w-48 h-48 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+					<LoadingSpinner classNames='w-48 h-48 animate-spin fill-indigo-500 text-gray-200' />
 				</div>
 			</>
 		)

@@ -122,7 +122,7 @@ const DeleteColumnDialog: React.FC<{
 											onSubmit={fullDeleteSubmit}
 										>
 											{isLoading ? (
-												<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+												<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200' />
 											) : (
 												<span className='h-8 w-8 p-1' />
 											)}
@@ -132,13 +132,13 @@ const DeleteColumnDialog: React.FC<{
 														setOpen(false)
 													}}
 													type='button'
-													className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+													className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 sm:w-auto'
 												>
 													Cancel
 												</button>
 												<button
 													type='submit'
-													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
+													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800`}
 												>
 													Delete column and tasks
 												</button>
@@ -218,7 +218,7 @@ const DeleteColumnDialog: React.FC<{
 											onSubmit={tasksSubmit}
 										>
 											{isLoading ? (
-												<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+												<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200' />
 											) : (
 												<span className='h-8 w-8 p-1' />
 											)}
@@ -228,13 +228,13 @@ const DeleteColumnDialog: React.FC<{
 														setOpen(false)
 													}}
 													type='button'
-													className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+													className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 sm:w-auto'
 												>
 													Cancel
 												</button>
 												<button
 													type='submit'
-													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
+													className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800`}
 												>
 													Delete column
 												</button>
@@ -296,7 +296,7 @@ const DeleteColumnDialog: React.FC<{
 										onSubmit={noTasksSubmit}
 									>
 										{isLoading ? (
-											<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+											<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200' />
 										) : (
 											<span className='h-8 w-8 p-1' />
 										)}
@@ -306,13 +306,13 @@ const DeleteColumnDialog: React.FC<{
 													setOpen(false)
 												}}
 												type='button'
-												className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+												className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 sm:w-auto'
 											>
 												Cancel
 											</button>
 											<button
 												type='submit'
-												className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
+												className={`rounded-lg bg-red-500 px-5 py-2 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800`}
 											>
 												Delete column
 											</button>

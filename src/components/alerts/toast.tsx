@@ -22,7 +22,7 @@ const Toast: React.FC<{
 					transition={{ duration: 0.65 }}
 				>
 					<div
-						className={` pointer-events-none max-w-xs select-none rounded-md border bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800`}
+						className={` pointer-events-none max-w-xs select-none rounded-md border bg-white shadow-lg`}
 						role='alert'
 					>
 						<div className='flex items-center gap-4 p-4'>
@@ -31,7 +31,7 @@ const Toast: React.FC<{
 							) : (
 								<InformationCircleIcon className='h-4 w-4 text-indigo-500' />
 							)}
-							<p className='align-middle text-base text-gray-700 dark:text-gray-400'>
+							<p className='align-middle text-base text-gray-700'>
 								{message}
 							</p>
 						</div>

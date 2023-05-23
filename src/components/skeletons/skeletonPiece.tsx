@@ -10,7 +10,7 @@ const SkeletonPiece: React.FC<{
 		<span
 			className={`${classNames} ${darker ? 'bg-gray-300' : 'bg-slate-200'} ${
 				lighter ? 'bg-slate-100' : 'bg-slate-200'
-			} inline-flex animate-pulse duration-75 dark:bg-slate-700`}
+			} inline-flex animate-pulse duration-75`}
 		>
 			{children}
 		</span>

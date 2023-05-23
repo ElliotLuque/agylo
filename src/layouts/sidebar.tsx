@@ -8,30 +8,15 @@ import {
 	CheckCircleIcon,
 	HomeIcon,
 	PlusIcon,
+	QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-import UserAvatar from '../components/misc/userAvatar'
-import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
+import UserMenu from './userMenu'
 
 const Navbar: React.FC = () => {
-	const session = useSession()
-
 	return (
 		<div className='mt-3 flex flex-col justify-center gap-6 font-semibold text-gray-800'>
-			<div
-				onClick={() => signOut()}
-				className='mb-5 flex cursor-pointer items-center gap-3.5'
-			>
-				<UserAvatar
-					isInvisible={false}
-					imageUrl={session.data?.user?.image as string}
-					width={28}
-					height={28}
-				/>
-				<h1 className='text-base text-gray-800 opacity-90'>
-					{session.data?.user?.name}
-				</h1>
-			</div>
+			<UserMenu />
 			<Link href='/personal/dashboard'>
 				<div className='flex items-center gap-3'>
 					<HomeIcon className='h-7 w-7' />
@@ -84,36 +69,47 @@ const Sidebar: React.FC = () => {
 			/>
 
 			<aside className='fixed top-0 z-10 h-screen w-72 border-r border-gray-200 bg-white'>
-				<div className='flex h-full flex-col gap-6 py-4 px-7'>
-					<div className='my-5 flex w-full items-center gap-2'>
-						<Image src='/agylo.svg' width={50} height={50} alt='logo' />
-						{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-						<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
-							agylo
+				<div className='flex h-full flex-col justify-between px-7'>
+					<div className='h-full flex-col gap-6 py-4 '>
+						<div className='mt-5 mb-14 flex w-full items-center gap-2'>
+							<Image src='/agylo.svg' width={50} height={50} alt='logo' />
+							{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+							<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
+								agylo
+							</p>
+						</div>
+						<Navbar />
+						<div className='mt-8'>
+							<div className='flex w-full items-center justify-between'>
+								<h1 className='text-lg font-medium opacity-70'>Projects</h1>
+								<PlusIcon
+									onClick={() => setOpenCreateDialog(true)}
+									className='h-5 w-5 hover:cursor-pointer'
+								/>
+							</div>
+							<div className='ml-1.5 mt-5 mb-4 flex h-56 flex-col gap-3.5 overflow-auto'>
+								{userProjects?.map((project) => {
+									return (
+										<ProjectItem
+											key={project.projectId}
+											name={project.project.name}
+											url={project.project.url}
+											iconId={project.project.iconId}
+										/>
+									)
+								})}
+							</div>
+						</div>
+					</div>
+					<Link
+						href={'https://github.com/ElliotLuque/agylo'}
+						className='my-5 flex items-center gap-2'
+					>
+						<QuestionMarkCircleIcon className='mt-0.5 h-5 w-5 opacity-50' />
+						<p className='text-sm font-semibold opacity-50 hover:underline'>
+							Help & feedback
 						</p>
-					</div>
-					<Navbar />
-					<div className='mt-8'>
-						<div className='flex w-full items-center justify-between'>
-							<h1 className='text-lg font-medium opacity-70'>Projects</h1>
-							<PlusIcon
-								onClick={() => setOpenCreateDialog(true)}
-								className='h-5 w-5 hover:cursor-pointer'
-							/>
-						</div>
-						<div className='ml-1.5 mt-5 mb-4 flex h-56 flex-col gap-3.5 overflow-auto'>
-							{userProjects?.map((project) => {
-								return (
-									<ProjectItem
-										key={project.projectId}
-										name={project.project.name}
-										url={project.project.url}
-										iconId={project.project.iconId}
-									/>
-								)
-							})}
-						</div>
-					</div>
+					</Link>
 				</div>
 			</aside>
 		</>

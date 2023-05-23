@@ -75,7 +75,7 @@ const SettingsSection: React.FC<{
 				<div className='my-6'>
 					<label
 						htmlFor='name'
-						className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+						className='mb-2 block text-base font-medium text-gray-800 '
 					>
 						Name
 					</label>
@@ -108,7 +108,7 @@ const SettingsSection: React.FC<{
 				<div className='mb-6'>
 					<label
 						htmlFor='name'
-						className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+						className='mb-2 block text-base font-medium text-gray-800'
 					>
 						URL
 					</label>
@@ -152,7 +152,7 @@ const SettingsSection: React.FC<{
 				<div className='mb-6'>
 					<label
 						htmlFor='description'
-						className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+						className='mb-2 block text-base font-medium text-gray-800'
 					>
 						Description
 					</label>
@@ -169,7 +169,7 @@ const SettingsSection: React.FC<{
 							errors.description
 								? 'border-red-400 bg-red-50 focus:ring-red-200'
 								: 'focus:border-indigo-400 focus:ring-indigo-200'
-						}  focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400`}
+						}  focus:outline-none focus:ring-1   `}
 						placeholder='Write your project description...'
 					/>
 					{errors.description && (
@@ -181,7 +181,7 @@ const SettingsSection: React.FC<{
 				<div className='flex flex-row items-center justify-between'>
 					<button
 						type='submit'
-						className='w-full rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+						className='w-full rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 sm:w-auto'
 					>
 						Update
 					</button>

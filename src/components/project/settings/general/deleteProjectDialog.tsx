@@ -35,7 +35,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
 		{
 			onSuccess: () => {
 				setOpen(false)
-				router.push('/me/dashboard')
+				router.push('/personal/dashboard')
 				trpcUtils.project.invalidate()
 			},
 		},
@@ -91,7 +91,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
 										<div className='mb-1'>
 											<label
 												htmlFor='name'
-												className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+												className='mb-2 block text-base font-medium text-gray-800'
 											></label>
 											<input
 												{...register('name', {
@@ -110,7 +110,7 @@ const DeleteProjectDialog: React.FC<DialogProps> = ({
 														isValid
 															? 'bg-red-500 hover:bg-red-800'
 															: 'bg-red-300'
-													} px-5 py-2.5 text-center font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700`}
+													} px-5 py-2.5 text-center font-bold text-white focus:outline-none focus:ring-4 focus:ring-red-300`}
 												>
 													Permanently delete this project
 												</button>

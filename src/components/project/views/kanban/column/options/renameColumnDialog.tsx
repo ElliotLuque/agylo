@@ -81,7 +81,7 @@ const RenameColumnDialog: React.FC<{
 										<div className='mb-1'>
 											<label
 												htmlFor='name'
-												className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+												className='mb-2 block text-base font-medium text-gray-800'
 											></label>
 											<input
 												{...register('newName', {
@@ -106,7 +106,7 @@ const RenameColumnDialog: React.FC<{
 											)}
 											<div className='mt-3 flex w-full flex-row items-center'>
 												{isLoading ? (
-													<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200 dark:text-gray-600' />
+													<LoadingSpinner classNames='p-1 h-8 w-8 animate-spin fill-indigo-500 text-gray-200' />
 												) : (
 													<span className='h-8 w-8 p-1' />
 												)}
@@ -117,7 +117,7 @@ const RenameColumnDialog: React.FC<{
 														}}
 														type='button'
 														className={`mt-3 rounded-lg  border 
-													 border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:focus:ring-indigo-800 dark:hover:bg-indigo-700`}
+													 border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-4 focus:ring-indigo-300`}
 													>
 														Cancel
 													</button>
@@ -127,7 +127,7 @@ const RenameColumnDialog: React.FC<{
 														className={`mt-3 rounded-lg  px-5 ${
 															isValid ? 'bg-indigo-500' : 'bg-indigo-300'
 														}
-													 py-2.5 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:bg-indigo-600 dark:focus:ring-indigo-800 dark:hover:bg-indigo-700`}
+													 py-2.5 text-center text-sm font-bold text-white focus:outline-none focus:ring-4 focus:ring-indigo-300`}
 													>
 														Rename column
 													</button>

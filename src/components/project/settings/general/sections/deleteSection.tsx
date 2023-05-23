@@ -11,7 +11,7 @@ const DeleteSection: React.FC<{
 
 			<button
 				onClick={() => setOpenDialog(true)}
-				className='mt-5 w-full rounded-lg bg-red-500 px-8 py-2.5 text-center text-base font-medium text-white outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 dark:bg-red-600 dark:focus:ring-red-800 dark:hover:bg-red-700 sm:w-auto'
+				className='mt-5 w-full rounded-lg bg-red-500 px-8 py-2.5 text-center text-base font-medium text-white outline-none focus:ring-4 focus:ring-red-300 hover:bg-red-800 sm:w-auto'
 			>
 				Delete this project
 			</button>

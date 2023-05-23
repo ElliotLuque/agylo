@@ -90,7 +90,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 
 									<form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
 										<div className='mb-6'>
-											<p className='mb-3.5 block text-base font-medium text-gray-800 dark:text-white'>
+											<p className='mb-3.5 block text-base font-medium text-gray-800'>
 												Icon
 											</p>
 											<div className='flex flex-wrap gap-4'>
@@ -115,7 +115,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 										<div className='mb-6'>
 											<label
 												htmlFor='name'
-												className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+												className='mb-2 block text-base font-medium text-gray-800'
 											>
 												Name
 											</label>
@@ -148,7 +148,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 										<div className='mb-6'>
 											<label
 												htmlFor='name'
-												className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+												className='mb-2 block text-base font-medium text-gray-800'
 											>
 												URL
 											</label>
@@ -193,7 +193,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 										<div className='mb-6'>
 											<label
 												htmlFor='description'
-												className='mb-2 block text-base font-medium text-gray-800 dark:text-white'
+												className='mb-2 block text-base font-medium text-gray-800'
 											>
 												Description
 											</label>
@@ -210,7 +210,7 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 													errors.description
 														? 'border-red-400 bg-red-50 focus:ring-red-200'
 														: 'focus:border-indigo-400 focus:ring-indigo-200'
-												}  focus:outline-none focus:ring-1 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400`}
+												}  focus:outline-none focus:ring-1 `}
 												placeholder='Write your project description...'
 											/>
 											{errors.description && (
@@ -227,14 +227,14 @@ const CreateProjectDialog: React.FC<DialogProps> = ({ open, setOpen }) => {
 													reset()
 												}}
 												type='button'
-												className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+												className='w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-300 hover:bg-gray-100 sm:w-auto'
 											>
 												Cancel
 											</button>
 
 											<button
 												type='submit'
-												className='w-full rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700 sm:w-auto'
+												className='w-full rounded-lg bg-indigo-500 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-indigo-800 sm:w-auto'
 											>
 												Create
 											</button>

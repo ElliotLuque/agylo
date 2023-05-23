@@ -8,6 +8,7 @@ import {
 import { DocumentIcon, PlusIcon } from '@heroicons/react/24/solid'
 import AttachmentOptionsMenu from './attachmentOptionsMenu'
 import { useSession } from 'next-auth/react'
+import prettyBytes from 'pretty-bytes'
 
 const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 	const trpcUtils = trpc.useContext()
@@ -116,9 +117,14 @@ const AttachmentList: React.FC<{ taskKey: string }> = ({ taskKey }) => {
 						<div className='flex items-center justify-center rounded-xl bg-indigo-200 p-2'>
 							<DocumentIcon className='h-6 w-6 text-indigo-400' />
 						</div>
-						<p className='text-sm font-medium text-gray-800'>
-							{attachment.filename}
-						</p>
+						<div className='flex flex-col justify-center'>
+							<p className='text-sm font-medium text-gray-800'>
+								{attachment.filename}
+							</p>
+							<p className='text-sm font-medium text-gray-400'>
+								{prettyBytes(attachment.filesize)}
+							</p>
+						</div>
 					</div>
 					<div className='flex items-center gap-2'>
 						<ArrowDownTrayIcon
