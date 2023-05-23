@@ -29,14 +29,6 @@ const Navbar: React.FC = () => {
 					<h1 className='text-lg'>My tasks</h1>
 				</div>
 			</Link>
-			<div>
-				<div className='flex cursor-default items-center gap-3'>
-					<BellIcon className='h-7 w-7 opacity-40' />
-					<h1 className='text-lg opacity-40'>
-						Inbox <span className='text-sm'>(Coming soon!)</span>
-					</h1>
-				</div>
-			</div>
 		</div>
 	)
 }
@@ -82,7 +74,7 @@ const Sidebar: React.FC = () => {
 							</p>
 						</Link>
 						<Navbar />
-						<div className='mt-8'>
+						<div className='mt-12'>
 							<div className='flex w-full items-center justify-between'>
 								<h1 className='text-lg font-medium opacity-70'>Projects</h1>
 								<PlusIcon
