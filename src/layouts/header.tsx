@@ -20,6 +20,9 @@ const Header: React.FC<{
 	participants: ParticipantsInfo
 	participantsCount: number
 	canEdit: boolean
+	tasksCount: number
+	projectKey: string
+	createdAt: Date
 }> = ({
 	name,
 	description,
@@ -29,6 +32,9 @@ const Header: React.FC<{
 	participants,
 	participantsCount,
 	canEdit,
+	tasksCount,
+	projectKey,
+	createdAt,
 }) => {
 	const [openDialog, setOpenDialog] = useState(false)
 
@@ -42,6 +48,9 @@ const Header: React.FC<{
 				setOpen={setOpenDialog}
 				name={name}
 				description={description}
+				projectKey={projectKey}
+				createdAt={createdAt}
+				taskCount={tasksCount}
 			/>
 			<header className='flex w-full flex-wrap items-center justify-between p-2'>
 				<div className='flex items-center gap-4'>

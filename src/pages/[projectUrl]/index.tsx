@@ -81,6 +81,9 @@ const KanbanPage: NextPageWithLayout = ({
 					participantsCount={projectData?._count.participants as number}
 					isLoading={isLoading}
 					canEdit={role === 1}
+					tasksCount={projectData?.taskCount as number}
+					projectKey={projectData?.key as string}
+					createdAt={projectData?.createdAt as Date}
 				/>
 				<div className='mt-3 flex w-[78vw] gap-2 py-3'>
 					<KanbanBoard
