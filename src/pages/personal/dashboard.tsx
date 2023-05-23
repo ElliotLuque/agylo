@@ -152,6 +152,7 @@ const Dashboard: NextPageWithLayout = () => {
 	const { data: tasksByProject } = trpc.task.assignedTasksByProject.useQuery()
 	const { data: userProjectsCount } = trpc.project.countUserProjects.useQuery()
 	const { data: userTasksCount } = trpc.task.totalTasksInMyProjects.useQuery()
+	const { data: myLastWeekTasks } = trpc.task.myLastWeekTasks.useQuery()
 	const { data: lastWeekTasks } = trpc.task.lastWeekTasks.useQuery()
 	const { data: activity } = trpc.project.getDashboardActivity.useQuery()
 
@@ -257,6 +258,7 @@ const Dashboard: NextPageWithLayout = () => {
 									index='date'
 									colors={['indigo']}
 									curveType='natural'
+									allowDecimals={false}
 									categories={['Created tasks']}
 									// eslint-disable-next-line @typescript-eslint/no-explicit-any
 									data={lastWeekTasks as any[]}

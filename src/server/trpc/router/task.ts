@@ -386,7 +386,13 @@ export const taskRouter = router({
 		const { id: userId } = ctx.session.user
 
 		const tasks =
-			(await prisma.$queryRaw`SELECT COUNT(DISTINCT agylo.Task.id) AS 'Tasks', agylo.Project.name FROM Task INNER JOIN agylo.\`Column\` ON agylo.Task.columnId = agylo.\`Column\`.id INNER JOIN agylo.ProjectParticipants ON agylo.\`Column\`.projectId = agylo.ProjectParticipants.projectId INNER JOIN agylo.Project ON agylo.ProjectParticipants.projectId = agylo.Project.id WHERE assigneeId = ${userId} GROUP BY agylo.Project.id`) as {
+			(await prisma.$queryRaw`SELECT COUNT(DISTINCT agylo.Task.id) AS 'Tasks', agylo.Project.name 
+									FROM Task 
+									INNER JOIN agylo.\`Column\` ON agylo.Task.columnId = agylo.\`Column\`.id 
+									INNER JOIN agylo.ProjectParticipants ON agylo.\`Column\`.projectId = agylo.ProjectParticipants.projectId 
+									INNER JOIN agylo.Project ON agylo.ProjectParticipants.projectId = agylo.Project.id 
+									WHERE assigneeId = ${userId} 
+									GROUP BY agylo.Project.id`) as {
 				name: string
 				Tasks: bigint
 			}[]
@@ -401,12 +407,46 @@ export const taskRouter = router({
 
 		return result
 	}),
+	myLastWeekTasks: protectedProcedure.query(async ({ ctx }) => {
+		const { prisma } = ctx
+		const { id: userId } = ctx.session.user
+
+		const weeklyTasks =
+			(await prisma.$queryRaw`SELECT COUNT(id) AS 'Created tasks', DATE_FORMAT(createdAt, '%Y-%m-%d') AS 'Date' 
+									FROM agylo.Task WHERE createdAt BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() 
+									AND authorId = ${userId} 
+									GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d') 
+									ORDER BY DATE_FORMAT(createdAt, '%Y-%m-%d') ASC`) as {
+				'Created tasks': bigint
+				Date: Date
+			}[]
+
+		const result = weeklyTasks.map((item) => {
+			const obj = {
+				date: dayjs(item.Date).format('DD MMM'),
+				'Created tasks': Number(item['Created tasks']),
+			}
+			return obj
+		})
+
+		return result
+	}),
 	lastWeekTasks: protectedProcedure.query(async ({ ctx }) => {
 		const { prisma } = ctx
 		const { id: userId } = ctx.session.user
 
 		const weeklyTasks =
-			(await prisma.$queryRaw`SELECT COUNT(id) AS 'Created tasks', DATE_FORMAT(createdAt, '%Y-%m-%d') AS 'Date' FROM agylo.Task WHERE createdAt BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() AND authorId = ${userId} GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d') ORDER BY DATE_FORMAT(createdAt, '%Y-%m-%d') ASC`) as {
+			(await prisma.$queryRaw`SELECT COUNT(DISTINCT agylo.Task.id) AS 'Created tasks', DATE_FORMAT(createdAt, '%Y-%m-%d') AS 'Date'
+									FROM agylo.Task
+									INNER JOIN agylo.\`Column\` ON agylo.Task.columnId = agylo.\`Column\`.id
+									INNER JOIN ProjectParticipants ON agylo.\`Column\`.projectId = agylo.ProjectParticipants.projectId
+									WHERE agylo.Task.createdAt BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW()
+									AND agylo.ProjectParticipants.projectId IN (
+										SELECT projectId
+										FROM ProjectParticipants
+										WHERE userId = ${userId})
+									GROUP BY DATE_FORMAT(createdAt, '%Y-%m-%d')
+									ORDER BY DATE_FORMAT(createdAt, '%Y-%m-%d') ASC`) as {
 				'Created tasks': bigint
 				Date: Date
 			}[]
@@ -425,9 +465,29 @@ export const taskRouter = router({
 		const { prisma } = ctx
 		const { id: userId } = ctx.session.user
 
+		const columnsWithTasksIds = await prisma.projectParticipants.findMany({
+			distinct: ['projectId'],
+			where: {
+				project: {
+					columns: {
+						some: {
+							tasks: {
+								some: {
+									assigneeId: userId,
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+
 		const tasks = await prisma.projectParticipants.findMany({
 			where: {
-				userId,
+				userId: userId,
+				projectId: {
+					in: columnsWithTasksIds.map((item) => item.projectId),
+				},
 			},
 			select: {
 				project: {

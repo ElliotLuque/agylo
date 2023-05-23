@@ -138,10 +138,11 @@ const MyTasksPage: NextPageWithLayout = () => {
 				<div className='flex flex-col flex-wrap justify-center'>
 					<h1 className='text-3xl font-bold'>My tasks</h1>
 					<h2 className='ml-1 text-lg text-gray-900/90'>
-						Check your active tasks
+						Check your assigned tasks
 					</h2>
 				</div>
-				<div className='mt-6 flex flex-col gap-5 divide-y overflow-scroll'>
+				{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+				<div className='mt-6 flex flex-col gap-5 divide-y overflow-auto scrollbar-thin'>
 					{myProjects?.map((project, idx) => {
 						return (
 							<ProjectListItem

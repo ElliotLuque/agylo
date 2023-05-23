@@ -106,12 +106,10 @@ const Sidebar: React.FC = () => {
 					</div>
 					<Link
 						href={'https://github.com/ElliotLuque/agylo'}
-						className='my-5 flex items-center gap-2'
+						className='my-5 flex items-center gap-2 hover:underline'
 					>
 						<QuestionMarkCircleIcon className='mt-0.5 h-5 w-5 opacity-50' />
-						<p className='text-sm font-semibold opacity-50 hover:underline'>
-							Help & feedback
-						</p>
+						<p className='text-sm font-semibold opacity-50'>Help & feedback</p>
 					</Link>
 				</div>
 			</aside>
