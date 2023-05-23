@@ -71,13 +71,16 @@ const Sidebar: React.FC = () => {
 			<aside className='fixed top-0 z-10 h-screen w-72 border-r border-gray-200 bg-white'>
 				<div className='flex h-full flex-col justify-between px-7'>
 					<div className='h-full flex-col gap-6 py-4 '>
-						<div className='mt-5 mb-14 flex w-full items-center gap-2'>
+						<Link
+							href={'/personal/dashboard'}
+							className='mt-5 mb-14 flex w-full items-center gap-2'
+						>
 							<Image src='/agylo.svg' width={50} height={50} alt='logo' />
 							{/* eslint-disable-next-line tailwindcss/no-custom-classname */}
 							<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
 								agylo
 							</p>
-						</div>
+						</Link>
 						<Navbar />
 						<div className='mt-8'>
 							<div className='flex w-full items-center justify-between'>
