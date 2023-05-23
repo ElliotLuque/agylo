@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from 'next'
-import { type ReactElement } from 'react'
+import { useState, type ReactElement } from 'react'
 import prettyBytes from 'pretty-bytes'
 import { protectedPage } from '../../server/common/protected-page'
 import { trpc } from '../../utils/trpc'
@@ -20,6 +20,8 @@ import {
 	Subtitle,
 	Text,
 	Title,
+	Toggle,
+	ToggleItem,
 } from '@tremor/react'
 import { useSession } from 'next-auth/react'
 import {
@@ -156,6 +158,8 @@ const Dashboard: NextPageWithLayout = () => {
 	const { data: lastWeekTasks } = trpc.task.lastWeekTasks.useQuery()
 	const { data: activity } = trpc.project.getDashboardActivity.useQuery()
 
+	const [chartToggle, setChartToggle] = useState<string>('myTasks')
+
 	const session = useSession()
 
 	return (
@@ -251,7 +255,17 @@ const Dashboard: NextPageWithLayout = () => {
 						</Col>
 						<Col numColSpan={2}>
 							<Card decoration='top' decorationColor='indigo'>
-								<Title className='font-bold'>Tasks reported this week</Title>
+								<Flex>
+									<Title className='font-bold'>Tasks created this week</Title>
+									<Toggle
+										color='zinc'
+										defaultValue={'myTasks'}
+										onValueChange={(value) => setChartToggle(value)}
+									>
+										<ToggleItem value='myTasks' text='My tasks' />
+										<ToggleItem value='allTasks' text='All tasks' />
+									</Toggle>
+								</Flex>
 								<AreaChart
 									className='mt-5 h-52 w-full'
 									yAxisWidth={20}
@@ -260,8 +274,13 @@ const Dashboard: NextPageWithLayout = () => {
 									curveType='natural'
 									allowDecimals={false}
 									categories={['Created tasks']}
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any
-									data={lastWeekTasks as any[]}
+									data={
+										chartToggle === 'myTasks'
+											? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+											  (myLastWeekTasks as any[])
+											: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+											  (lastWeekTasks as any[])
+									}
 								/>
 							</Card>
 						</Col>
