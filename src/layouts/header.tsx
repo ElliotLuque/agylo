@@ -10,7 +10,6 @@ import { useState } from 'react'
 import type { ParticipantsInfo } from '../pages/[projectUrl]'
 import Image from 'next/image'
 import HeaderSkeletonLoader from './headerSkeletonLoader'
-import { useSession } from 'next-auth/react'
 
 const Header: React.FC<{
 	name: string

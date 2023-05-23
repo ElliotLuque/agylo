@@ -31,9 +31,7 @@ const Toast: React.FC<{
 							) : (
 								<InformationCircleIcon className='h-4 w-4 text-indigo-500' />
 							)}
-							<p className='align-middle text-base text-gray-700'>
-								{message}
-							</p>
+							<p className='align-middle text-base text-gray-700'>{message}</p>
 						</div>
 					</div>
 				</motion.div>

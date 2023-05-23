@@ -14,6 +14,7 @@ const DatepickerComponent: React.FC = () => {
 	// calendars[0] is always present, this is an initial calendar
 	const { year, month, days } = calendars[0] as Calendar
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onDayClick = (evt: any, date: Date) => {
 		// In case you need any action with evt
 		evt.stopPropagation()

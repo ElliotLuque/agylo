@@ -15,7 +15,7 @@ const LabelColorCreate: React.FC<{
 	taskId: number
 	labelName: string
 	addLabelCallback: (label: LabelListItem) => void
-}> = ({ open, setOpen, projectId, taskId, labelName, addLabelCallback }) => {
+}> = ({ open, setOpen, projectId, taskId, labelName }) => {
 	const trpcUtils = trpc.useContext()
 	const { mutateAsync: createAndAddLabel } =
 		trpc.label.newLabelToTask.useMutation()
