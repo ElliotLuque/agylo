@@ -12,6 +12,7 @@ import {
 	ExclamationCircleIcon,
 	SparklesIcon,
 } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 
 const AuthErrorPage: NextPage = ({
 	csrfToken,
@@ -19,12 +20,15 @@ const AuthErrorPage: NextPage = ({
 	return (
 		<main className='mt-12 flex min-h-screen flex-col items-center bg-white'>
 			<section className='flex h-full w-[26rem] flex-col '>
-				<div className='flex w-full items-center justify-center gap-2'>
+				<Link
+					href={'/'}
+					className='flex w-full items-center justify-center gap-2'
+				>
 					<Image src='/agylo.svg' width={50} height={50} alt='logo' />
 					<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
 						agylo
 					</p>
-				</div>
+				</Link>
 				<div className='mt-10 flex w-full flex-col items-center justify-center gap-2'>
 					<h1 className='text-5xl font-black text-gray-900/90'>
 						Sign in to Agylo
