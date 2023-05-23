@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import {
 	CalendarDaysIcon,
 	CheckCircleIcon,
+	HashtagIcon,
 	UserIcon,
 } from '@heroicons/react/24/outline'
 import { Flex, Icon, Metric, Subtitle, Title, Text } from '@tremor/react'
@@ -102,7 +103,7 @@ const ProjectInfoDialog: React.FC<{
 
 										<div className='flex items-center gap-2'>
 											<Icon
-												icon={UserIcon}
+												icon={HashtagIcon}
 												size='lg'
 												color='indigo'
 												variant='light'
