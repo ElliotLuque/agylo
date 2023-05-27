@@ -2,7 +2,7 @@ import SkeletonPiece from '../../../skeletons/skeletonPiece'
 
 const KanbanBoardSkeletonLoader: React.FC = () => {
 	return (
-		<div className='flex h-screen w-full items-center'>
+		<div className='flex h-screen w-full'>
 			<div className='flex items-start gap-2'>
 				<div className='flex min-w-[23rem] flex-col gap-3 p-4'>
 					<div className='mb-2 flex items-center justify-between'>
