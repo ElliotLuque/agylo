@@ -67,7 +67,7 @@ const LandingPage: NextPage = () => {
 						</button>
 					</div>
 					<div className='my-12 flex flex-col items-center justify-center overflow-hidden rounded-xl border-gray-100 bg-white px-2 pt-5 shadow'>
-						<video className='w-full' autoPlay muted loop>
+						<video autoPlay muted loop>
 							<source src='/kanban-demo.webm' type='video/webm' />
 						</video>
 					</div>
