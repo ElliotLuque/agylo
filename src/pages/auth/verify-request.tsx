@@ -2,13 +2,14 @@
 import { EnvelopeIcon } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const VerifyRequestPage: NextPage = () => {
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-center bg-white'>
 			<div className='flex w-full items-center justify-center gap-1'>
-				{/* <Image src='/images/logo.png' width={50} height={50} alt='logo' /> */}
-				<p className='font-reemKufi text-3xl font-semibold text-gray-900/95'>
+				<Image src='/agylo.svg' width={50} height={50} alt='logo' />
+				<p className='font-poppins text-3xl font-semibold text-gray-900/95'>
 					agylo
 				</p>
 			</div>
