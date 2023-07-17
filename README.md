@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
 
 ![logo]
 
@@ -26,9 +26,7 @@ application also offers robust collaborative features, enabling file sharing and
 checking recent activity from your teammates, fostering a cohesive team
 environment.
 
-<video autoplay muted loop>
-    <source src="https://github-production-user-asset-6210df.s3.amazonaws.com/72250839/253948615-0748377e-8c7c-463c-88b9-9eb7872ad4b2.webm" type='video/webm'>
-</video>
+![demo]
 
 Demo of the kanban board
 
@@ -61,5 +59,5 @@ To install and run this project locally, follow these steps:
 This software is licensed under the terms of the [GPL v3.0 license](LICENSE)
 
 [logo]: https://github.com/ElliotLuque/agylo/assets/72250839/4ff508fa-9f6f-4428-bd09-1b1e2ff45386
-[demo]: https://github.com/ElliotLuque/agylo/assets/72250839/0748377e-8c7c-463c-88b9-9eb7872ad4b2
+[demo]: https://github.com/ElliotLuque/agylo/assets/72250839/76ca52b9-e3db-48d9-b7e3-13bde72fc70a
 [license]: https://img.shields.io/github/license/ElliotLuque/agylo
