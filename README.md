@@ -34,6 +34,7 @@ environment.
 - **Frontend**: React, Next.js, Tailwind CSS
 - **Backend**: Prisma, PlanetScale, tRPC
 - **Deployment**: Vercel
+- **Auth**: NextAuth.js
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
@@ -42,7 +43,7 @@ To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the fo
 - [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
   You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) 
 
-## 🚀 Installation
+## 🚀 Installation and usage
 
 To install and run this project locally, follow these steps:
 
