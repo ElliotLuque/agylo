@@ -27,8 +27,7 @@ checking recent activity from your teammates, fostering a cohesive team
 environment.
 
 ![demo]
-
-Demo of the kanban board
+*Demo of the kanban board*
 
 ## 🛠 Technologies
 
