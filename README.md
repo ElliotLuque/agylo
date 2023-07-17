@@ -1,4 +1,4 @@
-<div align="center">
+<div style="text-align: center;">
 
 ![logo]
 
@@ -9,31 +9,57 @@
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![PlanetScale](https://img.shields.io/badge/planetscale-%23000000.svg?style=for-the-badge&logo=planetscale&logoColor=white)
 
+📖 Final degree project for *Higher Degree in Web Application Development* at CIPFP Ausiàs March.
+
 </div>
 
-## What's next? How do I make an app with this?
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 🔎 Overview
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+![license]
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Agylo is a user-friendly task and project management application that
+empowers users to efficiently manage tasks, collaborate seamlessly with team
+members, and track project progress. With its intuitive interface, users can
+easily create projects, assign tasks, and monitor ongoing activities. The
+application also offers robust collaborative features, enabling file sharing and
+checking recent activity from your teammates, fostering a cohesive team
+environment.
 
-## Learn More
+<video autoplay muted loop>
+    <source src="https://github-production-user-asset-6210df.s3.amazonaws.com/72250839/253948615-0748377e-8c7c-463c-88b9-9eb7872ad4b2.webm" type='video/webm'>
+</video>
+
+Demo of the kanban board
+
+## 🛠 Technologies
+
+- **Frontend**: React, Next.js, Tailwind CSS
+- **Backend**: Prisma, PlanetScale, tRPC
+- **Deployment**: Vercel
+
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
 To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
+- [T3 Stack Documentation](https://create.t3.gg/)
 - [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+  You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## 🚀 Installation
 
-## How do I deploy this?
+To install and run this project locally, follow these steps:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- Clone this repository: ```git clone https://github.com/ElliotLuque/agylo.git``` 
+- Install dependencies (preferably **pnpm**): ```pnpm install```
+- Create a .env file with the same variables as [.env.example](.env.example)
+- Run the project in development mode: ```pnpm run dev```
+- Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+
+## 📜 License
+
+This software is licensed under the terms of the [GPL v3.0 license](LICENSE)
 
 [logo]: https://github.com/ElliotLuque/agylo/assets/72250839/4ff508fa-9f6f-4428-bd09-1b1e2ff45386
+[demo]: https://github.com/ElliotLuque/agylo/assets/72250839/0748377e-8c7c-463c-88b9-9eb7872ad4b2
+[license]: https://img.shields.io/github/license/ElliotLuque/agylo
